@@ -9,6 +9,11 @@
   color: white;
 }
 
+@font-face {
+  font-family: "Tron";
+  src: url('/fonts/TRON.TTF') format('truetype');
+}
+
 html,
 body {
   min-height: 100dvh;
