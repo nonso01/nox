@@ -1,13 +1,18 @@
-// import React from 'react';
-// import logoClear from '/images/logo-clear.png'
+import MobileApp from "./components/MobileApp";
+import DesktopApp from "./components/DesktopApp";
+import Text from "./components/Text";
+import { useState } from "react";
 
 function App() {
-  return (
-    <div>
-      {/* <h1>Welcome to my World!</h1> */}
-      <img src={null} alt="update logo" />
-    </div>
-  );
+  const [mobileView, setMobileView] = useState(false);
+
+  if (mobileView) {
+    return <MobileApp />;
+  } else if (!mobileView) {
+    return <DesktopApp />;
+  } else {
+    return <Text text="no value passed" />;
+  }
 }
 
 export default App;
