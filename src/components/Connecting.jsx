@@ -50,7 +50,7 @@ export default function Connecting() {
 
   return (
     <div className="connecting  flex column between" ref={root}>
-      <div className="progress flex column  debbug">
+      <div className="progress flex column">
         <div className="flex center">
           <progress max={100} value={50} />
         </div>
