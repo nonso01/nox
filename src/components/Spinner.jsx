@@ -9,7 +9,7 @@ export default function Spinner() {
         }
         .spinner {
           border: 4px solid #222;
-          border-left-color: rgb(77, 219, 52);
+          border-left-color: #34db69;
           border-radius: 50%;
           width: 40px;
           height: 40px;

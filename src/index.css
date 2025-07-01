@@ -7,7 +7,7 @@
   box-sizing: border-box;
 
   font-family: "Outfit", system-ui, -apple-system, sans-serif;
-  color: white;
+  color: rgb(255, 255, 255);
 }
 
 @font-face {
@@ -46,14 +46,34 @@ a {
   color: inherit;
 }
 
+.flex {
+  display: flex;
+  &.column {
+    flex-direction: column;
+  }
+
+  &.between {
+    justify-content: space-between;
+  }
+  &.evenly {
+    justify-content: space-evenly;
+  }
+  &.around {
+    justify-content: space-around;
+  }
+  &.center {
+    justify-content: center;
+    align-items: center;
+  }
+}
+
 .debbug {
   border: 2px solid red;
 }
 
-
 /* connecting component general */
 .connecting {
-height: 100dvh;
+  height: 100dvh;
 }
 
 /* @media screen and (max-width: 600px) {
