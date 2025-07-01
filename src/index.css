@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Rubik:ital,wght@0,300..900;1,300..900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Rubik:ital,wght@0,300..900;1,300..900&display=swap");
 
 /* CSS Reset */
 * {
@@ -12,7 +12,7 @@
 
 @font-face {
   font-family: "Tron";
-  src: url('/fonts/TRON.TTF') format('truetype');
+  src: url("/fonts/TRON.TTF") format("truetype");
 }
 
 html,
@@ -45,3 +45,16 @@ a {
   text-decoration: none;
   color: inherit;
 }
+
+.debbug {
+  border: 2px solid red;
+}
+
+
+/* connecting component general */
+.connecting {
+height: 100dvh;
+}
+
+/* @media screen and (max-width: 600px) {
+} */

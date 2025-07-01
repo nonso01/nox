@@ -1,1 +1,1 @@
-export default function MobileApp() {}
+export default function MobileApp({ connected }) {}
