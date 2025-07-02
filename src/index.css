@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Rubik:ital,wght@0,300..900;1,300..900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Orbitron:wght@400..900&family=Outfit:wght@100..900&display=swap");
 
 /* CSS Reset */
 * {
@@ -13,6 +13,10 @@
 @font-face {
   font-family: "Tron";
   src: url("/fonts/TRON.TTF") format("truetype");
+}
+
+:root {
+  --font-sm: 0.9rem;
 }
 
 html,

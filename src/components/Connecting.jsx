@@ -4,6 +4,9 @@ import { animate } from "animejs";
 import { createScope, createDraggable, createSpring } from "animejs";
 import { useRef, useEffect, useState } from "react";
 
+const ONE_SECOND = 1000;
+const ONE_HUNDRED = 100;
+
 export default function Connecting() {
   const hundredth = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0];
   const tenth = [...hundredth];
@@ -20,27 +23,29 @@ export default function Connecting() {
       // });
 
       // animate the numbers in the Y axis
-      animate(".hundredth", {
+      animate(".connecting .hundredth", {
         y: ["45.5%", "-45.5%"],
-        duration: 2e3,
-        // loop: true,
+        duration: ONE_SECOND + ONE_HUNDRED,
+        ease: "outExpo",
+        loop: 5,
       });
 
-      animate(".tenth", {
+      animate(".connecting .tenth", {
         y: ["45.5%", "-45.5%"],
-        duration: 3e3,
+        duration: ONE_SECOND * 10,
         ease: "outExpo",
       });
 
-      animate(".unith", {
+      animate(".connecting .unith", {
         y: ["25%", "-25%"],
-        duration: 4e3,
+        duration: ONE_SECOND * 10,
       });
 
-      //animating the progress element
-      animate("progress", {
-        value: [0, 100],
-        duration: 4.5e3,
+      // Animate each progress element with a staggered delay
+      animate(".connecting progress", {
+        value: [0, ONE_HUNDRED],
+        delay: (el, i) => i * (ONE_SECOND / 2), // Each progress bar starts 500ms after the previous one
+        duration: (el, i) => i * (ONE_HUNDRED * 5) + ONE_SECOND,
         ease: "outExpo",
       });
     });
@@ -50,21 +55,36 @@ export default function Connecting() {
 
   return (
     <div className="connecting  flex column between" ref={root}>
-      <div className="progress flex column">
-        <div className="flex center">
-          <progress max={100} value={50} />
+      <div className="progress flex between debbug">
+        <div className="info flex center ">
+          <h1>Connecting...</h1>
         </div>
-        <div>
-          <p className="info">
-            connecting
-            <span>.</span>
-            <span>.</span>
-            <span>.</span>
-          </p>
+
+        <div className="statuses flex column evenly debbug">
+          <div>
+            <p>connecting..</p>
+            <progress max={100} value={0}></progress>
+          </div>
+          <div>
+            <p>downloading fonts..</p>
+            <progress max={100} value={0}></progress>
+          </div>
+          <div>
+            <p>downloading assets..</p>
+            <progress max={100} value={0}></progress>
+          </div>
+          <div>
+            <p>activating fruit juice..</p>
+            <progress max={100} value={0}></progress>
+          </div>
+          <div>
+            <p>initailizing 2d/3d view..</p>
+            <progress max={100} value={0}></progress>
+          </div>
         </div>
       </div>
 
-      <div className="num flex  center ">
+      <div className="num flex center ">
         <div className=" unith th ">
           {unith.map((el, i) => (
             <p key={i} className="flex center">
@@ -88,24 +108,42 @@ export default function Connecting() {
       <style jsx="true">
         {`
           .progress {
-            height: 40%;
-            align-items: center;
-            justify-content: flex-end;
+            height: 30%;
+            // align-items: center;
+            // justify-content: flex-end;
             gap: 1rem;
 
             progress {
               appearance: none;
-              width: 350px;
-              height: 10px;
+              width: 300px;
+              height: 5px;
 
               &::-webkit-progress-value {
                 background-color: #34db69;
-                border-radius: 3px;
+                border-radius: 1px;
               }
 
               &::-webkit-progress-bar {
                 background-color: rgba(12, 12, 12, 0.36);
-                border-radius: 3px;
+                border-radius: 1px;
+              }
+            }
+          }
+
+          .info {
+            width: max(100px, 40%);
+          }
+
+          .statuses {
+            width: max(250px, 25%);
+            div {
+              // border: 2px solid;
+              height: 18%;
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              p {
+                font-size: var(--font-sm);
               }
             }
           }
@@ -118,6 +156,11 @@ export default function Connecting() {
               width: 25%;
               font-size: 13rem;
             }
+          }
+
+          .th p {
+            margin-block: 1rem;
+            // added margins
           }
 
           .unith {
