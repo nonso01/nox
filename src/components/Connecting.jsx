@@ -1,5 +1,5 @@
 import Spinner from "./Spinner";
-import { animate } from "animejs";
+import { animate, utils } from "animejs";
 
 import { createScope, createDraggable, createSpring } from "animejs";
 import { useRef, useEffect, useState } from "react";
@@ -17,6 +17,13 @@ export default function Connecting() {
 
   useEffect(() => {
     scope.current = createScope({ root }).add((self) => {
+      const [
+        connected,
+        fontsDownloaded,
+        assetsDownloaded,
+        fruitJuiceActivated,
+        ViewInitialized,
+      ] = utils.$(".connecting .statuses p");
       // createDraggable(".info", {
       //   container: [0, 0, 0, 0],
       //   releaseEase: createSpring({ stiffness: 200 }),
@@ -41,12 +48,29 @@ export default function Connecting() {
         duration: ONE_SECOND * 10,
       });
 
-      // Animate each progress element with a staggered delay
+      // Animate each progress element with a delay
       animate(".connecting progress", {
         value: [0, ONE_HUNDRED],
-        delay: (el, i) => i * (ONE_SECOND / 2), // Each progress bar starts 500ms after the previous one
+        y: ["-10px", "0px"],
+        opacity: [0, 1],
+        delay: (el, i) => i * (ONE_SECOND / 2),
+        // Each progress bar starts 500ms after the previous one
         duration: (el, i) => i * (ONE_HUNDRED * 5) + ONE_SECOND,
         ease: "outExpo",
+        onComplete: (el) => {
+          connected.textContent = "connected";
+          fontsDownloaded.textContent = "fonts downloaded";
+          assetsDownloaded.textContent = "assets downloaded";
+          fruitJuiceActivated.textContent = "fruit juice activated";
+          ViewInitialized.textContent = "2d/3d view initialized";
+        },
+      });
+
+      animate(".connecting .statuses p", {
+        opacity: [0, 1],
+        y: ["-10px", "0px"],
+        delay: (el, i) => i * (ONE_SECOND / 2),
+        duration: (el, i) => i * (ONE_HUNDRED * 5) + ONE_SECOND,
       });
     });
 
@@ -55,12 +79,12 @@ export default function Connecting() {
 
   return (
     <div className="connecting  flex column between" ref={root}>
-      <div className="progress flex between debbug">
+      <div className="progress flex between ">
         <div className="info flex center ">
           <h1>Connecting...</h1>
         </div>
 
-        <div className="statuses flex column evenly debbug">
+        <div className="statuses flex column evenly ">
           <div>
             <p>connecting..</p>
             <progress max={100} value={0}></progress>
@@ -109,8 +133,6 @@ export default function Connecting() {
         {`
           .progress {
             height: 30%;
-            // align-items: center;
-            // justify-content: flex-end;
             gap: 1rem;
 
             progress {
