@@ -17,6 +17,8 @@
 
 :root {
   --font-sm: 0.9rem;
+
+  --light-green: #34db69;
 }
 
 html,
@@ -25,7 +27,8 @@ body {
   background-color: #222;
   scrollbar-gutter: stable;
 
-  #root {
+  #root,
+  .desktop-app {
     min-height: inherit;
   }
 }
@@ -75,9 +78,16 @@ a {
   border: 2px solid red;
 }
 
+.desktop-app {
+  position: relative;
+}
+
 /* connecting component general */
 .connecting {
   height: 100dvh;
+  width: 100dvw;
+  position: relative;
+  z-index: 1;
 }
 
 /* @media screen and (max-width: 600px) {

@@ -1,16 +1,39 @@
-import Spinner from "./Spinner";
-import { animate, utils } from "animejs";
+import GreenWhiteLine from "./GreenwhiteLine";
 
-import { createScope, createDraggable, createSpring } from "animejs";
+import {
+  createScope,
+  createDraggable,
+  createSpring,
+  stagger,
+  animate,
+  utils,
+  svg,
+} from "animejs";
 import { useRef, useEffect, useState } from "react";
 
 const ONE_SECOND = 1000;
 const ONE_HUNDRED = 100;
 
-export default function Connecting() {
+export default function Connecting({ connected }) {
   const hundredth = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0];
   const tenth = [...hundredth];
   const unith = [0, 1];
+
+  const [connectingText, setConnectingText] = useState([
+    "C",
+    "O",
+    "N",
+    "N",
+    "E",
+    "C",
+    "T",
+    "I",
+    "N",
+    "G",
+    ".",
+    ".",
+    ".",
+  ]);
 
   const root = useRef(null);
   const scope = useRef(null);
@@ -21,7 +44,7 @@ export default function Connecting() {
         connected,
         fontsDownloaded,
         assetsDownloaded,
-        fruitJuiceActivated,
+        // fruitJuiceActivated,
         ViewInitialized,
       ] = utils.$(".connecting .statuses p");
       // createDraggable(".info", {
@@ -29,23 +52,35 @@ export default function Connecting() {
       //   releaseEase: createSpring({ stiffness: 200 }),
       // });
 
+      // animate the main heading
+      animate(".connecting .info h1 span", {
+        y: ["-10px", "0px", "10px"],
+        opacity: [0, 1, 0, 1],
+        delay: stagger(50),
+        duration: 50,
+        alternate: true,
+        loop: 2,
+        ease: createSpring({ stiffness: 200, mass: 3 }),
+      });
+
       // animate the numbers in the Y axis
       animate(".connecting .hundredth", {
         y: ["45.5%", "-45.5%"],
         duration: ONE_SECOND + ONE_HUNDRED,
-        ease: "outExpo",
-        loop: 5,
+        ease: "step(2)",
+        loop: 7,
       });
 
       animate(".connecting .tenth", {
         y: ["45.5%", "-45.5%"],
-        duration: ONE_SECOND * 10,
-        ease: "outExpo",
+        duration: ONE_SECOND * 9,
+        ease: "step(2)",
       });
 
       animate(".connecting .unith", {
         y: ["25%", "-25%"],
-        duration: ONE_SECOND * 10,
+        duration: ONE_SECOND * 9,
+        ease: "step(1)",
       });
 
       // Animate each progress element with a delay
@@ -61,7 +96,7 @@ export default function Connecting() {
           connected.textContent = "connected";
           fontsDownloaded.textContent = "fonts downloaded";
           assetsDownloaded.textContent = "assets downloaded";
-          fruitJuiceActivated.textContent = "fruit juice activated";
+          // fruitJuiceActivated.textContent = "fruit juice activated";
           ViewInitialized.textContent = "2d/3d view initialized";
         },
       });
@@ -74,6 +109,16 @@ export default function Connecting() {
       });
     });
 
+    //animate the lines
+    animate(svg.createDrawable(".connecting .lines path"), {
+      draw: ["0 0", "0 1", "1 1"],
+      ease: "inBounce",
+      duration: ONE_SECOND * 8,
+      delay: stagger(ONE_SECOND * 1.5),
+      alternate: true,
+      // loop: 1,
+    });
+
     return () => scope.current.revert();
   }, []);
 
@@ -81,7 +126,11 @@ export default function Connecting() {
     <div className="connecting  flex column between" ref={root}>
       <div className="progress flex between ">
         <div className="info flex center ">
-          <h1>Connecting...</h1>
+          <h1>
+            {connectingText.map((el, i) => (
+              <span key={i}>{el}</span>
+            ))}
+          </h1>
         </div>
 
         <div className="statuses flex column evenly ">
@@ -97,10 +146,10 @@ export default function Connecting() {
             <p>downloading assets..</p>
             <progress max={100} value={0}></progress>
           </div>
-          <div>
+          {/* <div>
             <p>activating fruit juice..</p>
             <progress max={100} value={0}></progress>
-          </div>
+          </div> */}
           <div>
             <p>initailizing 2d/3d view..</p>
             <progress max={100} value={0}></progress>
@@ -111,22 +160,30 @@ export default function Connecting() {
       <div className="num flex center ">
         <div className=" unith th ">
           {unith.map((el, i) => (
-            <p key={i} className="flex center">
+            <p key={i} className="flex center ">
               {el}
             </p>
           ))}
         </div>
         <div className="tenth th">
           {tenth.map((el, i) => (
-            <p key={i}>{el}</p>
+            <p key={i} className="flex center ">
+              {el}
+            </p>
           ))}
         </div>
-        <div className="hundredth th">
+        <div className="hundredth th ">
           {hundredth.map((el, i) => (
-            <p key={i}>{el}</p>
+            <p key={i} className="flex center ">
+              {el}
+            </p>
           ))}
         </div>
         <div>%</div>
+      </div>
+
+      <div className="lines">
+        <GreenWhiteLine />
       </div>
 
       <style jsx="true">
@@ -154,6 +211,10 @@ export default function Connecting() {
 
           .info {
             width: max(100px, 40%);
+            backdrop-filter: blur(1rem);
+            span {
+              display: inline-block;
+            }
           }
 
           .statuses {
@@ -174,9 +235,10 @@ export default function Connecting() {
             height: 35%;
             width: 30%;
             overflow: hidden;
+            backdrop-filter: blur(1rem);
             div {
               width: 25%;
-              font-size: 13rem;
+              font-size: clamp(2rem, 13rem, 13.2rem);
             }
           }
 
@@ -194,6 +256,16 @@ export default function Connecting() {
 
           .hundredth {
             transform: translateY(45.5%);
+          }
+
+          .lines {
+            position: absolute;
+            overflow: hidden;
+            top: 0;
+            height: inherit;
+            width: inherit;
+            z-index: -1;
+            // background-color: #000c;
           }
 
           @media screen and (max-width: 600px) {
