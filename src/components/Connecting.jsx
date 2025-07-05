@@ -40,13 +40,8 @@ export default function Connecting({ connected }) {
 
   useEffect(() => {
     scope.current = createScope({ root }).add((self) => {
-      const [
-        connected,
-        fontsDownloaded,
-        assetsDownloaded,
-        // fruitJuiceActivated,
-        ViewInitialized,
-      ] = utils.$(".connecting .statuses p");
+      const [connected, fontsDownloaded, assetsDownloaded, ViewInitialized] =
+        utils.$(".connecting .statuses p");
       // createDraggable(".info", {
       //   container: [0, 0, 0, 0],
       //   releaseEase: createSpring({ stiffness: 200 }),
@@ -88,15 +83,13 @@ export default function Connecting({ connected }) {
         value: [0, ONE_HUNDRED],
         y: ["-10px", "0px"],
         opacity: [0, 1],
-        delay: (el, i) => i * (ONE_SECOND / 2),
-        // Each progress bar starts 500ms after the previous one
+        delay: stagger(ONE_SECOND / 2),
         duration: (el, i) => i * (ONE_HUNDRED * 5) + ONE_SECOND,
         ease: "outExpo",
         onComplete: (el) => {
           connected.textContent = "connected";
           fontsDownloaded.textContent = "fonts downloaded";
           assetsDownloaded.textContent = "assets downloaded";
-          // fruitJuiceActivated.textContent = "fruit juice activated";
           ViewInitialized.textContent = "2d/3d view initialized";
         },
       });
@@ -109,13 +102,13 @@ export default function Connecting({ connected }) {
       });
     });
 
-    //animate the lines
+    //animate the lines path
     animate(svg.createDrawable(".connecting .lines path"), {
       draw: ["0 0", "0 1", "1 1"],
-      ease: "inBounce",
+      ease: "inCubic",
       duration: ONE_SECOND * 8,
-      delay: stagger(ONE_SECOND * 1.5),
-      alternate: true,
+      delay: stagger(ONE_SECOND * 2),
+      // alternate: true,
       // loop: 1,
     });
 
@@ -146,10 +139,7 @@ export default function Connecting({ connected }) {
             <p>downloading assets..</p>
             <progress max={100} value={0}></progress>
           </div>
-          {/* <div>
-            <p>activating fruit juice..</p>
-            <progress max={100} value={0}></progress>
-          </div> */}
+
           <div>
             <p>initailizing 2d/3d view..</p>
             <progress max={100} value={0}></progress>
@@ -219,6 +209,7 @@ export default function Connecting({ connected }) {
 
           .statuses {
             width: max(250px, 25%);
+            backdrop-filter: blur(1rem);
             div {
               // border: 2px solid;
               height: 18%;
