@@ -14,7 +14,7 @@ import { useRef, useEffect, useState } from "react";
 const ONE_SECOND = 1000;
 const ONE_HUNDRED = 100;
 
-export default function Connecting({ connected }) {
+export default function Connecting({ connected, onSetConnected }) {
   const hundredth = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0];
   const tenth = [...hundredth];
   const unith = [0, 1];
@@ -40,8 +40,12 @@ export default function Connecting({ connected }) {
 
   useEffect(() => {
     scope.current = createScope({ root }).add((self) => {
-      const [connected, fontsDownloaded, assetsDownloaded, ViewInitialized] =
-        utils.$(".connecting .statuses p");
+      const [
+        $connected,
+        $fontsDownloaded,
+        $assetsDownloaded,
+        $ViewInitialized,
+      ] = utils.$(".connecting .statuses p");
       // createDraggable(".info", {
       //   container: [0, 0, 0, 0],
       //   releaseEase: createSpring({ stiffness: 200 }),
@@ -49,33 +53,56 @@ export default function Connecting({ connected }) {
 
       // animate the main heading
       animate(".connecting .info h1 span", {
-        y: ["-10px", "0px", "10px"],
+        y: ["-25px", "0px", "25px"],
         opacity: [0, 1, 0, 1],
         delay: stagger(50),
         duration: 50,
         alternate: true,
         loop: 2,
         ease: createSpring({ stiffness: 200, mass: 3 }),
+        onUpdate(self) {
+          if (self.currentTime > ONE_SECOND * 7) {
+            setConnectingText((x) => [
+              "C",
+              "O",
+              "N",
+              "N",
+              "E",
+              "C",
+              "T",
+              "E",
+              "D",
+              ".",
+              ".",
+              ".",
+            ]);
+          }
+          // console.log(self.currentTime);
+        },
+        onComplete() {
+          onSetConnected(true); // updates the state
+          // console.log(connected);
+        },
       });
 
       // animate the numbers in the Y axis
       animate(".connecting .hundredth", {
         y: ["45.5%", "-45.5%"],
         duration: ONE_SECOND + ONE_HUNDRED,
-        ease: "step(2)",
+        ease: "steps(10)",
         loop: 7,
       });
 
       animate(".connecting .tenth", {
         y: ["45.5%", "-45.5%"],
         duration: ONE_SECOND * 9,
-        ease: "step(2)",
+        ease: "steps(5)",
       });
 
       animate(".connecting .unith", {
         y: ["25%", "-25%"],
         duration: ONE_SECOND * 9,
-        ease: "step(1)",
+        ease: "steps(1)",
       });
 
       // Animate each progress element with a delay
@@ -83,21 +110,21 @@ export default function Connecting({ connected }) {
         value: [0, ONE_HUNDRED],
         y: ["-10px", "0px"],
         opacity: [0, 1],
-        delay: stagger(ONE_SECOND / 2),
+        delay: stagger(ONE_SECOND),
         duration: (el, i) => i * (ONE_HUNDRED * 5) + ONE_SECOND,
         ease: "outExpo",
         onComplete: (el) => {
-          connected.textContent = "connected";
-          fontsDownloaded.textContent = "fonts downloaded";
-          assetsDownloaded.textContent = "assets downloaded";
-          ViewInitialized.textContent = "2d/3d view initialized";
+          $connected.textContent = "connected";
+          $fontsDownloaded.textContent = "fonts downloaded";
+          $assetsDownloaded.textContent = "assets downloaded";
+          $ViewInitialized.textContent = "2d/3d view initialized";
         },
       });
 
       animate(".connecting .statuses p", {
         opacity: [0, 1],
         y: ["-10px", "0px"],
-        delay: (el, i) => i * (ONE_SECOND / 2),
+        delay: (el, i) => i * ONE_SECOND,
         duration: (el, i) => i * (ONE_HUNDRED * 5) + ONE_SECOND,
       });
     });
@@ -105,6 +132,7 @@ export default function Connecting({ connected }) {
     //animate the lines path
     animate(svg.createDrawable(".connecting .lines path"), {
       draw: ["0 0", "0 1", "1 1"],
+      opacity: [0.1, 0.8],
       ease: "inCubic",
       duration: ONE_SECOND * 8,
       delay: stagger(ONE_SECOND * 2),
@@ -256,6 +284,7 @@ export default function Connecting({ connected }) {
             height: inherit;
             width: inherit;
             z-index: -1;
+
             // background-color: #000c;
           }
 

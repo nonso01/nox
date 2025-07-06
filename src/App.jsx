@@ -6,15 +6,30 @@ import { useState } from "react";
 const CONNECT_DELAY_TIME = 6e3;
 
 function App() {
-  const [mobileView, setMobileView] = useState(false);
+  const mobileQuery = window.matchMedia("(max-width: 768px)");
+  const [isMobile, setIsMobile] = useState(mobileQuery.matches);
+
+  mobileQuery.addEventListener("change", (event) => {
+    setIsMobile((m) => event.matches);
+    // console.log(event.matches);
+  });
+
   const [connected, setConnected] = useState(false);
 
-  if (mobileView) {
+  // Simulate a delay for connection, this state
+  // is updated in the Connecting Component
+  function handleSetConnected(c) {
+    setConnected(c);
+  }
+
+  if (isMobile) {
     return <MobileApp connected={connected} />;
-  } else if (!mobileView) {
-    return <DesktopApp connected={connected} />;
+  } else if (!isMobile) {
+    return (
+      <DesktopApp connected={connected} onSetConnected={handleSetConnected} />
+    );
   } else {
-    return <Text text="no value passed" />;
+    return <Text text="An error occured!, Please refresh" />;
   }
 }
 
