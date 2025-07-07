@@ -14,7 +14,7 @@ function App() {
     // console.log(event.matches);
   });
 
-  const [connected, setConnected] = useState(false);
+  const [connected, setConnected] = useState(false); // set back to true to test
 
   // Simulate a delay for connection, this state
   // is updated in the Connecting Component

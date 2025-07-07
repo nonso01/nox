@@ -5,9 +5,10 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  line-height: 1.4;
 
   font-family: "Outfit", system-ui, -apple-system, sans-serif;
-  color: rgb(255, 255, 255);
+  color: #fff;
 }
 
 @font-face {
@@ -19,6 +20,8 @@
   --font-sm: 0.9rem;
 
   --light-green: #34db69;
+  --dark: #222;
+  --light-dark: #0008;
 }
 
 html,
@@ -26,10 +29,19 @@ body {
   min-height: 100dvh;
   background-color: #222;
   scrollbar-gutter: stable;
+  /* overflow-x: hidden; */
 
   #root,
   .desktop-app {
     min-height: inherit;
+  }
+}
+
+html:has(.connecting) {
+  overflow: hidden;
+
+  .desktop-app {
+    padding: 0;
   }
 }
 
@@ -51,6 +63,10 @@ select {
 a {
   text-decoration: none;
   color: inherit;
+  transition-duration: 200ms;
+  &:hover {
+    transition-duration: 150ms;
+  }
 }
 
 .flex {
@@ -78,16 +94,19 @@ a {
   border: 2px solid red;
 }
 
-.desktop-app {
-  position: relative;
-}
-
 /* connecting component general */
 .connecting {
   height: 100dvh;
-  width: 100dvw;
+  /* width: 100dvw; */
   position: relative;
   z-index: 1;
+}
+
+/* desktopapp component */
+
+.desktop-app {
+  position: relative;
+  padding: 30px 130px;
 }
 
 /* @media screen and (max-width: 600px) {
