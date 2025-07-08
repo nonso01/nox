@@ -46,10 +46,7 @@ export default function Connecting({ connected, onSetConnected }) {
         $assetsDownloaded,
         $ViewInitialized,
       ] = utils.$(".connecting .statuses p");
-      // createDraggable(".info", {
-      //   container: [0, 0, 0, 0],
-      //   releaseEase: createSpring({ stiffness: 200 }),
-      // });
+     
 
       // animate the main heading
       animate(".connecting .info h1 span", {

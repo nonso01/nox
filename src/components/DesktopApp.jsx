@@ -3,7 +3,7 @@ import Connecting from "./Connecting";
 import Logo from "/images/favicon.png";
 import { createScope, createDraggable, createSpring } from "animejs";
 import { useRef, useState, useEffect } from "react";
-// import { animate } from "animejs";
+import { Star } from "lucide-react";
 
 export default function DesktopApp({ connected, onSetConnected }) {
   const root = useRef(null);
@@ -32,7 +32,7 @@ export default function DesktopApp({ connected, onSetConnected }) {
   } else {
     return (
       <div className="desktop-app" ref={root}>
-        <header className="d-header flex column between " id="home">
+        <header className="d-header flex column between" id="home">
           <nav className="d-nav flex between">
             <div className=" links flex evenly">
               <span>
@@ -64,7 +64,48 @@ export default function DesktopApp({ connected, onSetConnected }) {
               </span>
             </div>
           </nav>
-          <section className="d-s1 "></section>
+          <section className="d-s1 flex column evenly debbug">
+            <div className="intro-name flex column evenly debbug">
+              <p className="p-hello flex center">
+                <span>HELLO</span>
+              </p>
+              <p className="p-name">
+                I'm <span>Martin,</span>
+                <p>Frontend Developer</p>
+              </p>
+            </div>
+
+            <div className="intro-rating flex between debbug">
+              <div className="debbug">
+                <p>''</p>
+                <p>
+                  Martin's proffesionalism and expertise ensured our website and
+                  brand success. Highly recommended!
+                </p>
+                <p>
+                  <span>30+</span>
+                  <span>Client Served</span>
+                </p>
+              </div>
+
+              <div className="debbug">
+                <p>
+                  <Star fill="var(--light-green)" stroke="var(--light-green)" />
+                  <Star fill="var(--light-green)" stroke="var(--light-green)" />
+                  <Star fill="var(--light-green)" stroke="var(--light-green)" />
+                  <Star fill="var(--light-green)" stroke="var(--light-green)" />
+                  <Star fill="var(--light-green)" stroke="var(--light-green)" />
+                </p>
+                <p>4 Years</p>
+                <p>In The Making!</p>
+              </div>
+            </div>
+
+            <div className="intro-links debbug">
+              <p>Portfolio</p>
+              <p>Hire me</p>
+            </div>
+          </section>
         </header>
 
         <style jsx="true">{`
@@ -105,6 +146,44 @@ export default function DesktopApp({ connected, onSetConnected }) {
 
             .d-s1 {
               height: 830px;
+
+              .intro-name {
+                align-self: center;
+                height: 300px;
+                width: 72%;
+
+                .p-hello {
+                  // border: 2px solid;
+                  align-self: center;
+                  width: 100px;
+                  font-weight: bold;
+                  span {
+                    font-family: "Orbitron";
+                    letter-spacing: 3px;
+                  }
+                }
+
+                .p-name {
+                  font-size: 5.5rem;
+                  text-align: center;
+                  font-weight: bold;
+
+                  span {
+                    color: var(--light-green);
+                  }
+                }
+              }
+
+              .intro-rating {
+                height: 300px;
+                div {
+                  width: 400px;
+                }
+              }
+
+              .intro-links {
+                height: 100px;
+              }
             }
           }
         `}</style>

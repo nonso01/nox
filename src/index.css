@@ -9,6 +9,7 @@
 
   font-family: "Outfit", system-ui, -apple-system, sans-serif;
   color: #fff;
+  user-select: none;
 }
 
 @font-face {
