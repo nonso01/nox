@@ -69,10 +69,10 @@ export default function DesktopApp({ connected, onSetConnected }) {
               <p className="p-hello flex center">
                 <span>HELLO</span>
               </p>
-              <p className="p-name">
+              <div className="p-name">
                 I'm <span>Martin,</span>
-                Frontend Developer
-              </p>
+                <p>Frontend Developer</p>
+              </div>
             </div>
 
             <div className="intro-rating flex between ">
