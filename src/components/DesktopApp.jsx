@@ -4,6 +4,8 @@ import Logo from "/images/favicon.png";
 import { createScope, createDraggable, createSpring } from "animejs";
 import { useRef, useState, useEffect } from "react";
 import { Star, ArrowUpRight } from "lucide-react";
+import { animate } from "animejs";
+import { stagger } from "animejs";
 
 export default function DesktopApp({ connected, onSetConnected }) {
   const root = useRef(null);
@@ -15,6 +17,15 @@ export default function DesktopApp({ connected, onSetConnected }) {
       createDraggable(".logo img", {
         container: [0, 0, 0, 0],
         releaseEase: createSpring({ stiffness: 200 }),
+      });
+
+      animate(".lucide-star", {
+        duration: 500,
+        scale: [0, 1],
+        ease: createSpring({ stiffness: 200, mass: 2 }),
+        delay: stagger(100, { from: "center" }),
+        alternate: true,
+        loop: 6,
       });
     });
 
@@ -32,7 +43,7 @@ export default function DesktopApp({ connected, onSetConnected }) {
   } else {
     return (
       <div className="desktop-app" ref={root}>
-        <header className="d-header flex column between" id="home">
+        <header className="d-header flex column between " id="home">
           <nav className="d-nav flex between">
             <div className=" links flex evenly">
               <span>
@@ -105,7 +116,7 @@ export default function DesktopApp({ connected, onSetConnected }) {
 
             <div className="intro-links flex evenly ">
               <p className="flex center">
-                Portfolio <ArrowUpRight />
+                Portfolio <ArrowUpRight strokeWidth={3} />
               </p>
               <p className="flex center">Hire me</p>
             </div>
@@ -253,7 +264,8 @@ export default function DesktopApp({ connected, onSetConnected }) {
                   align-self: center;
                   height: 80px;
                   border-radius: 25px;
-                  font-size: 1.7rem;
+                  font-size: 1.5rem;
+                  font-weight: bold;
                   gap: 0.625rem;
                   cursor: pointer;
                 }
