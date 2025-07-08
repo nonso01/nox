@@ -41,10 +41,10 @@ export default function DesktopApp({ connected, onSetConnected }) {
                 </a>
               </span>
               <span>
-                <a href="">About</a>
+                <a href="#">About</a>
               </span>
               <span>
-                <a href="">Service</a>
+                <a href="#">Service</a>
               </span>
             </div>
 
@@ -54,13 +54,13 @@ export default function DesktopApp({ connected, onSetConnected }) {
 
             <div className="links flex evenly">
               <span>
-                <a href="">Resume</a>
+                <a href="#">Resume</a>
               </span>
               <span>
-                <a href="">Projects</a>
+                <a href="#">Projects</a>
               </span>
               <span>
-                <a href="">Let's chat</a>
+                <a href="#">Let's chat</a>
               </span>
             </div>
           </nav>
