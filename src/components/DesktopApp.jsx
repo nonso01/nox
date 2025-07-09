@@ -27,6 +27,25 @@ export default function DesktopApp({ connected, onSetConnected }) {
         alternate: true,
         loop: true,
       });
+
+      animate(".cards .folders div:nth-child(2)", {
+        y: ["0%", "-10%", "-30%"],
+        duration: 500,
+        delay: stagger(100, { from: "center" }),
+        ease: createSpring({ stiffness: 200, mass: 2 }),
+        alternate: true,
+        loop: true,
+      });
+
+      animate(".cards .folders div:nth-child(3)", {
+        y: ["0%", "-20%", "-40%"],
+        duration: 400,
+        delay: stagger(100, { from: "first" }),
+        ease: createSpring({ stiffness: 200, mass: 2 }),
+        alternate: true,
+        loop: true,
+      });
+
     });
 
     console.log(connected);
@@ -137,10 +156,54 @@ export default function DesktopApp({ connected, onSetConnected }) {
               </p>
             </div>
           </div>
-          <div className="service-cards flex between ">
-            <div className="cards"></div>
-            <div className="cards"></div>
-            <div className="cards"></div>
+          <div className="service-cards flex between">
+            <div className="cards">
+              <p className="title">2D/3D Animations</p>
+              <div className="folders">
+                <div>
+                  <video autoPlay loop muted playsInline>
+                    <source src="/images/dice-390.webm" />
+                  </video>
+                </div>
+                <div></div>
+                <div></div>
+              </div>
+              <div className="arrow">
+                <ArrowUpRight width={72} height={72} />
+              </div>
+            </div>
+            <div className="cards">
+              <p className="title ">Full Stack apps</p>
+              <div className="folders">
+                <div>
+                  <img
+                    src="/images/food-order-page.png"
+                    alt="food order page thumbnail"
+                  />
+                </div>
+                <div></div>
+                <div></div>
+              </div>
+              <div className="arrow">
+                <ArrowUpRight width={72} height={72} />
+              </div>
+            </div>
+            <div className="cards">
+              <p className="title ">Landing pages</p>
+              <div className="folders">
+                <div>
+                  <img
+                    src="/images/sneaker-landing-page.png"
+                    alt="food order page thumbnail"
+                  />
+                </div>
+                <div></div>
+                <div></div>
+              </div>
+              <div className="arrow">
+                <ArrowUpRight width={72} height={72} />
+              </div>
+            </div>
           </div>
         </section>
 
@@ -329,13 +392,80 @@ export default function DesktopApp({ connected, onSetConnected }) {
               height: 600px;
 
               .cards {
-                width: 30.5%;
+                position: relative;
+                width: min(30.5%, 500px);
                 height: 600px;
                 align-self: center;
-                background-color: var(--dark);
+                background-color: #222;
                 clip-path: path(
                   "M450 0C477.614 6.4426e-06 500 22.3858 500 50V389C500 416.614 477.614 439 450 439H387C359.386 439 337 461.386 337 489V550C337 577.614 314.614 600 287 600H50C22.3858 600 8.0543e-07 577.614 0 550V50C0 22.3858 22.3858 4.02663e-07 50 0H450ZM430 460C468.66 460 500 491.34 500 530C500 568.66 468.66 600 430 600C391.34 600 360 568.66 360 530C360 491.34 391.34 460 430 460Z"
                 );
+
+                transition-duration: 200ms;
+
+                &:hover {
+                  background-color: var(--light-green);
+                  .arrow {
+                    background-color: var(--light-green);
+                  }
+                }
+
+                .title {
+                  height: 20%;
+                  padding: 1.5rem;
+                  font-size: 2rem;
+                  font-weight: 500;
+                  border-bottom: 2px solid var(--light-dark);
+                }
+
+                .folders {
+                  height: 80%;
+                  position: relative;
+                  // background-color: white;
+
+                  div {
+                    position: absolute;
+                    bottom: 0;
+                    height: 60%;
+                    width: 100%;
+                    border-radius: 25px;
+                    overflow: hidden;
+                  }
+
+                  div:nth-child(1) {
+                    background-color: #222b;
+                    z-index: 8;
+                  }
+
+                  div:nth-child(2) {
+                    width: 90%;
+                    margin-inline: 5%;
+                    transform: translateY(-10%);
+                    background-color: #000a;
+                    z-index: 4;
+                  }
+
+                  div:nth-child(3) {
+                    width: 80%;
+                    margin-inline: 10%;
+                    transform: translateY(-20%);
+                    background-color: #0009;
+                    z-index: 2;
+                  }
+                }
+
+                .arrow {
+                  width: 29%;
+                  height: 150px;
+                  display: grid;
+                  place-items: center;
+                  background-color: var(--dark);
+                  position: absolute;
+                  z-index: 10;
+                  bottom: -5px;
+                  right: -1px;
+                  transition-duration: 200ms;
+                }
               }
             }
           }
