@@ -30,7 +30,7 @@ export default function DesktopApp({ connected, onSetConnected }) {
 
       animate(".cards .folders div:nth-child(2)", {
         y: ["0%", "-10%", "-30%"],
-        duration: 500,
+        // duration: 6000,
         delay: stagger(100, { from: "center" }),
         ease: createSpring({ stiffness: 200, mass: 2 }),
         alternate: true,
@@ -39,13 +39,12 @@ export default function DesktopApp({ connected, onSetConnected }) {
 
       animate(".cards .folders div:nth-child(3)", {
         y: ["0%", "-20%", "-40%"],
-        duration: 400,
-        delay: stagger(100, { from: "first" }),
+        // duration: 9000,
+        delay: stagger(200, { from: "first" }),
         ease: createSpring({ stiffness: 200, mass: 2 }),
         alternate: true,
         loop: true,
       });
-
     });
 
     console.log(connected);
@@ -166,20 +165,14 @@ export default function DesktopApp({ connected, onSetConnected }) {
                   </video>
                 </div>
                 <div>
-                  <img
-                    src="/images/nox-psp-390.png"
-                    alt="nox psp thumbnail"
-                  />
+                  <img src="/images/nox-psp-390.png" alt="nox psp thumbnail" />
                 </div>
                 <div>
-                  <img
-                    src="/images/earth-390.png"
-                    alt="earth thumbnail"
-                  />
+                  <img src="/images/earth-390.png" alt="earth thumbnail" />
                 </div>
               </div>
               <div className="arrow">
-                <ArrowUpRight width={72} height={72} />
+                <ArrowUpRight width={50} height={50} />
               </div>
             </div>
             <div className="cards">
@@ -191,11 +184,21 @@ export default function DesktopApp({ connected, onSetConnected }) {
                     alt="food order page thumbnail"
                   />
                 </div>
-                <div></div>
-                <div></div>
+                <div>
+                  <img
+                    src="/images/form-full-stack.png"
+                    alt="interactive form"
+                  />
+                </div>
+                <div>
+                  <img
+                    src="/images/pay-card-full-stack.png"
+                    alt="payment card page"
+                  />
+                </div>
               </div>
               <div className="arrow">
-                <ArrowUpRight width={72} height={72} />
+                <ArrowUpRight width={50} height={50} />
               </div>
             </div>
             <div className="cards">
@@ -207,11 +210,21 @@ export default function DesktopApp({ connected, onSetConnected }) {
                     alt="sneaker page thumbnail"
                   />
                 </div>
-                <div></div>
-                <div></div>
+                <div>
+                  <img
+                    src="/images/bookmark-landing-page.png"
+                    alt="bookmark landing page"
+                  />
+                </div>
+                <div>
+                  <img
+                    src="/images/blogr-landing-page.png"
+                    alt="blogr landing page"
+                  />
+                </div>
               </div>
               <div className="arrow">
-                <ArrowUpRight width={72} height={72} />
+                <ArrowUpRight width={50} height={50} />
               </div>
             </div>
           </div>
@@ -475,6 +488,7 @@ export default function DesktopApp({ connected, onSetConnected }) {
                   bottom: -5px;
                   right: -1px;
                   transition-duration: 200ms;
+                  cursor: pointer;
                 }
               }
             }
