@@ -41,6 +41,11 @@ body {
 html:has(.connecting) {
   overflow: hidden;
 
+  .connecting {
+    overflow: hidden;
+    /* hmmm work on this */
+  }
+
   .desktop-app {
     padding: 0;
   }
@@ -111,7 +116,6 @@ a {
 .desktop-app {
   position: relative;
   /* padding: 30px 130px; */
-  
 }
 
 /* @media screen and (max-width: 600px) {

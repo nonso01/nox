@@ -482,7 +482,7 @@ export default function DesktopApp({ connected, onSetConnected }) {
                   height: 150px;
                   display: grid;
                   place-items: center;
-                  background-color: var(--dark);
+                  background-color: #222e;
                   position: absolute;
                   z-index: 10;
                   bottom: -5px;
