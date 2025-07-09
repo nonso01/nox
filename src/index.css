@@ -110,7 +110,8 @@ a {
 
 .desktop-app {
   position: relative;
-  padding: 30px 130px;
+  /* padding: 30px 130px; */
+  
 }
 
 /* @media screen and (max-width: 600px) {

@@ -25,7 +25,7 @@ export default function DesktopApp({ connected, onSetConnected }) {
         ease: createSpring({ stiffness: 200, mass: 2 }),
         delay: stagger(100, { from: "center" }),
         alternate: true,
-        loop: 6,
+        loop: true,
       });
     });
 
@@ -123,9 +123,31 @@ export default function DesktopApp({ connected, onSetConnected }) {
           </section>
         </header>
 
+        <section className="d-service flex column evenly">
+          <div className="service-info flex between">
+            <div>
+              <p>
+                My <span>Services</span>
+              </p>
+            </div>
+            <div>
+              <p>
+                Specializing in web development, Blender art, and professional
+                video editing to bring your vision to life.
+              </p>
+            </div>
+          </div>
+          <div className="service-cards flex between ">
+            <div className="cards"></div>
+            <div className="cards"></div>
+            <div className="cards"></div>
+          </div>
+        </section>
+
         <style jsx="true">{`
           .d-header {
             height: 1020px;
+            padding: 30px 130px;
 
             a {
               font-size: 1.1rem;
@@ -269,6 +291,51 @@ export default function DesktopApp({ connected, onSetConnected }) {
                   gap: 0.625rem;
                   cursor: pointer;
                 }
+              }
+            }
+          }
+
+          .d-service {
+            height: 830px;
+            padding: 30px 130px;
+            background-color: var(--light-dark);
+            border-radius: 50px;
+
+            .service-info {
+              height: 100px;
+              padding-bottom: 1rem;
+              border-bottom: 2px solid var(--dark);
+
+              div {
+                width: 30%;
+                // font-weight: 500;
+              }
+
+              div:nth-child(1) p {
+                font-size: 3.5rem;
+
+                span {
+                  color: var(--light-green);
+                }
+              }
+
+              div:nth-child(2) p {
+                font-size: 1.3rem;
+                line-height: 1.5;
+              }
+            }
+
+            .service-cards {
+              height: 600px;
+
+              .cards {
+                width: 30.5%;
+                height: 600px;
+                align-self: center;
+                background-color: var(--dark);
+                clip-path: path(
+                  "M450 0C477.614 6.4426e-06 500 22.3858 500 50V389C500 416.614 477.614 439 450 439H387C359.386 439 337 461.386 337 489V550C337 577.614 314.614 600 287 600H50C22.3858 600 8.0543e-07 577.614 0 550V50C0 22.3858 22.3858 4.02663e-07 50 0H450ZM430 460C468.66 460 500 491.34 500 530C500 568.66 468.66 600 430 600C391.34 600 360 568.66 360 530C360 491.34 391.34 460 430 460Z"
+                );
               }
             }
           }
