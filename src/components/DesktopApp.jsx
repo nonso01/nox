@@ -165,8 +165,18 @@ export default function DesktopApp({ connected, onSetConnected }) {
                     <source src="/images/dice-390.webm" />
                   </video>
                 </div>
-                <div></div>
-                <div></div>
+                <div>
+                  <img
+                    src="/images/nox-psp-390.png"
+                    alt="nox psp thumbnail"
+                  />
+                </div>
+                <div>
+                  <img
+                    src="/images/earth-390.png"
+                    alt="earth thumbnail"
+                  />
+                </div>
               </div>
               <div className="arrow">
                 <ArrowUpRight width={72} height={72} />
@@ -194,7 +204,7 @@ export default function DesktopApp({ connected, onSetConnected }) {
                 <div>
                   <img
                     src="/images/sneaker-landing-page.png"
-                    alt="food order page thumbnail"
+                    alt="sneaker page thumbnail"
                   />
                 </div>
                 <div></div>
