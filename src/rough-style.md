@@ -1,0 +1,259 @@
+`Under desktop-app, large screen 1920px`
+
+```css
+.d-header {
+  height: 1020px;
+  padding: 30px 130px;
+
+  a {
+    font-size: 1.1rem;
+    font-weight: bolder;
+    &:hover {
+      color: var(--light-green);
+    }
+  }
+
+  .d-nav {
+    height: 100px;
+    padding: 1%;
+    border-radius: 25px;
+    background-color: var(--light-dark);
+
+    a.home-link {
+      color: var(--light-green);
+    }
+
+    .logo {
+      width: 10%;
+      img {
+        width: 40%;
+        aspect-ratio: 1;
+      }
+    }
+
+    .links {
+      width: 35%;
+      align-items: center;
+    }
+  }
+
+  .d-s1 {
+    height: 830px;
+
+    .intro-name {
+      align-self: center;
+      height: 300px;
+      width: 72%;
+
+      .p-hello {
+        align-self: center;
+        width: 100px;
+        font-weight: bold;
+        span {
+          font-family: "Orbitron";
+          letter-spacing: 3px;
+        }
+      }
+
+      .p-name {
+        /*.p-name p */
+        font-size: 5.5rem;
+        text-align: center;
+        font-weight: bold;
+
+        span {
+          color: var(--light-green);
+        }
+      }
+    }
+
+    .intro-rating {
+      height: 300px;
+
+      div {
+        width: 400px;
+      }
+
+      .p-quote {
+        font-size: 3rem;
+      }
+
+      .p-info {
+        font-size: 1.3rem;
+        text-wrap: balance;
+        line-height: 1.5;
+      }
+
+      .p-client {
+        p:nth-child(1) {
+          font-size: 2rem;
+          font-weight: bold;
+          font-family: "Orbitron";
+        }
+        p:nth-child(2) {
+          margin-top: 0.6rem;
+          font-size: var(--font-sm);
+        }
+      }
+
+      .p-stars {
+        width: 50%;
+      }
+
+      .p-years {
+        font-size: 2rem;
+        font-weight: bold;
+        margin-block: 2rem;
+        span {
+          font-family: "Orbitron";
+        }
+      }
+
+      .p-ex {
+        font-size: 2.5rem;
+        text-align: right;
+        padding-bottom: 1.5rem;
+        width: 80%;
+        border-bottom: 5px solid;
+      }
+    }
+
+    .intro-links {
+      height: 100px;
+      width: 500px;
+      align-self: center;
+
+      p:nth-child(1) {
+        background-color: var(--light-green);
+      }
+
+      p:nth-child(2) {
+        color: var(--light-green);
+        border: 2px solid;
+      }
+
+      p {
+        width: 45%;
+        align-self: center;
+        height: 80px;
+        border-radius: 25px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        gap: 0.625rem;
+        cursor: pointer;
+      }
+    }
+  }
+}
+
+.d-service {
+  height: 830px;
+  padding: 30px 130px;
+  background-color: var(--light-dark);
+  border-radius: 50px;
+
+  .service-info {
+    height: 100px;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid var(--dark);
+
+    div {
+      width: 30%;
+    }
+
+    div:nth-child(1) p {
+      font-size: 3.5rem;
+
+      span {
+        color: var(--light-green);
+      }
+    }
+
+    div:nth-child(2) p {
+      font-size: 1.3rem;
+      line-height: 1.5;
+    }
+  }
+
+  .service-cards {
+    height: 600px;
+
+    .cards {
+      position: relative;
+      width: min(30.5%, 500px);
+      height: 600px;
+      align-self: center;
+      background-color: #222;
+      clip-path: path(
+        "M450 0C477.614 6.4426e-06 500 22.3858 500 50V389C500 416.614 477.614 439 450 439H387C359.386 439 337 461.386 337 489V550C337 577.614 314.614 600 287 600H50C22.3858 600 8.0543e-07 577.614 0 550V50C0 22.3858 22.3858 4.02663e-07 50 0H450ZM430 460C468.66 460 500 491.34 500 530C500 568.66 468.66 600 430 600C391.34 600 360 568.66 360 530C360 491.34 391.34 460 430 460Z"
+      );
+
+      transition-duration: 200ms;
+
+      &:hover {
+        background-color: var(--light-green);
+        .arrow {
+          background-color: var(--light-green);
+        }
+      }
+
+      .title {
+        height: 20%;
+        padding: 1.5rem;
+        font-size: 2rem;
+        font-weight: 500;
+        border-bottom: 2px solid var(--light-dark);
+      }
+
+      .folders {
+        height: 80%;
+        position: relative;
+
+        div {
+          position: absolute;
+          bottom: 0;
+          height: 60%;
+          width: 100%;
+          border-radius: 25px;
+          overflow: hidden;
+        }
+
+        div:nth-child(1) {
+          background-color: #222b;
+          z-index: 8;
+        }
+
+        div:nth-child(2) {
+          width: 90%;
+          margin-inline: 5%;
+          transform: translateY(-10%);
+          background-color: #000a;
+          z-index: 4;
+        }
+
+        div:nth-child(3) {
+          width: 80%;
+          margin-inline: 10%;
+          transform: translateY(-20%);
+          background-color: #0009;
+          z-index: 2;
+        }
+      }
+
+      .arrow {
+        width: 29%;
+        height: 150px;
+        display: grid;
+        place-items: center;
+        background-color: #222e;
+        position: absolute;
+        z-index: 10;
+        bottom: -5px;
+        right: -1px;
+        transition-duration: 200ms;
+        cursor: pointer;
+      }
+    }
+  }
+}
+```
