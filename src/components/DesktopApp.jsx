@@ -2,11 +2,16 @@
 import Connecting from "./Connecting";
 import LineFollowCircle from "./LineFollowCircle";
 import Logo from "/images/favicon.png";
-import { createScope, createDraggable, createSpring } from "animejs";
+import {
+  createScope,
+  createDraggable,
+  createSpring,
+  animate,
+  stagger,
+  svg,
+} from "animejs";
 import { useRef, useState, useEffect } from "react";
 import { Star, ArrowUpRight } from "lucide-react";
-import { animate } from "animejs";
-import { stagger } from "animejs";
 
 export default function DesktopApp({ connected, onSetConnected }) {
   const root = useRef(null);
@@ -47,6 +52,14 @@ export default function DesktopApp({ connected, onSetConnected }) {
         loop: true,
       });
     });
+
+    // animate(svg.createDrawable(".d-work-info .lines path, .d-work-info .lines circle"), {
+    //   draw: ["0 0", "0 1", "1 1"],
+    //   // opacity: [0.1, 0.8],
+    //   ease: "inCubic",
+    //   duration: 1000 * 2,
+    //   delay: stagger(1000 * 2),
+    // });
 
     console.log(connected);
 
@@ -292,6 +305,9 @@ export default function DesktopApp({ connected, onSetConnected }) {
             </div>
           </div>
         </section>
+
+        <section className="d-3d-hire d-experience"></section>
+
         <style jsx="true">{`
           .d-experience {
             height: 830px;
@@ -303,7 +319,7 @@ export default function DesktopApp({ connected, onSetConnected }) {
               align-self: center;
 
               p {
-                font-size: 2.5rem;
+                font-size: 3rem;
                 font-weight: 500;
               }
             }
