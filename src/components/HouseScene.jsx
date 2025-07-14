@@ -1,11 +1,15 @@
 import { useEffect, useRef } from "react";
 import * as THREE from "three";
 // import { GUI} from "three/addons/libs/lil-gui.module.min.js";
+import Stats from "three/addons/libs/stats.module.js";
 
 export default function HouseScene() {
   const mountRef = useRef(null);
   // Use a ref to store the renderer to ensure access during cleanup
   const rendererRef = useRef(null);
+
+  const stats = new Stats(); // stats.js for performance monitoring
+  document.body.appendChild(stats.dom);
 
   useEffect(() => {
     // Skip if mountRef is not attached
@@ -14,11 +18,11 @@ export default function HouseScene() {
       return;
     }
 
-    // Three.js Setup
+    // three.js Setup
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0x000000);
 
-    // Initialize camera with parent div's aspect ratio
+    // initialize camera with parent div's aspect ratio
     const parentWidth = mountRef.current?.clientWidth;
     const parentHeight = mountRef.current?.clientHeight;
     const camera = new THREE.PerspectiveCamera(
@@ -34,22 +38,21 @@ export default function HouseScene() {
     renderer.setPixelRatio(window.devicePixelRatio);
     rendererRef.current = renderer;
 
-    // Prevent multiple canvas appends
+    // prevent multiple canvas appends
     if (mountRef.current.childElementCount === 0) {
       mountRef.current.appendChild(renderer.domElement);
     } else {
       console.warn("Canvas already exists, skipping append");
     }
 
-    const geometry = new THREE.TorusKnotGeometry(4, 1, 100, 16);
+    const geometry = new THREE.TorusKnotGeometry(2.5, 1, 100, 16);
     const material = new THREE.MeshNormalMaterial({
-        wireframe: true,
+      wireframe: true,
     });
     const cube = new THREE.Mesh(geometry, material);
     scene.add(cube);
 
-
-    // Resize function
+    // resize function
     const resizeRendererToDisplaySize = () => {
       const canvas = renderer.domElement;
       const px = Math.min(window.devicePixelRatio, 2);
@@ -64,18 +67,22 @@ export default function HouseScene() {
       return needResize;
     };
 
-    // Animation loop
+    // animation loop
     const animate = (time) => {
-      time *= 0.001; // Convert to seconds
+      stats.begin(); // begin stats calculations
+      
+      time *= 0.001; // convert to seconds
       requestAnimationFrame(animate);
-      resizeRendererToDisplaySize(); // Check resize every frame
+      resizeRendererToDisplaySize(); // check resize every frame
       cube.rotation.x += 0.01;
       cube.rotation.y += 0.01;
       renderer.render(scene, camera);
+
+      stats.end(); // end calculations
     };
     requestAnimationFrame(animate);
 
-    // Cleanup
+    // cleanup
     return () => {
       if (mountRef.current && rendererRef.current?.domElement) {
         try {

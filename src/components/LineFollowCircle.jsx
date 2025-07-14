@@ -16,7 +16,7 @@ export default function LineFollowCircle() {
           cy="247"
           r="23"
           stroke="#34db69"
-          fill="#34db69"
+          // fill="#34db69"
           strokeWidth="4"
         />
         <circle cx="25" cy="469" r="23" stroke="#34db69" strokeWidth="4" />

@@ -20,15 +20,15 @@
 :root {
   --font-sm: 0.9rem;
 
-  --light-green: #34db69;
+  --primary-color: #34db69;
   --dark: #222;
-  --light-dark: #0008;
+  --secondary-color: #0008;
 }
 
 html,
 body {
   min-height: 100dvh;
-  background-color: #222;
+  background-color: var(--dark);
   scrollbar-gutter: stable;
   /* overflow-x: hidden; */
 
@@ -76,6 +76,27 @@ a {
 }
 
 /* scroll bar styles */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: transparent;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: white;
+  border-radius: 10px;
+  transition-duration: 200ms;
+  /* border: 2px solid transparent; */
+}
+
+::-webkit-scrollbar-thumb:hover {
+  transition-duration: 200ms;
+  background-color: var(--primary-color);
+}
 
 .flex {
   display: flex;
@@ -130,7 +151,7 @@ a {
       font-size: 1.1rem;
       font-weight: bolder;
       &:hover {
-        color: var(--light-green);
+        color: var(--primary-color);
       }
     }
 
@@ -138,10 +159,10 @@ a {
       height: 100px;
       padding: 1%;
       border-radius: 25px;
-      background-color: var(--light-dark);
+      background-color: var(--secondary-color);
 
       a.home-link {
-        color: var(--light-green);
+        color: var(--primary-color);
       }
 
       .logo {
@@ -183,7 +204,7 @@ a {
           font-weight: bold;
 
           span {
-            color: var(--light-green);
+            color: var(--primary-color);
           }
         }
       }
@@ -245,11 +266,11 @@ a {
         align-self: center;
 
         p:nth-child(1) {
-          background-color: var(--light-green);
+          background-color: var(--primary-color);
         }
 
         p:nth-child(2) {
-          color: var(--light-green);
+          color: var(--primary-color);
           border: 2px solid;
         }
 
@@ -270,7 +291,7 @@ a {
   .d-service {
     height: 830px;
     padding: 30px 130px;
-    background-color: var(--light-dark);
+    background-color: var(--secondary-color);
     border-radius: 50px;
 
     .service-info {
@@ -286,7 +307,7 @@ a {
         font-size: 3.5rem;
 
         span {
-          color: var(--light-green);
+          color: var(--primary-color);
         }
       }
 
@@ -312,9 +333,9 @@ a {
         transition-duration: 200ms;
 
         &:hover {
-          background-color: var(--light-dark);
+          background-color: var(--secondary-color);
           .arrow {
-            background-color: var(--light-green);
+            background-color: var(--primary-color);
           }
         }
 
@@ -323,7 +344,7 @@ a {
           padding: 1.5rem;
           font-size: 2rem;
           font-weight: 500;
-          border-bottom: 2px solid var(--light-dark);
+          border-bottom: 2px solid var(--secondary-color);
         }
 
         .folders {

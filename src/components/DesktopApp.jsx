@@ -134,11 +134,26 @@ export default function DesktopApp({ connected, onSetConnected }) {
 
               <div className=" flex column end">
                 <p className="p-stars flex evenly">
-                  <Star fill="var(--light-green)" stroke="var(--light-green)" />
-                  <Star fill="var(--light-green)" stroke="var(--light-green)" />
-                  <Star fill="var(--light-green)" stroke="var(--light-green)" />
-                  <Star fill="var(--light-green)" stroke="var(--light-green)" />
-                  <Star fill="var(--light-green)" stroke="var(--light-green)" />
+                  <Star
+                    fill="var(--primary-color)"
+                    stroke="var(--primary-color)"
+                  />
+                  <Star
+                    fill="var(--primary-color)"
+                    stroke="var(--primary-color)"
+                  />
+                  <Star
+                    fill="var(--primary-color)"
+                    stroke="var(--primary-color)"
+                  />
+                  <Star
+                    fill="var(--primary-color)"
+                    stroke="var(--primary-color)"
+                  />
+                  <Star
+                    fill="var(--primary-color)"
+                    stroke="var(--primary-color)"
+                  />
                 </p>
                 <p className="p-years">
                   <span>4</span> Years

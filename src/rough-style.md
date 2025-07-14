@@ -9,7 +9,7 @@
     font-size: 1.1rem;
     font-weight: bolder;
     &:hover {
-      color: var(--light-green);
+      color: var(--primary-color);
     }
   }
 
@@ -17,10 +17,10 @@
     height: 100px;
     padding: 1%;
     border-radius: 25px;
-    background-color: var(--light-dark);
+    background-color: var(--secondary-color);
 
     a.home-link {
-      color: var(--light-green);
+      color: var(--primary-color);
     }
 
     .logo {
@@ -62,7 +62,7 @@
         font-weight: bold;
 
         span {
-          color: var(--light-green);
+          color: var(--primary-color);
         }
       }
     }
@@ -124,11 +124,11 @@
       align-self: center;
 
       p:nth-child(1) {
-        background-color: var(--light-green);
+        background-color: var(--primary-color);
       }
 
       p:nth-child(2) {
-        color: var(--light-green);
+        color: var(--primary-color);
         border: 2px solid;
       }
 
@@ -149,7 +149,7 @@
 .d-service {
   height: 830px;
   padding: 30px 130px;
-  background-color: var(--light-dark);
+  background-color: var(--secondary-color);
   border-radius: 50px;
 
   .service-info {
@@ -165,7 +165,7 @@
       font-size: 3.5rem;
 
       span {
-        color: var(--light-green);
+        color: var(--primary-color);
       }
     }
 
@@ -191,9 +191,9 @@
       transition-duration: 200ms;
 
       &:hover {
-        background-color: var(--light-green);
+        background-color: var(--primary-color);
         .arrow {
-          background-color: var(--light-green);
+          background-color: var(--primary-color);
         }
       }
 
@@ -202,7 +202,7 @@
         padding: 1.5rem;
         font-size: 2rem;
         font-weight: 500;
-        border-bottom: 2px solid var(--light-dark);
+        border-bottom: 2px solid var(--secondary-color);
       }
 
       .folders {
