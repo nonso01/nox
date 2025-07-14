@@ -1,5 +1,6 @@
 // import Text from "./Text";
 import Connecting from "./Connecting";
+import HouseScene from "./HouseScene";
 import LineFollowCircle from "./LineFollowCircle";
 import Logo from "/images/favicon.png";
 import {
@@ -306,7 +307,9 @@ export default function DesktopApp({ connected, onSetConnected }) {
           </div>
         </section>
 
-        <section className="d-3d-hire">3D Space</section>
+        <section className="d-3d-hire">
+          <HouseScene />
+        </section>
 
         {/* <section className=""></section> */}
 
