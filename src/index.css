@@ -75,6 +75,8 @@ a {
   }
 }
 
+/* scroll bar styles */
+
 .flex {
   display: flex;
   &.column {
@@ -103,7 +105,7 @@ a {
   border: 2px solid red;
 }
 
-/* connecting component general */
+/* connecting component */
 .connecting {
   height: 100dvh;
   /* width: 100dvw; */
@@ -119,6 +121,10 @@ a {
   .d-header {
     height: 1020px;
     padding: 30px 130px;
+
+    background-image: url("/images/2d-me.png"); /* test image */
+    background-repeat: no-repeat;
+    background-position: 50% -50%;
 
     a {
       font-size: 1.1rem;
@@ -367,6 +373,63 @@ a {
           right: -1px;
           transition-duration: 200ms;
           cursor: pointer;
+        }
+      }
+    }
+  }
+
+  .d-experience {
+    height: 830px;
+    padding: 30px 130px;
+
+    .p-work {
+      height: 100px;
+      width: 48.8%; /* 800px */
+      align-self: center;
+
+      p {
+        font-size: 3rem;
+        font-weight: 500;
+      }
+    }
+
+    .d-work {
+      height: 600px;
+
+      h2 {
+        font-size: 2rem;
+      }
+
+      p {
+        margin-block: 0.625rem;
+        font-weight: 500;
+        span {
+          font-family: "Orbitron", sans-serif;
+        }
+      }
+
+      .d-work-time {
+        height: 100%;
+        width: 36.7%;
+
+        div {
+          height: 25%;
+        }
+      }
+
+      .d-work-info {
+        height: 100%;
+        width: 52%;
+
+        .lines {
+          width: 100px;
+        }
+
+        .info-detail {
+          width: 650px;
+          div {
+            height: 25%;
+          }
         }
       }
     }

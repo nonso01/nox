@@ -256,4 +256,61 @@
     }
   }
 }
+
+.d-experience {
+  height: 830px;
+  padding: 30px 130px;
+
+  .p-work {
+    height: 100px;
+    width: 48.8%; /* 800px */
+    align-self: center;
+
+    p {
+      font-size: 3rem;
+      font-weight: 500;
+    }
+  }
+
+  .d-work {
+    height: 600px;
+
+    h2 {
+      font-size: 2rem;
+    }
+
+    p {
+      margin-block: 0.625rem;
+      font-weight: 500;
+      span {
+        font-family: "Orbitron", sans-serif;
+      }
+    }
+
+    .d-work-time {
+      height: 100%;
+      width: 36.7%;
+
+      div {
+        height: 25%;
+      }
+    }
+
+    .d-work-info {
+      height: 100%;
+      width: 52%;
+
+      .lines {
+        width: 100px;
+      }
+
+      .info-detail {
+        width: 650px;
+        div {
+          height: 25%;
+        }
+      }
+    }
+  }
+}
 ```
