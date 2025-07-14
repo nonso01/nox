@@ -312,7 +312,7 @@ a {
         transition-duration: 200ms;
 
         &:hover {
-          background-color: var(--light-green);
+          background-color: var(--light-dark);
           .arrow {
             background-color: var(--light-green);
           }
