@@ -129,6 +129,22 @@ a {
   }
 }
 
+.text-effect {
+  &.gradient-white {
+    color: transparent !important;
+    -webkit-background-clip: text;
+    background-clip: text;
+    background-image: linear-gradient(white 60%, transparent);
+  }
+
+  &.gradient-green {
+    color: transparent !important;
+    -webkit-background-clip: text;
+    background-clip: text;
+    background-image: linear-gradient(var(--primary-color) 60%, transparent);
+  }
+}
+
 .debbug {
   border: 2px solid red;
 }

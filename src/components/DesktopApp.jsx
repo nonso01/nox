@@ -1,4 +1,3 @@
-// import Text from "./Text";
 import Connecting from "./Connecting";
 import HouseScene from "./HouseScene";
 import LineFollowCircle from "./LineFollowCircle";
@@ -37,7 +36,6 @@ export default function DesktopApp({ connected, onSetConnected }) {
 
       animate(".cards .folders div:nth-child(2)", {
         y: ["0%", "-10%", "-30%"],
-        // duration: 6000,
         delay: stagger(100, { from: "center" }),
         ease: createSpring({ stiffness: 200, mass: 2 }),
         alternate: true,
@@ -46,21 +44,12 @@ export default function DesktopApp({ connected, onSetConnected }) {
 
       animate(".cards .folders div:nth-child(3)", {
         y: ["0%", "-20%", "-40%"],
-        // duration: 9000,
         delay: stagger(200, { from: "first" }),
         ease: createSpring({ stiffness: 200, mass: 2 }),
         alternate: true,
         loop: true,
       });
     });
-
-    // animate(svg.createDrawable(".d-work-info .lines path, .d-work-info .lines circle"), {
-    //   draw: ["0 0", "0 1", "1 1"],
-    //   // opacity: [0.1, 0.8],
-    //   ease: "inCubic",
-    //   duration: 1000 * 2,
-    //   delay: stagger(1000 * 2),
-    // });
 
     console.log(connected);
 
@@ -114,8 +103,8 @@ export default function DesktopApp({ connected, onSetConnected }) {
                 <span>HELLO</span>
               </p>
               <div className="p-name">
-                I'm <span>Martin,</span>
-                <p>Frontend Developer</p>
+                I'm <span className="text-effect gradient-green">Martin,</span>
+                <p className="text-effect gradient-white">Frontend Developer</p>
               </div>
             </div>
 

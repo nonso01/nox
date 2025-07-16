@@ -3,6 +3,10 @@ import * as THREE from "three";
 // import { GUI} from "three/addons/libs/lil-gui.module.min.js";
 import Stats from "three/addons/libs/stats.module.js";
 
+const BLACK = 0x000000;
+const DARK = 0x222222;
+const WHITE = 0xffffff;
+
 export default function HouseScene() {
   const mountRef = useRef(null);
   // Use a ref to store the renderer to ensure access during cleanup
@@ -20,7 +24,7 @@ export default function HouseScene() {
 
     // three.js Setup
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x000000);
+    scene.background = new THREE.Color(BLACK);
 
     // initialize camera with parent div's aspect ratio
     const parentWidth = mountRef.current?.clientWidth;
@@ -70,7 +74,7 @@ export default function HouseScene() {
     // animation loop
     const animate = (time) => {
       stats.begin(); // begin stats calculations
-      
+
       time *= 0.001; // convert to seconds
       requestAnimationFrame(animate);
       resizeRendererToDisplaySize(); // check resize every frame
