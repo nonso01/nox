@@ -9,6 +9,8 @@ import {
   animate,
   stagger,
   svg,
+  createAnimatable,
+  utils,
 } from "animejs";
 import { useRef, useState, useEffect } from "react";
 import { Star, ArrowUpRight } from "lucide-react";
@@ -49,9 +51,37 @@ export default function DesktopApp({ connected, onSetConnected }) {
         alternate: true,
         loop: true,
       });
+
+      // animate follow-dot
+      const [$nav] = utils.$(".desktop-app .d-nav");
+      const navBounds = $nav.getBoundingClientRect();
+
+      const animatableFollowDot = createAnimatable(
+        ".desktop-app .d-nav .follow-dot",
+        {
+          x: 500,
+          y: 500,
+          ease: "out(3)",
+        }
+      );
+
+      const onMouseMove = (e) => {
+        const { width, height, left, top } = navBounds;
+        const hw = width / 2;
+        const hh = height / 2;
+        const x = e.clientX - left;
+        const y = e.clientY - top - hh;
+        animatableFollowDot.x(x);
+        animatableFollowDot.y(y);
+
+        console.log({ x, y });
+      };
+
+      window.addEventListener("mousemove", onMouseMove);
+      console.log($nav);
     });
 
-    console.log(connected);
+    // console.log(connected);
 
     return () => scope.current && scope.current.revert();
   }, [connected]);
@@ -66,8 +96,8 @@ export default function DesktopApp({ connected, onSetConnected }) {
     return (
       <div className="desktop-app" ref={root}>
         <header className="d-header flex column between " id="home">
-          <nav className="d-nav flex between">
-            <div className=" links flex evenly">
+          <nav className="d-nav flex between ">
+            <div className=" links flex evenly ">
               <span>
                 <a href="#home" className="home-link">
                   Home
@@ -85,7 +115,7 @@ export default function DesktopApp({ connected, onSetConnected }) {
               <img src={Logo} alt="Martin's logo" />
             </div>
 
-            <div className="links flex evenly">
+            <div className="links flex evenly ">
               <span>
                 <a href="#">Resume</a>
               </span>
@@ -96,6 +126,8 @@ export default function DesktopApp({ connected, onSetConnected }) {
                 <a href="#">Let's chat</a>
               </span>
             </div>
+
+            <div className="follow-dot"></div>
           </nav>
           <section className="d-s1 flex column evenly ">
             <div className="intro-name flex column evenly ">

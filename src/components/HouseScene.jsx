@@ -8,16 +8,15 @@ const DARK = 0x222222;
 const WHITE = 0xffffff;
 
 export default function HouseScene() {
-  const mountRef = useRef(null);
   // Use a ref to store the renderer to ensure access during cleanup
+  const mountRef = useRef(null);
   const rendererRef = useRef(null);
   const statsRef = useRef(null);
 
-  // const stats = new Stats();
-  // document.body.appendChild(stats.dom);
+  
 
   useEffect(() => {
-    // Skip if mountRef is not attached
+    // skip if mountRef is not attached
     if (!mountRef.current) {
       console.warn("mountRef.current is null on mount");
       return;
@@ -40,7 +39,7 @@ export default function HouseScene() {
       0.1,
       1000
     );
-    camera.position.z = 10;
+    camera.position.z = 8;
 
     const renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setSize(parentWidth, parentHeight); // Match parent div

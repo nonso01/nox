@@ -181,8 +181,10 @@ a {
     .d-nav {
       height: 100px;
       padding: 1%;
-      border-radius: 25px;
-      background-color: var(--secondary-color);
+      position: relative;
+      z-index: 5;
+      /* border-radius: 25px; */
+      /* background-color: var(--secondary-color); */
 
       a.home-link {
         color: var(--primary-color);
@@ -199,6 +201,31 @@ a {
       .links {
         width: 35%;
         align-items: center;
+        background-color: var(--secondary-color);
+        backdrop-filter: blur(5px);
+        border-radius: 50px;
+
+        position: relative;
+        z-index: inherit;
+      }
+
+      .follow-dot {
+        position: absolute;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background-color: var(--secondary-color);
+        opacity: 0.05;
+        transition-duration: 150ms;
+      }
+
+      &:has(.links:hover) {
+        .follow-dot {
+          transition-duration: 150ms;
+          background-color: var(--primary-color);
+          opacity: 1;
+          box-shadow: 5px 5px 2rem var(--primary-color);
+        }
       }
     }
 
