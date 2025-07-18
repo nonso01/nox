@@ -11,9 +11,10 @@ export default function HouseScene() {
   const mountRef = useRef(null);
   // Use a ref to store the renderer to ensure access during cleanup
   const rendererRef = useRef(null);
+  const statsRef = useRef(null);
 
-  const stats = new Stats(); // stats.js for performance monitoring
-  document.body.appendChild(stats.dom);
+  // const stats = new Stats();
+  // document.body.appendChild(stats.dom);
 
   useEffect(() => {
     // Skip if mountRef is not attached
@@ -21,6 +22,10 @@ export default function HouseScene() {
       console.warn("mountRef.current is null on mount");
       return;
     }
+
+    const stats = new Stats();
+    statsRef.current = stats;
+    document.body.appendChild(stats.dom);
 
     // three.js Setup
     const scene = new THREE.Scene();
@@ -35,7 +40,7 @@ export default function HouseScene() {
       0.1,
       1000
     );
-    camera.position.z = 5;
+    camera.position.z = 10;
 
     const renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setSize(parentWidth, parentHeight); // Match parent div
@@ -53,8 +58,8 @@ export default function HouseScene() {
     const material = new THREE.MeshNormalMaterial({
       wireframe: true,
     });
-    const cube = new THREE.Mesh(geometry, material);
-    scene.add(cube);
+    const mesh = new THREE.Mesh(geometry, material);
+    scene.add(mesh);
 
     // resize function
     const resizeRendererToDisplaySize = () => {
@@ -71,15 +76,16 @@ export default function HouseScene() {
       return needResize;
     };
 
+    window.addEventListener("resize", resizeRendererToDisplaySize); // resize
+
     // animation loop
     const animate = (time) => {
       stats.begin(); // begin stats calculations
 
       time *= 0.001; // convert to seconds
       requestAnimationFrame(animate);
-      resizeRendererToDisplaySize(); // check resize every frame
-      cube.rotation.x += 0.01;
-      cube.rotation.y += 0.01;
+      mesh.rotation.x += 0.01;
+      mesh.rotation.y += 0.01;
       renderer.render(scene, camera);
 
       stats.end(); // end calculations
@@ -89,15 +95,14 @@ export default function HouseScene() {
     // cleanup
     return () => {
       if (mountRef.current && rendererRef.current?.domElement) {
-        try {
-          mountRef.current.removeChild(rendererRef.current.domElement);
-        } catch (error) {
-          console.warn("Error removing canvas:", error);
-        }
+        mountRef.current.removeChild(rendererRef.current.domElement);
       }
       if (rendererRef.current) {
         rendererRef.current.dispose();
         rendererRef.current = null;
+      }
+      if (statsRef.current && statsRef.current.dom.parentNode) {
+        statsRef.current.dom.parentNode.removeChild(statsRef.current.dom);
       }
     };
   }, []);

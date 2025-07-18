@@ -103,8 +103,8 @@ export default function DesktopApp({ connected, onSetConnected }) {
                 <span>HELLO</span>
               </p>
               <div className="p-name">
-                I'm <span className="text-effect gradient-green">Martin,</span>
-                <p className="text-effect gradient-white">Frontend Developer</p>
+                I'm <span>Martin,</span>
+                <p>Frontend Developer</p>
               </div>
             </div>
 
