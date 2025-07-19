@@ -104,10 +104,10 @@ export default function DesktopApp({ connected, onSetConnected }) {
                 </a>
               </span>
               <span>
-                <a href="#">About</a>
+                <a href="#about">About</a>
               </span>
               <span>
-                <a href="#">Service</a>
+                <a href="#service">Service</a>
               </span>
             </div>
 
@@ -191,6 +191,10 @@ export default function DesktopApp({ connected, onSetConnected }) {
             </div>
           </section>
         </header>
+
+        <section className="d-about flex center" id="service">
+          <p className="text-effect gradient-white ">WHAT I DO!</p>
+        </section>
 
         <section className="d-service flex column evenly">
           <div className="service-info flex between">
@@ -343,7 +347,7 @@ export default function DesktopApp({ connected, onSetConnected }) {
           </div>
         </section>
 
-        <section className="d-about flex center ">
+        <section className="d-about flex center " id="about">
           <p className="text-effect gradient-white animate ">WHO AM I ?</p>
         </section>
 

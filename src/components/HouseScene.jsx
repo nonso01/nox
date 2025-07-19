@@ -3,17 +3,13 @@ import * as THREE from "three";
 // import { GUI} from "three/addons/libs/lil-gui.module.min.js";
 import Stats from "three/addons/libs/stats.module.js";
 
-const BLACK = 0x000000;
-const DARK = 0x222222;
-const WHITE = 0xffffff;
+const BG_COLOR = 0x000000;
 
 export default function HouseScene() {
   // Use a ref to store the renderer to ensure access during cleanup
   const mountRef = useRef(null);
   const rendererRef = useRef(null);
   const statsRef = useRef(null);
-
-  
 
   useEffect(() => {
     // skip if mountRef is not attached
@@ -28,7 +24,7 @@ export default function HouseScene() {
 
     // three.js Setup
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color(BLACK);
+    scene.background = new THREE.Color(BG_COLOR);
 
     // initialize camera with parent div's aspect ratio
     const parentWidth = mountRef.current?.clientWidth;
