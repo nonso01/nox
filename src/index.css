@@ -457,7 +457,7 @@ a {
           height: 150px;
           display: grid;
           place-items: center;
-          background-color: #222e;
+          background-color: var(--secondary-color);
           position: absolute;
           z-index: 10;
           bottom: -5px;

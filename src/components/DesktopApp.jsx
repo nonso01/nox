@@ -192,11 +192,8 @@ export default function DesktopApp({ connected, onSetConnected }) {
           </section>
         </header>
 
-        <section className="d-about flex center" id="service">
-          <p className="text-effect gradient-white ">WHAT I DO!</p>
-        </section>
 
-        <section className="d-service flex column evenly">
+        <section className="d-service flex column evenly" id="service">
           <div className="service-info flex between">
             <div>
               <p>
