@@ -67,7 +67,7 @@ export default function DesktopApp({ connected, onSetConnected }) {
 
       const onMouseMove = (e) => {
         const { width, height, left, top } = navBounds;
-        const hw = width / 2;
+        // const hw = width / 2;
         const hh = height / 2;
         const x = e.clientX - left;
         const y = e.clientY - top - hh;
@@ -343,15 +343,25 @@ export default function DesktopApp({ connected, onSetConnected }) {
           </div>
         </section>
 
+        <section className="d-about flex center ">
+          <p className="text-effect gradient-white animate ">WHO AM I ?</p>
+        </section>
+
         <section className="d-3d-hire">
           <HouseScene />
         </section>
 
-        {/* <section className=""></section> */}
-
         <style jsx="true">{`
-          .d-3d-hire {
-            height: 1020px;
+          .d-about {
+            height: 500px;
+            overflow-x: hidden;
+
+            p {
+              font-size: clamp(14vw, 15vw, 18rem);
+              font-family: "Orbitron";
+              font-weight: 600;
+              // text-shadow: 50px 50px 10px #fff1;
+            }
           }
         `}</style>
       </div>

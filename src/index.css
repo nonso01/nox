@@ -12,10 +12,7 @@
   user-select: none;
 }
 
-@font-face {
-  font-family: "Tron";
-  src: url("/fonts/TRON.TTF") format("truetype");
-}
+
 
 :root {
   --font-sm: 0.9rem;
@@ -26,6 +23,12 @@
 
   --cursor: url("/cursors/jujutsu-cursor-32.png") 5 5, auto;
   --pointer: url("/cursors/jujutsu-pointer-32.png") 5 5, pointer;
+}
+
+@property --angle {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
 }
 
 html,
@@ -134,7 +137,11 @@ a {
     color: transparent !important;
     -webkit-background-clip: text;
     background-clip: text;
-    background-image: linear-gradient(white 60%, transparent);
+    background-image: linear-gradient(
+      var(--angle),
+      white 40%,
+      var(--secondary-color)
+    );
   }
 
   &.gradient-green {
@@ -142,6 +149,19 @@ a {
     -webkit-background-clip: text;
     background-clip: text;
     background-image: linear-gradient(var(--primary-color) 60%, transparent);
+  }
+
+  &.animate {
+    animation: rotateGradient 10s linear infinite;
+  }
+}
+
+@keyframes rotateGradient {
+  from {
+    --angle: 0deg;
+  }
+  to {
+    --angle: 360deg; 
   }
 }
 
@@ -216,15 +236,15 @@ a {
         border-radius: 50%;
         background-color: var(--secondary-color);
         opacity: 0.05;
-        transition-duration: 150ms;
+        /* transition-duration: 150ms; */
       }
 
       &:has(.links:hover) {
         .follow-dot {
-          transition-duration: 150ms;
+          /* transition-duration: 150ms; */
           background-color: var(--primary-color);
           opacity: 1;
-          box-shadow: 5px 5px 2rem var(--primary-color);
+          box-shadow: 0 0 2rem var(--primary-color);
         }
       }
     }
@@ -504,6 +524,10 @@ a {
         }
       }
     }
+  }
+
+  .d-3d-hire {
+    height: 1020px;
   }
 }
 
