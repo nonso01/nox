@@ -1,5 +1,5 @@
 import Connecting from "./Connecting";
-import HouseScene from "./HouseScene";
+import HouseScene from "./HouseR3F";
 import LineFollowCircle from "./LineFollowCircle";
 import { TestimonialCard, TData } from "./TestimonialCard";
 import Logo from "/images/favicon.png";
@@ -324,7 +324,7 @@ export default function DesktopApp({ connected, onSetConnected }) {
           <div className="cards flex column evenly ">
             <div className="marquee flex center ">
               {TData.map((_data, index) => {
-                return <TestimonialCard data={_data} />;
+                return <TestimonialCard data={_data} key={index} />;
               })}
             </div>
             <p className="join flex center ">
@@ -333,8 +333,14 @@ export default function DesktopApp({ connected, onSetConnected }) {
           </div>
         </section>
 
+        <section className="d-fly">
+          {/* for this section, try to create a 2d animation with a letter flying in a path until you arrive at the interactive 3d contact section */}
+        </section>
+
         <style jsx="true">{`
-          
+          .d-fly {
+            // height: 1000px;
+          }
         `}</style>
       </div>
     );

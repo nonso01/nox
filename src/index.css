@@ -524,6 +524,15 @@ a {
 
   .d-3d-house {
     height: 1080px;
+    .house-scene {
+      height: 100%;
+
+      canvas {
+        display: block;
+        width: 100% !important;
+        height: 100% !important;
+      }
+    }
   }
 
   .d-testimonial {

@@ -1,9 +1,13 @@
+// convert to r3f version
 import { useEffect, useRef } from "react";
 import * as THREE from "three";
-// import { GUI} from "three/addons/libs/lil-gui.module.min.js";
+import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
+import { DRACOLoader } from "three/addons/loaders/DRACOLoader.js";
 import Stats from "three/addons/libs/stats.module.js";
 
-const BG_COLOR = 0x000000;
+const BG_COLOR = 0x222222;
+const log = console.log;
 
 export default function HouseScene() {
   // Use a ref to store the renderer to ensure access during cleanup
@@ -35,11 +39,13 @@ export default function HouseScene() {
       0.1,
       1000
     );
-    camera.position.z = 8;
+    // camera.position.z = 10;
 
     const renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setSize(parentWidth, parentHeight); // Match parent div
     renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     rendererRef.current = renderer;
 
     // prevent multiple canvas appends
@@ -49,42 +55,109 @@ export default function HouseScene() {
       console.warn("Canvas already exists, skipping append");
     }
 
-    const geometry = new THREE.TorusKnotGeometry(2.5, 1, 100, 16);
-    const material = new THREE.MeshNormalMaterial({
-      wireframe: true,
-    });
-    const mesh = new THREE.Mesh(geometry, material);
-    scene.add(mesh);
+    // Lights
+    const ambientLight = new THREE.AmbientLight(0x404040, 1.5);
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 3);
+    directionalLight.position.set(0, 10, 10);
+    directionalLight.castShadow = true;
+    directionalLight.shadow.mapSize = new THREE.Vector2(2048, 2048);
+    directionalLight.shadow.camera.near = 0.1;
+    directionalLight.shadow.camera.far = 50;
+    directionalLight.shadow.bias = -0.0001;
+    directionalLight.shadow.normalBias = 0.05;
+    scene.add(directionalLight);
+    scene.add(ambientLight);
+    //light helper
+    const lightHelper = new THREE.DirectionalLightHelper(
+      directionalLight,
+      5,
+      0xff0000
+    );
+    scene.add(lightHelper);
+
+    // controls
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    // controls.dampingFactor = 0.1;
+    controls.minDistance = 1;
+    controls.maxDistance = 5.5;
+    controls.maxPolarAngle = Math.PI / 2;
+
+    camera.position.set(0, 10, 10);
+    controls.update();
+
+    // load gltf model
+    const loadingManager = new THREE.LoadingManager();
+    const dracoLoader = new DRACOLoader();
+    dracoLoader.setDecoderPath(
+      "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/libs/draco/"
+    );
+    dracoLoader.setDecoderConfig({ type: "js" });
+    const gltfLoader = new GLTFLoader(loadingManager);
+    gltfLoader.setDRACOLoader(dracoLoader);
+    const url = "/3d-models/fornitures-house.glb";
+
+    gltfLoader.load(
+      url,
+      (gltf) => {
+        const root = gltf.scene;
+        root.traverse((child) => {
+          if (child.isMesh) {
+            child.castShadow = true;
+            child.receiveShadow = true;
+          }
+        });
+        scene.add(root);
+        // Compute bounding box and center camera
+        const box = new THREE.Box3().setFromObject(root);
+        log(box);
+        const boxSize = box.getSize(new THREE.Vector3());
+        const boxCenter = box.getCenter(new THREE.Vector3());
+        const maxDim = Math.max(boxSize.x, boxSize.y, boxSize.z);
+        const fov = camera.fov * (Math.PI / 180);
+        let cameraZ = Math.abs(maxDim / 2 / Math.tan(fov / 2));
+        cameraZ *= 1.5; // Zoom out slightly for better framing
+        camera.position.set(
+          boxCenter.x,
+          boxCenter.y + maxDim / 2,
+          boxCenter.z + cameraZ
+        );
+        controls.target.set(boxCenter.x, boxCenter.y, boxCenter.z);
+        controls.update();
+      },
+      (xhr) => {
+        log(xhr.loaded / xhr.total);
+      },
+      (error) => {
+        log("Error loading GLTF model:", error);
+      }
+    );
 
     // resize function
     const resizeRendererToDisplaySize = () => {
       const canvas = renderer.domElement;
-      const px = Math.min(window.devicePixelRatio, 2);
-      const width = Math.floor(mountRef.current.clientWidth * px);
-      const height = Math.floor(mountRef.current.clientHeight * px);
+      const width = Math.floor(mountRef.current.clientWidth);
+      const height = Math.floor(mountRef.current.clientHeight);
       const needResize = canvas.width !== width || canvas.height !== height;
       if (needResize) {
-        renderer.setSize(width, height, false); 
-        // false prevents internal CSS update
+        renderer.setSize(width, height, false);
         camera.aspect = width / height;
         camera.updateProjectionMatrix();
       }
       return needResize;
     };
 
-    window.addEventListener("resize", resizeRendererToDisplaySize); // resize
+    // window.addEventListener("resize", resizeRendererToDisplaySize); // resize
 
     // animation loop
     const animate = (time) => {
-      stats.begin(); // begin stats calculations
+      stats.begin();
 
-      time *= 0.001; // convert to seconds
       requestAnimationFrame(animate);
-      mesh.rotation.x += 0.01;
-      mesh.rotation.y += 0.01;
+      resizeRendererToDisplaySize();
       renderer.render(scene, camera);
 
-      stats.end(); // end calculations
+      stats.end();
     };
     requestAnimationFrame(animate);
 
@@ -106,19 +179,6 @@ export default function HouseScene() {
   return (
     <>
       <div className="house-scene" ref={mountRef} />
-      <style jsx="true">
-        {`
-          .house-scene {
-            height: 100%;
-
-            canvas {
-              display: block;
-              width: 100% !important;
-              height: 100% !important;
-            }
-          }
-        `}
-      </style>
     </>
   );
 }
