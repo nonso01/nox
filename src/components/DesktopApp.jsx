@@ -334,64 +334,7 @@ export default function DesktopApp({ connected, onSetConnected }) {
         </section>
 
         <style jsx="true">{`
-          .d-testimonial {
-            height: 830px;
-            padding: 30px 0px;
-            background-color: var(--secondary-color);
-            position: relative;
-
-            .words {
-              align-self: center;
-              width: min(960px, 50%);
-              height: 30%;
-
-              p {
-                text-align: center;
-                text-wrap: balance;
-                font-weight: 600;
-              }
-
-              .large {
-                font-size: 3rem;
-
-                span {
-                  color: var(--primary-color);
-                }
-              }
-            }
-
-            .cards {
-              height: 60%;
-              overflow: hidden;
-
-              .marquee {
-                height: 80%;
-                gap: 2rem; /* 2 * 6 */
-                width: calc(500px * 8 + 16rem);
-                animation: scroll 40s linear infinite alternate-reverse;
-              }
-
-              .join {
-                align-self: center;
-                height: 10%;
-                width: 10%;
-                font-size: 12px;
-                font-weight: 600;
-                span {
-                  color: var(--primary-color);
-                }
-              }
-            }
-          }
-
-          @keyframes scroll {
-            0% {
-              transform: translateX(0);
-            }
-            100% {
-              transform: translateX(calc(-500px * 4 + 16rem));
-            }
-          }
+          
         `}</style>
       </div>
     );
