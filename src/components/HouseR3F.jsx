@@ -1,6 +1,12 @@
 import { useEffect, useRef } from "react";
 import { Canvas, useThree } from "@react-three/fiber";
-import { OrbitControls, useGLTF, Stats, useHelper } from "@react-three/drei";
+import {
+  OrbitControls,
+  useGLTF,
+  Stats,
+  useHelper,
+  Environment,
+} from "@react-three/drei";
 import * as THREE from "three";
 import { DirectionalLightHelper } from "three";
 
@@ -46,7 +52,6 @@ function SceneContent() {
 
   return (
     <>
-      <ambientLight intensity={1.5} color={0x404040} />
       <directionalLight
         ref={dirLightRef}
         position={[0, 10, 10]}
@@ -59,6 +64,8 @@ function SceneContent() {
         shadow-bias={-0.0001}
         shadow-normalBias={0.05}
       />
+      {/* HDR for ambientLights */}
+      <Environment files={"/hdr/brown_photostudio_02_1k.hdr"} />
       <primitive object={gltf.scene} ref={modelRef} />
       <OrbitControls
         enableDamping

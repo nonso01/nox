@@ -4,6 +4,7 @@ import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { DRACOLoader } from "three/addons/loaders/DRACOLoader.js";
+import { RGBELoader } from "three/addons/loaders/RGBELoader.js";
 import Stats from "three/addons/libs/stats.module.js";
 
 const BG_COLOR = 0x222222;
@@ -56,8 +57,8 @@ export default function HouseScene() {
     }
 
     // Lights
-    const ambientLight = new THREE.AmbientLight(0x404040, 1.5);
-    const directionalLight = new THREE.DirectionalLight(0xffffff, 3);
+
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 2);
     directionalLight.position.set(0, 10, 10);
     directionalLight.castShadow = true;
     directionalLight.shadow.mapSize = new THREE.Vector2(2048, 2048);
@@ -66,7 +67,7 @@ export default function HouseScene() {
     directionalLight.shadow.bias = -0.0001;
     directionalLight.shadow.normalBias = 0.05;
     scene.add(directionalLight);
-    scene.add(ambientLight);
+
     //light helper
     const lightHelper = new THREE.DirectionalLightHelper(
       directionalLight,
@@ -85,6 +86,21 @@ export default function HouseScene() {
 
     camera.position.set(0, 10, 10);
     controls.update();
+
+    // Load HDR environment map
+    const rgbeLoader = new RGBELoader();
+    rgbeLoader.load(
+      "/hdr/brown_photostudio_02_1k.hdr",
+      (texture) => {
+        texture.mapping = THREE.EquirectangularReflectionMapping;
+        // scene.background = texture
+        scene.environment = texture;
+      },
+      undefined,
+      (error) => {
+        log("Error loading HDR texture:", error);
+      }
+    );
 
     // load gltf model
     const loadingManager = new THREE.LoadingManager();
