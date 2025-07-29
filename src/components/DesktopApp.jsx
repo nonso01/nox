@@ -1,6 +1,7 @@
 import Connecting from "./Connecting";
 import HouseScene from "./HouseScene";
 import LineFollowCircle from "./LineFollowCircle";
+import { TestimonialCard, TData } from "./TestimonialCard";
 import Logo from "/images/favicon.png";
 import {
   createScope,
@@ -51,34 +52,6 @@ export default function DesktopApp({ connected, onSetConnected }) {
         alternate: true,
         loop: true,
       });
-
-      // animate follow-dot
-      const [$nav] = utils.$(".desktop-app .d-nav");
-      const navBounds = $nav.getBoundingClientRect();
-
-      const animatableFollowDot = createAnimatable(
-        ".desktop-app .d-nav .follow-dot",
-        {
-          x: 500,
-          y: 500,
-          ease: "out(3)",
-        }
-      );
-
-      const onMouseMove = (e) => {
-        const { width, height, left, top } = navBounds;
-        // const hw = width / 2;
-        const hh = height / 2;
-        const x = e.clientX - left;
-        const y = e.clientY - top - hh;
-        animatableFollowDot.x(x);
-        animatableFollowDot.y(y);
-
-        console.log({ x, y });
-      };
-
-      window.addEventListener("mousemove", onMouseMove);
-      console.log($nav);
     });
 
     // console.log(connected);
@@ -127,7 +100,7 @@ export default function DesktopApp({ connected, onSetConnected }) {
               </span>
             </div>
 
-            <div className="follow-dot"></div>
+            {/* <div className="follow-dot"></div> */}
           </nav>
           <section className="d-s1 flex column evenly ">
             <div className="intro-name flex column evenly ">
@@ -155,26 +128,11 @@ export default function DesktopApp({ connected, onSetConnected }) {
 
               <div className=" flex column end">
                 <p className="p-stars flex evenly">
-                  <Star
-                    fill="var(--primary-color)"
-                    stroke="var(--primary-color)"
-                  />
-                  <Star
-                    fill="var(--primary-color)"
-                    stroke="var(--primary-color)"
-                  />
-                  <Star
-                    fill="var(--primary-color)"
-                    stroke="var(--primary-color)"
-                  />
-                  <Star
-                    fill="var(--primary-color)"
-                    stroke="var(--primary-color)"
-                  />
-                  <Star
-                    fill="var(--primary-color)"
-                    stroke="var(--primary-color)"
-                  />
+                  <Star />
+                  <Star />
+                  <Star />
+                  <Star />
+                  <Star />
                 </p>
                 <p className="p-years">
                   <span>4</span> Years
@@ -191,7 +149,6 @@ export default function DesktopApp({ connected, onSetConnected }) {
             </div>
           </section>
         </header>
-
 
         <section className="d-service flex column evenly" id="service">
           <div className="service-info flex between">
@@ -348,20 +305,91 @@ export default function DesktopApp({ connected, onSetConnected }) {
           <p className="text-effect gradient-white animate ">WHO AM I ?</p>
         </section>
 
-        <section className="d-3d-hire">
+        <section className="d-3d-house">
           <HouseScene />
         </section>
 
-        <style jsx="true">{`
-          .d-about {
-            height: 500px;
-            overflow-x: hidden;
+        <section className="d-testimonial flex column evenly">
+          <div className="words flex column evenly ">
+            <p className="large">Testimonials that</p>
+            <p className="large">
+              Speak to <span>My Results</span>
+            </p>
+            <p className="small">
+              weaving seamless web experiences, sculpting vivid Blender worlds,
+              and editing dynamic videos to spark your imagination.
+            </p>
+          </div>
 
-            p {
-              font-size: clamp(14vw, 15vw, 18rem);
-              font-family: "Orbitron";
-              font-weight: 600;
-              // text-shadow: 50px 50px 10px #fff1;
+          <div className="cards flex column evenly ">
+            <div className="marquee flex center ">
+              {TData.map((_data, index) => {
+                return <TestimonialCard data={_data} />;
+              })}
+            </div>
+            <p className="join flex center ">
+              Waiting for <span>Yours!</span>
+            </p>
+          </div>
+        </section>
+
+        <style jsx="true">{`
+          .d-testimonial {
+            height: 830px;
+            padding: 30px 0px;
+            background-color: var(--secondary-color);
+            position: relative;
+
+            .words {
+              align-self: center;
+              width: min(960px, 50%);
+              height: 30%;
+
+              p {
+                text-align: center;
+                text-wrap: balance;
+                font-weight: 600;
+              }
+
+              .large {
+                font-size: 3rem;
+
+                span {
+                  color: var(--primary-color);
+                }
+              }
+            }
+
+            .cards {
+              height: 60%;
+              overflow: hidden;
+
+              .marquee {
+                height: 80%;
+                gap: 2rem; /* 2 * 6 */
+                width: calc(500px * 8 + 16rem);
+                animation: scroll 40s linear infinite alternate-reverse;
+              }
+
+              .join {
+                align-self: center;
+                height: 10%;
+                width: 10%;
+                font-size: 12px;
+                font-weight: 600;
+                span {
+                  color: var(--primary-color);
+                }
+              }
+            }
+          }
+
+          @keyframes scroll {
+            0% {
+              transform: translateX(0);
+            }
+            100% {
+              transform: translateX(calc(-500px * 4 + 16rem));
             }
           }
         `}</style>

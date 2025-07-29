@@ -64,7 +64,8 @@ export default function HouseScene() {
       const height = Math.floor(mountRef.current.clientHeight * px);
       const needResize = canvas.width !== width || canvas.height !== height;
       if (needResize) {
-        renderer.setSize(width, height, false); // false prevents internal CSS update
+        renderer.setSize(width, height, false); 
+        // false prevents internal CSS update
         camera.aspect = width / height;
         camera.updateProjectionMatrix();
       }

@@ -9,10 +9,8 @@
 
   font-family: "Outfit", system-ui, -apple-system, sans-serif;
   color: #fff;
-  user-select: none;
+  /* user-select: none; */
 }
-
-
 
 :root {
   --font-sm: 0.9rem;
@@ -39,7 +37,7 @@ body {
   scroll-behavior: smooth;
 
   cursor: var(--cursor);
-  /* overflow-x: hidden; */
+  overflow-x: hidden;
 
   #root,
   .desktop-app {
@@ -83,6 +81,11 @@ a {
   &:hover {
     transition-duration: 150ms;
   }
+}
+
+.lucide-star {
+  stroke: var(--primary-color);
+  fill: var(--primary-color);
 }
 
 /* scroll bar styles */
@@ -161,7 +164,7 @@ a {
     --angle: 0deg;
   }
   to {
-    --angle: 360deg; 
+    --angle: 360deg;
   }
 }
 
@@ -227,25 +230,6 @@ a {
 
         position: relative;
         z-index: inherit;
-      }
-
-      .follow-dot {
-        position: absolute;
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        background-color: var(--secondary-color);
-        opacity: 0.05;
-        /* transition-duration: 150ms; */
-      }
-
-      &:has(.links:hover) {
-        .follow-dot {
-          /* transition-duration: 150ms; */
-          background-color: var(--primary-color);
-          opacity: 1;
-          box-shadow: 0 0 2rem var(--primary-color);
-        }
       }
     }
 
@@ -526,8 +510,20 @@ a {
     }
   }
 
-  .d-3d-hire {
-    height: 1020px;
+  .d-about {
+    height: 500px;
+    overflow-x: hidden;
+
+    p {
+      font-size: clamp(14vw, 15vw, 18rem);
+      font-family: "Orbitron";
+      font-weight: 600;
+      /* text-shadow: 50px 50px 10px #fff1; */
+    }
+  }
+
+  .d-3d-house {
+    height: 1080px;
   }
 }
 
