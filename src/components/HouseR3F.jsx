@@ -55,7 +55,7 @@ function SceneContent() {
       <directionalLight
         ref={dirLightRef}
         position={[0, 10, 10]}
-        intensity={3}
+        intensity={2}
         color={0xffffff}
         castShadow
         shadow-mapSize={[2048, 2048]}

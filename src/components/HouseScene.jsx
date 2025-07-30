@@ -125,21 +125,20 @@ export default function HouseScene() {
         });
         scene.add(root);
         // Compute bounding box and center camera
-        const box = new THREE.Box3().setFromObject(root);
+        const box = new THREE.Box3().setFromObject(modelRef.current);
         log(box);
         const boxSize = box.getSize(new THREE.Vector3());
         const boxCenter = box.getCenter(new THREE.Vector3());
         const maxDim = Math.max(boxSize.x, boxSize.y, boxSize.z);
         const fov = camera.fov * (Math.PI / 180);
         let cameraZ = Math.abs(maxDim / 2 / Math.tan(fov / 2));
-        cameraZ *= 1.5; // Zoom out slightly for better framing
+        cameraZ *= 1.5;
         camera.position.set(
           boxCenter.x,
           boxCenter.y + maxDim / 2,
           boxCenter.z + cameraZ
         );
-        controls.target.set(boxCenter.x, boxCenter.y, boxCenter.z);
-        controls.update();
+        camera.lookAt(boxCenter);
       },
       (xhr) => {
         log(xhr.loaded / xhr.total);
