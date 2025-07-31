@@ -186,7 +186,7 @@ a {
   background-color: var(--dark);
   background-image: url("/images/loading-square-bg.png");
   background-repeat: no-repeat;
-  background-size: 100%;
+  background-size: cover;
 
   svg * {
     /* for animejs */
