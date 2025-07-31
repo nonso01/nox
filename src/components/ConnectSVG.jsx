@@ -43,14 +43,17 @@ export default function ConnectSVG() {
           <path
             d="M141.234 126H151.234L140 176H130L141.234 126Z"
             fill="#34DB69"
+            fillOpacity="0.1"
           />
           <path
             d="M155.234 126H165.234L154 176H144L155.234 126Z"
             fill="#34DB69"
+            fillOpacity="0.1"
           />
           <path
             d="M169.234 126H179.234L168 176H158L169.234 126Z"
             fill="#34DB69"
+            fillOpacity="0.1"
           />
           <path
             d="M183.234 126H193.234L182 176H172L183.234 126Z"
@@ -300,14 +303,14 @@ export default function ConnectSVG() {
             fillOpacity="0.3"
           />
           <text
-            x="367"
+            x="365"
             y="60"
             fill="#34DB69"
             fontSize={32}
             fontWeight={500}
             className="text-effect orbitron"
           >
-            100
+            000
           </text>
           <path
             d="M351.697 21.6451C351.973 21.6403 352.2 21.8602 352.205 22.1362C352.21 22.4123 351.99 22.6399 351.714 22.6448L349.215 22.6877L349.276 26.1882C349.281 26.464 349.061 26.6916 348.785 26.6968C348.509 26.7016 348.281 26.481 348.276 26.205L348.215 22.7059L344.716 22.7669C344.44 22.7718 344.212 22.5519 344.207 22.2758C344.202 21.9998 344.422 21.772 344.698 21.7672L348.197 21.7061L348.154 19.2068C348.149 18.9307 348.369 18.703 348.645 18.6982C348.921 18.6934 349.149 18.9132 349.154 19.1893L349.198 21.688L351.697 21.6451Z"
@@ -438,6 +441,17 @@ export default function ConnectSVG() {
               transform="translate(125 88)"
             />
           </clipPath>
+
+          <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
+            {" "}
+            <feDropShadow
+              dx="2"
+              dy="0"
+              stdDeviation="5"
+              floodColor="#34DB69"
+              floodOpacity="0.5"
+            />
+          </filter>
         </defs>
       </svg>
     </>
