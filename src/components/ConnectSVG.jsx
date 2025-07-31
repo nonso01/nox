@@ -304,6 +304,7 @@ export default function ConnectSVG() {
             y="60"
             fill="#34DB69"
             fontSize={32}
+            fontWeight={500}
             className="text-effect orbitron"
           >
             100
