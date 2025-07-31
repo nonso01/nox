@@ -24,7 +24,10 @@ export default function Connecting({ connected, onSetConnected }) {
   const scope = useRef(null);
 
   useEffect(() => {
-    scope.current = createScope({ root }).add((self) => {});
+    scope.current = createScope({ root }).add((self) => {
+      // animate(".connecting svg .cube-plus path", {
+      // });
+    });
 
     return () => scope.current.revert();
   }, []);

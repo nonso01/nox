@@ -187,6 +187,12 @@ a {
   background-image: url("/images/loading-square-bg.png");
   background-repeat: no-repeat;
   background-size: 100%;
+
+  svg * {
+    /* for animejs */
+    transform-origin: 50%;
+    transform-box: fill-box;
+  }
 }
 
 /* desktopapp component */
