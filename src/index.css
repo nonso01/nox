@@ -136,9 +136,15 @@ a {
 }
 
 .text-effect {
+  &.orbitron,
+  &.orbitron * {
+    font-family: "Orbitron", sans-serif;
+  }
+
   &.gradient-white {
     color: transparent !important;
     -webkit-background-clip: text;
+    -moz-background-clip: text;
     background-clip: text;
     background-image: linear-gradient(
       var(--angle),
@@ -175,9 +181,12 @@ a {
 /* connecting component */
 .connecting {
   height: 100dvh;
-  /* width: 100dvw; */
   position: relative;
   z-index: 1;
+  background-color: var(--dark);
+  background-image: url("/images/loading-square-bg.png");
+  background-repeat: no-repeat;
+  background-size: 100%;
 }
 
 /* desktopapp component */

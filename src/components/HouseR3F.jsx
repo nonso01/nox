@@ -25,7 +25,6 @@ function SceneContent() {
   useEffect(() => {
     if (modelRef.current) {
       const box = new THREE.Box3().setFromObject(modelRef.current);
-      log(box);
       const boxSize = box.getSize(new THREE.Vector3());
       const boxCenter = box.getCenter(new THREE.Vector3());
       const maxDim = Math.max(boxSize.x, boxSize.y, boxSize.z);
@@ -50,6 +49,17 @@ function SceneContent() {
     });
   }, [gltf]);
 
+  // display object names on click
+  function handlePointerDown(event) {
+    event.stopPropagation();
+    // We'll use event.point and event.object for the clicked mesh
+    if (event.object) {
+      const objectName = event.object.name || "Unnamed Object";
+      log(`Clicked object: ${objectName}`);
+      // log(event.object);
+    }
+  }
+
   return (
     <>
       <directionalLight
@@ -66,7 +76,11 @@ function SceneContent() {
       />
       {/* HDR for ambientLights */}
       <Environment files={"/hdr/brown_photostudio_02_1k.hdr"} />
-      <primitive object={gltf.scene} ref={modelRef} />
+      <primitive
+        object={gltf.scene}
+        ref={modelRef}
+        onPointerDown={handlePointerDown}
+      />
       <OrbitControls
         enableDamping
         minDistance={1}
