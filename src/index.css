@@ -9,7 +9,7 @@
 
   font-family: "Outfit", system-ui, -apple-system, sans-serif;
   color: #fff;
-  /* user-select: none; */
+  user-select: none;
 }
 
 :root {
@@ -17,6 +17,7 @@
 
   --primary-color: #34db69;
   --dark: #222;
+  --black: #000;
   --secondary-color: #0008;
 
   --cursor: url("/cursors/jujutsu-cursor-32.png") 5 5, auto;
@@ -184,14 +185,16 @@ a {
   position: relative;
   z-index: 1;
   background-color: var(--dark);
-  background-image: url("/images/loading-square-bg.png");
+  /* background-image: url("/images/loading-square-bg.png"); */
   background-repeat: no-repeat;
   background-size: cover;
 
-  svg * {
-    /* for animejs */
-    transform-origin: 50%;
-    transform-box: fill-box;
+  svg {
+    * {
+      /* for animejs */
+      transform-origin: 50%;
+      transform-box: fill-box;
+    }
   }
 }
 

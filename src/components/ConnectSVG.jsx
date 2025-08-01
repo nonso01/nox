@@ -8,37 +8,41 @@ export default function ConnectSVG() {
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
       >
-        <rect width="800" height="300" fill="transparent" />
-        <circle cx="86" cy="146" r="14" stroke="white" strokeWidth="2" />
-        <rect x="71" y="166" width="30" height="10" rx="1" fill="white" />
-        <line
-          x1="72.5"
-          y1="124.5"
-          x2="99.5"
-          y2="124.5"
-          stroke="white"
-          strokeWidth="3"
-          strokeLinecap="round"
-        />
-        <path
-          d="M26.5674 132.75C26.7599 132.417 27.2401 132.417 27.4326 132.75L38.6914 152.25C38.8838 152.583 38.6434 153 38.2588 153H15.7412C15.3566 153 15.1162 152.583 15.3086 152.25L26.5674 132.75Z"
-          stroke="#34DB69"
-        />
-        <circle cx="719" cy="146" r="14" stroke="white" strokeWidth="2" />
-        <rect x="704" y="166" width="30" height="10" rx="1" fill="white" />
-        <line
-          x1="705.5"
-          y1="124.5"
-          x2="732.5"
-          y2="124.5"
-          stroke="white"
-          strokeWidth="3"
-          strokeLinecap="round"
-        />
-        <path
-          d="M771.567 137.75C771.76 137.417 772.24 137.417 772.433 137.75L783.691 157.25C783.884 157.583 783.643 158 783.259 158H760.741C760.357 158 760.116 157.583 760.309 157.25L771.567 137.75Z"
-          stroke="#34DB69"
-        />
+        {/* <rect width="800" height="300" fill="transparent" /> */}
+        <g className="tris-1">
+          <circle cx="86" cy="146" r="14" stroke="white" strokeWidth="2" />
+          <rect x="71" y="166" width="30" height="10" rx="1" fill="white" />
+          <line
+            x1="72.5"
+            y1="124.5"
+            x2="99.5"
+            y2="124.5"
+            stroke="white"
+            strokeWidth="3"
+            strokeLinecap="round"
+          />
+          <path
+            d="M26.5674 132.75C26.7599 132.417 27.2401 132.417 27.4326 132.75L38.6914 152.25C38.8838 152.583 38.6434 153 38.2588 153H15.7412C15.3566 153 15.1162 152.583 15.3086 152.25L26.5674 132.75Z"
+            stroke="#34DB69"
+          />
+        </g>
+        <g className="tris-2">
+          <circle cx="719" cy="146" r="14" stroke="white" strokeWidth="2" />
+          <rect x="704" y="166" width="30" height="10" rx="1" fill="white" />
+          <line
+            x1="705.5"
+            y1="124.5"
+            x2="732.5"
+            y2="124.5"
+            stroke="white"
+            strokeWidth="3"
+            strokeLinecap="round"
+          />
+          <path
+            d="M771.567 137.75C771.76 137.417 772.24 137.417 772.433 137.75L783.691 157.25C783.884 157.583 783.643 158 783.259 158H760.741C760.357 158 760.116 157.583 760.309 157.25L771.567 137.75Z"
+            stroke="#34DB69"
+          />
+        </g>
         <g className="loading-bars">
           <path
             d="M141.234 126H151.234L140 176H130L141.234 126Z"
@@ -376,7 +380,7 @@ export default function ConnectSVG() {
             strokeWidth="2"
           />
         </g>
-        <g className="downloading">
+        <g className="down">
           {/* <rect
             width="400"
             height="40"
@@ -388,7 +392,7 @@ export default function ConnectSVG() {
           </text>
         </g>
 
-        <g clipPath="url(#clip4_182_2)" className="connectiing">
+        <g clipPath="url(#clip4_182_2)" className="con">
           {/* <rect
             width="200"
             height="30"

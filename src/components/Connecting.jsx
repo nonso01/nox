@@ -2,18 +2,74 @@ import ConnectSVG from "./ConnectSVG";
 
 import {
   createScope,
-  createDraggable,
   createSpring,
   stagger,
   animate,
   utils,
-  svg,
+  createTimeline,
 } from "animejs";
 import { useRef, useEffect, useState } from "react";
 
-const ONE_SECOND = 1000;
+const ONESEC = 1000;
 const HUNDRED = 100;
+
 const log = console.log;
+
+export function splitTextToTspan(textEl) {
+  const textContent = textEl.textContent;
+  textEl.textContent = "";
+
+  const tspans = Array.from(textContent).map((char, index) => {
+    const tspan = document.createElementNS(
+      "http://www.w3.org/2000/svg",
+      "tspan"
+    );
+    tspan.setAttribute("dy", "0");
+    tspan.textContent = char;
+    textEl.append(tspan);
+    return tspan;
+  });
+
+  return tspans;
+}
+
+export function animateGlitchText(
+  tspans = [],
+  finalText = "CONNECTING...",
+  duration = 400
+) {
+  const charset = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+  const totalChars = tspans.length;
+  const lockSteps = Array(totalChars).fill(false);
+
+  const instance = animate(tspans, {
+    opacity: [0.1, 1],
+    dy: [0, -1, 1, 0],
+    duration,
+    delay: stagger(100),
+    ease: "outSine",
+    loop: 6,
+    onUpdate({ progress }) {
+      // progress changes from 0 -1 based on the loop count
+      tspans.forEach((tspan, i) => {
+        const lockThreshold = (i + 1) / totalChars;
+
+        if (progress >= lockThreshold) {
+          // Lock in original character
+          tspan.textContent = finalText[i];
+          lockSteps[i] = true;
+        } else if (!lockSteps[i] && finalText[i] !== " ") {
+          // Show random char temporarily
+          const randChar = charset[Math.floor(Math.random() * charset.length)];
+          tspan.textContent = randChar;
+        }
+      });
+    },
+    onComplete() {
+      utils.cleanInlineStyles(instance);
+    },
+  });
+}
 
 export default function Connecting({ connected, onSetConnected }) {
   const root = useRef(null);
@@ -23,18 +79,18 @@ export default function Connecting({ connected, onSetConnected }) {
 
   useEffect(() => {
     scope.current = createScope({ root }).add((self) => {
-      // loading bars
-
       const [$percentText] = utils.$(".connecting  g.percent text");
-      // log(percentText);
+      const [$conText] = utils.$(".connecting g.con text");
+      const $connectTexts = splitTextToTspan($conText);
 
+      // loading bars
       animate(".connecting svg .loading-bars path", {
         fillOpacity: [0.1, 0.5, 1],
         filter: "url(#shadow)",
         delay: stagger(HUNDRED * 3),
         ease: "inBounce",
         onComplete({ duration }) {
-          const dt = duration / ONE_SECOND;
+          const dt = duration / ONESEC;
           log(`completed after: ${dt}sec`);
           // onSetConnected(true);
         },
@@ -47,10 +103,39 @@ export default function Connecting({ connected, onSetConnected }) {
             : (t = `${dt}`);
 
           // log(t)
-
           $percentText.textContent = t;
         },
       });
+
+      //connecting.. texts
+      animateGlitchText($connectTexts);
+
+      // animate first tris
+      // {
+      //   const tl = createTimeline({ defaults: { ease: "inElastic", duration: ONESEC *2 } });
+      //   const [circle, rect, line, triangle] = utils.$(
+      //     ".connecting svg g.tris-1 *"
+      //   );
+
+      //   tl.add(
+      //     circle,
+      //     {
+      //       x: "300px",
+      //       y: "100px",
+      //       loop: 4,
+      //       reversed: true,
+      //       alternate: true,
+      //     },
+      //     0
+      //   ).add(
+      //     rect,
+      //     {
+      //       rotate: 360,
+      //       loop: 4,
+      //     },
+      //     0
+      //   );
+      // }
     });
 
     return () => scope.current.revert();
