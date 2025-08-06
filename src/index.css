@@ -15,10 +15,10 @@
 :root {
   --font-sm: 0.9rem;
 
-  --primary-color: #34db69;
-  --dark: #222;
+  --pc: #34db69;
+  --sc: #222;
   --black: #000;
-  --secondary-color: #0008;
+  --scl: #0008;
 
   --cursor: url("/cursors/jujutsu-cursor-32.png") 5 5, auto;
   --pointer: url("/cursors/jujutsu-pointer-32.png") 5 5, pointer;
@@ -33,7 +33,7 @@
 html,
 body {
   min-height: 100dvh;
-  background-color: var(--dark);
+  background-color: var(--sc);
   scrollbar-gutter: stable;
   scroll-behavior: smooth;
 
@@ -85,8 +85,8 @@ a {
 }
 
 .lucide-star {
-  stroke: var(--primary-color);
-  fill: var(--primary-color);
+  stroke: var(--pc);
+  fill: var(--pc);
 }
 
 /* scroll bar styles */
@@ -109,7 +109,7 @@ a {
 
 ::-webkit-scrollbar-thumb:hover {
   transition-duration: 200ms;
-  background-color: var(--primary-color);
+  background-color: var(--pc);
 }
 
 .flex {
@@ -147,18 +147,14 @@ a {
     -webkit-background-clip: text;
     -moz-background-clip: text;
     background-clip: text;
-    background-image: linear-gradient(
-      var(--angle),
-      white 40%,
-      var(--secondary-color)
-    );
+    background-image: linear-gradient(var(--angle), white 40%, var(--scl));
   }
 
   &.gradient-green {
     color: transparent !important;
     -webkit-background-clip: text;
     background-clip: text;
-    background-image: linear-gradient(var(--primary-color) 60%, transparent);
+    background-image: linear-gradient(var(--pc) 60%, transparent);
   }
 
   &.animate {
@@ -184,8 +180,7 @@ a {
   height: 100dvh;
   position: relative;
   z-index: 1;
-  background-color: var(--dark);
-  /* background-image: url("/images/loading-square-bg.png"); */
+  background-color: var(--sc);
   background-repeat: no-repeat;
   background-size: cover;
 
@@ -215,7 +210,7 @@ a {
       font-size: 1.1rem;
       font-weight: bolder;
       &:hover {
-        color: var(--primary-color);
+        color: var(--pc);
       }
     }
 
@@ -225,10 +220,10 @@ a {
       position: relative;
       z-index: 5;
       /* border-radius: 25px; */
-      /* background-color: var(--secondary-color); */
+      /* background-color: var(--scl); */
 
       a.home-link {
-        color: var(--primary-color);
+        color: var(--pc);
       }
 
       .logo {
@@ -242,7 +237,7 @@ a {
       .links {
         width: 35%;
         align-items: center;
-        background-color: var(--secondary-color);
+        background-color: var(--scl);
         backdrop-filter: blur(5px);
         border-radius: 50px;
 
@@ -276,7 +271,7 @@ a {
           font-weight: bold;
 
           span {
-            color: var(--primary-color);
+            color: var(--pc);
           }
         }
       }
@@ -338,11 +333,11 @@ a {
         align-self: center;
 
         p:nth-child(1) {
-          background-color: var(--primary-color);
+          background-color: var(--pc);
         }
 
         p:nth-child(2) {
-          color: var(--primary-color);
+          color: var(--pc);
           border: 2px solid;
         }
 
@@ -363,13 +358,13 @@ a {
   .d-service {
     height: 830px;
     padding: 30px 130px;
-    background-color: var(--secondary-color);
+    background-color: var(--black);
     /* border-radius: 50px; */
 
     .service-info {
       height: 100px;
       padding-bottom: 1rem;
-      border-bottom: 2px solid var(--dark);
+      border-bottom: 2px solid var(--sc);
 
       div {
         width: 30%;
@@ -379,7 +374,7 @@ a {
         font-size: 3.5rem;
 
         span {
-          color: var(--primary-color);
+          color: var(--pc);
         }
       }
 
@@ -405,9 +400,9 @@ a {
         transition-duration: 200ms;
 
         &:hover {
-          background-color: var(--secondary-color);
+          /* background-color: var(--scl); */
           .arrow {
-            background-color: var(--primary-color);
+            background-color: var(--pc);
           }
         }
 
@@ -416,7 +411,7 @@ a {
           padding: 1.5rem;
           font-size: 2rem;
           font-weight: 500;
-          /* border-bottom: 2px solid var(--secondary-color); */
+          /* border-bottom: 2px solid var(--scl); */
         }
 
         .folders {
@@ -459,7 +454,7 @@ a {
           height: 150px;
           display: grid;
           place-items: center;
-          background-color: var(--secondary-color);
+          background-color: var(--scl);
           position: absolute;
           z-index: 10;
           bottom: -5px;
@@ -556,7 +551,7 @@ a {
   .d-testimonial {
     height: 830px;
     padding: 30px 0px;
-    background-color: var(--secondary-color);
+    background-color: var(--black);
     position: relative;
 
     .words {
@@ -574,7 +569,7 @@ a {
         font-size: 3rem;
 
         span {
-          color: var(--primary-color);
+          color: var(--pc);
         }
       }
     }
@@ -587,7 +582,7 @@ a {
 
       &::before,
       &::after {
-        background-image: linear-gradient(to right, #000a 0%, #fff0 100%);
+        background-image: linear-gradient(to right, #000d 0%, #fff0 100%);
         content: "";
         height: 100%;
         position: absolute;
@@ -618,7 +613,7 @@ a {
         font-size: 12px;
         font-weight: 600;
         span {
-          color: var(--primary-color);
+          color: var(--pc);
         }
       }
     }

@@ -46,7 +46,8 @@ const TData = [
     role: "DevRel Engineer ",
     image: "https://avatars.githubusercontent.com/u/102877324?v=4",
     rating: 4,
-    testimonial: "Martin's engaging videos and Blender demos boosted our dev community's interest, doubling our event turnout.",
+    testimonial:
+      "Martin's engaging videos and Blender demos boosted our dev community's interest, doubling our event turnout.",
   },
   {
     name: "Charles Chrismann",
@@ -89,7 +90,7 @@ function TestimonialCard({ data }) {
       </div>
       <style jsx="true">{`
         .t-card {
-          //   border: 2px solid var(--dark);
+          //   border: 2px solid var(--sc);
           background-color: #222;
           width: 500px;
           height: 250px;

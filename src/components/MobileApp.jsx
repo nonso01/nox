@@ -1,5 +1,9 @@
 import Connecting from "./Connecting";
 
 export default function MobileApp({ connected }) {
-  return <Connecting />;
+  return (
+    <div className="mobile-app">
+      <Connecting />
+    </div>
+  );
 }
