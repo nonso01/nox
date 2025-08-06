@@ -1,6 +1,6 @@
 import Connecting from "./Connecting";
 import HouseScene from "./HouseR3F";
-import LineFollowCircle from "./LineFollowCircle";
+import { LineFollowCircle } from "./Svgs";
 import { TestimonialCard, TData } from "./TestimonialCard";
 import Logo from "/images/favicon.png";
 import {

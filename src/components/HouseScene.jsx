@@ -1,4 +1,3 @@
-// convert to r3f version
 import { useEffect, useRef } from "react";
 import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
@@ -11,13 +10,11 @@ const BG_COLOR = 0x222222;
 const log = console.log;
 
 export default function HouseScene() {
-  // Use a ref to store the renderer to ensure access during cleanup
   const mountRef = useRef(null);
   const rendererRef = useRef(null);
   const statsRef = useRef(null);
 
   useEffect(() => {
-    // skip if mountRef is not attached
     if (!mountRef.current) {
       console.warn("mountRef.current is null on mount");
       return;
@@ -27,11 +24,9 @@ export default function HouseScene() {
     statsRef.current = stats;
     document.body.appendChild(stats.dom);
 
-    // three.js Setup
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(BG_COLOR);
 
-    // initialize camera with parent div's aspect ratio
     const parentWidth = mountRef.current?.clientWidth;
     const parentHeight = mountRef.current?.clientHeight;
     const camera = new THREE.PerspectiveCamera(
@@ -40,16 +35,14 @@ export default function HouseScene() {
       0.1,
       1000
     );
-    // camera.position.z = 10;
 
     const renderer = new THREE.WebGLRenderer({ antialias: true });
-    renderer.setSize(parentWidth, parentHeight); // Match parent div
+    renderer.setSize(parentWidth, parentHeight);
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     rendererRef.current = renderer;
 
-    // prevent multiple canvas appends
     if (mountRef.current.childElementCount === 0) {
       mountRef.current.appendChild(renderer.domElement);
     } else {
@@ -57,7 +50,6 @@ export default function HouseScene() {
     }
 
     // Lights
-
     const directionalLight = new THREE.DirectionalLight(0xffffff, 2);
     directionalLight.position.set(0, 10, 10);
     directionalLight.castShadow = true;
@@ -68,7 +60,6 @@ export default function HouseScene() {
     directionalLight.shadow.normalBias = 0.05;
     scene.add(directionalLight);
 
-    //light helper
     const lightHelper = new THREE.DirectionalLightHelper(
       directionalLight,
       5,
@@ -76,10 +67,18 @@ export default function HouseScene() {
     );
     scene.add(lightHelper);
 
-    // controls
+    // Ground plane
+    const groundGeometry = new THREE.PlaneGeometry(100, 100);
+    const groundMaterial = new THREE.MeshStandardMaterial({ color: 0x222222 });
+    const ground = new THREE.Mesh(groundGeometry, groundMaterial);
+    ground.rotation.x = -Math.PI / 2;
+    ground.receiveShadow = true;
+    scene.add(ground);
+
+    // Controls
     const controls = new OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true;
-    // controls.dampingFactor = 0.1;
+    controls.enablePan = false
     controls.minDistance = 1;
     controls.maxDistance = 5.5;
     controls.maxPolarAngle = Math.PI / 2;
@@ -93,7 +92,6 @@ export default function HouseScene() {
       "/hdr/brown_photostudio_02_1k.hdr",
       (texture) => {
         texture.mapping = THREE.EquirectangularReflectionMapping;
-        // scene.background = texture
         scene.environment = texture;
       },
       undefined,
@@ -102,7 +100,7 @@ export default function HouseScene() {
       }
     );
 
-    // load gltf model
+    // Load GLTF model
     const loadingManager = new THREE.LoadingManager();
     const dracoLoader = new DRACOLoader();
     dracoLoader.setDecoderPath(
@@ -116,20 +114,25 @@ export default function HouseScene() {
     gltfLoader.load(
       url,
       (gltf) => {
-        const root = gltf.scene;
-        root.traverse((child) => {
+        const model = gltf.scene;
+        model.traverse((child) => {
           if (child.isMesh) {
             child.castShadow = true;
             child.receiveShadow = true;
           }
         });
-        scene.add(root);
-        // Compute bounding box and center camera
-        const box = new THREE.Box3().setFromObject(modelRef.current);
-        log(box);
+        scene.add(model);
+
+        // Compute bounding box to position ground and camera
+        const box = new THREE.Box3().setFromObject(model);
         const boxSize = box.getSize(new THREE.Vector3());
         const boxCenter = box.getCenter(new THREE.Vector3());
         const maxDim = Math.max(boxSize.x, boxSize.y, boxSize.z);
+
+        // Position ground at the bottom of the model
+        ground.position.y = box.min.y;
+
+        // Adjust camera
         const fov = camera.fov * (Math.PI / 180);
         let cameraZ = Math.abs(maxDim / 2 / Math.tan(fov / 2));
         cameraZ *= 1.5;
@@ -139,6 +142,8 @@ export default function HouseScene() {
           boxCenter.z + cameraZ
         );
         camera.lookAt(boxCenter);
+        controls.target.copy(boxCenter);
+        controls.update();
       },
       (xhr) => {
         log(xhr.loaded / xhr.total);
@@ -148,7 +153,7 @@ export default function HouseScene() {
       }
     );
 
-    // resize function
+    // Resize function
     const resizeRendererToDisplaySize = () => {
       const canvas = renderer.domElement;
       const width = Math.floor(mountRef.current.clientWidth);
@@ -162,21 +167,17 @@ export default function HouseScene() {
       return needResize;
     };
 
-    // window.addEventListener("resize", resizeRendererToDisplaySize); // resize
-
-    // animation loop
+    // Animation loop
     const animate = (time) => {
       stats.begin();
-
       requestAnimationFrame(animate);
       resizeRendererToDisplaySize();
       renderer.render(scene, camera);
-
       stats.end();
     };
     requestAnimationFrame(animate);
 
-    // cleanup
+    // Cleanup
     return () => {
       if (mountRef.current && rendererRef.current?.domElement) {
         mountRef.current.removeChild(rendererRef.current.domElement);

@@ -88,48 +88,7 @@ function TestimonialCard({ data }) {
           <p className="flex center">{data?.rating}.0</p>
         </div>
       </div>
-      <style jsx="true">{`
-        .t-card {
-          //   border: 2px solid var(--sc);
-          background-color: #222;
-          width: 500px;
-          height: 250px;
-          border-radius: 0.625rem;
-          padding-inline: 1rem;
-
-          .detail {
-            height: 25%;
-            gap: 1rem;
-            img {
-              height: 100%;
-              aspect-ratio: 1;
-              border-radius: 50%;
-              /*border: 2px solid blue;*/
-            }
-
-            .name {
-              font-weight: 600;
-            }
-
-            .role {
-              opacity: 0.7;
-            }
-          }
-
-          .info {
-            height: 40%;
-          }
-
-          .rate {
-            height: 15%;
-            gap: 1rem;
-            p {
-              font-family: "Orbitron", sans-serif;
-              font-weight: 500;
-            }
-          }
-        }
-      `}</style>
+      {/* <style jsx="true">{``}</style> */}
     </>
   );
 }

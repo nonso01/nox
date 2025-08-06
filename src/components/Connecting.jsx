@@ -8,7 +8,7 @@ import {
 } from "animejs";
 import { useRef, useEffect, useState } from "react";
 import { splitTextToTspan, animateGlitchText } from "./utils";
-import ConnectSVG from "./ConnectSVG";
+import { ConnectSVG } from "./Svgs";
 
 const ONESEC = 1000;
 const HUNDRED = 100;
@@ -88,7 +88,7 @@ export default function Connecting({ connected, onSetConnected }) {
   return (
     <div className="connecting flex center" ref={root}>
       <ConnectSVG />
-      <style jsx="true">{``}</style>
+      {/* <style jsx="true">{``}</style> */}
     </div>
   );
 }
