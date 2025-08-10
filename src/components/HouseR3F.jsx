@@ -15,8 +15,7 @@ const log = console.log;
 const BG_COLOR = 0x222222;
 
 function Loader() {
-  const { progress } = useProgress();
-  // const v = `${progress.toFixed(1)} % loaded`;
+  // const { progress } = useProgress();
   return (
     <Html center>
       <Spinner />
@@ -103,7 +102,7 @@ export default function HouseSceneR3F() {
         <OrbitControls
           enableDamping
           enablePan={false}
-          minDistance={1}
+          minDistance={0.5}
           maxDistance={5.5}
           maxPolarAngle={Math.PI / 2}
           makeDefault
