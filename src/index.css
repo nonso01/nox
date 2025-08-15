@@ -171,7 +171,8 @@ a {
   }
 }
 
-.debbug {
+.debbug,
+.bd {
   border: 2px solid red;
 }
 
@@ -219,7 +220,7 @@ a {
       padding: 1%;
       position: relative;
       z-index: 5;
-      
+
       a.home-link {
         color: var(--pc);
       }
@@ -390,7 +391,7 @@ a {
         width: min(30.5%, 500px);
         height: 600px;
         align-self: center;
-        background-color: #222;
+        background-color: var(--sc);
         clip-path: path(
           "M450 0C477.614 6.4426e-06 500 22.3858 500 50V389C500 416.614 477.614 439 450 439H387C359.386 439 337 461.386 337 489V550C337 577.614 314.614 600 287 600H50C22.3858 600 8.0543e-07 577.614 0 550V50C0 22.3858 22.3858 4.02663e-07 50 0H450ZM430 460C468.66 460 500 491.34 500 530C500 568.66 468.66 600 430 600C391.34 600 360 568.66 360 530C360 491.34 391.34 460 430 460Z"
         );
@@ -533,7 +534,7 @@ a {
     }
   }
 
-  .d-3d-house {
+  .d-my-room {
     height: 1020px;
     .house-scene {
       height: 100%;
@@ -655,6 +656,32 @@ a {
           font-weight: 500;
         }
       }
+    }
+  }
+
+  .d-fly {
+    background-color: var(--black);
+    height: 7000px;
+    position: relative;
+
+    div:has(svg) {
+      width: max-content;
+    }
+
+    .message-img {
+      position: absolute;
+      top: -150px;
+      left: -100px;
+      border: 2px solid red;
+    }
+
+    div.debbug {
+      position: absolute;
+      width: 50px;
+      height: 50px;
+      top: -25px;
+      left: 0px;
+      transform-origin: 50% 50%;
     }
   }
 }

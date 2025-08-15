@@ -497,3 +497,84 @@ export function ConnectSVG() {
 export function Spinner() {
   return <div className="spinner"></div>;
 }
+
+export function FlyingMessage({ fill = "#34DB69" }) {
+  return (
+    <>
+      <svg
+        width="235"
+        height="237"
+        viewBox="0 0 235 237"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        className="flying-message"
+      >
+        <g filter="url(#filter0_d_226_16)">
+          <path
+            d="M56.7437 11.4512C55.5238 2.07131 66.8028 -3.6029 73.6069 2.96777L227.491 151.572C233.028 156.92 230.7 166.256 223.3 168.378L17.6704 227.342C8.57742 229.949 1.28243 219.643 6.76416 211.934L62.1239 134.088C64.5819 130.631 68.9531 129.101 73.0301 130.271L92.6831 135.907C95.8683 136.82 99.1907 134.978 100.104 131.793C101.017 128.608 99.1758 125.286 95.9907 124.372L76.7898 118.865C72.9575 117.766 70.1443 114.496 69.6301 110.542L56.7437 11.4512Z"
+            fill={fill}
+          />
+        </g>
+        <defs>
+          <filter
+            id="filter0_d_226_16"
+            x="0.873535"
+            y="0.129883"
+            width="233.676"
+            height="236.625"
+            filterUnits="userSpaceOnUse"
+            colorInterpolationFilters="sRGB"
+          >
+            <feFlood floodOpacity="0" result="BackgroundImageFix" />
+            <feColorMatrix
+              in="SourceAlpha"
+              type="matrix"
+              values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+              result="hardAlpha"
+            />
+            <feOffset dy="5" />
+            <feGaussianBlur stdDeviation="2" />
+            <feComposite in2="hardAlpha" operator="out" />
+            <feColorMatrix
+              type="matrix"
+              values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"
+            />
+            <feBlend
+              mode="normal"
+              in2="BackgroundImageFix"
+              result="effect1_dropShadow_226_16"
+            />
+            <feBlend
+              mode="normal"
+              in="SourceGraphic"
+              in2="effect1_dropShadow_226_16"
+              result="shape"
+            />
+          </filter>
+        </defs>
+      </svg>
+    </>
+  );
+}
+
+export function FlyingMessagePath() {
+  return (
+    <>
+      <svg
+        width="1315"
+        height="6482"
+        viewBox="0 0 1315 6482"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        className="flying-message-path"
+      >
+        <path
+          d="M136.419 100.515C1069.42 -155.985 1162.92 153.015 1005.42 345.515C847.919 538.015 19.4192 532.015 369.419 882.015C719.419 1232.02 1279.92 1215.02 1232.92 958.015C1185.92 701.015 911.919 439.015 760.419 590.515C608.919 742.015 713.419 1238.02 678.419 1564.52C643.419 1891.02 264.419 2118.02 176.919 1955.02C13.9192 1739.52 -96.5808 1401.52 136.419 1337.02C369.419 1272.52 952.779 1317.28 1115.92 1506.02C1246 1656.5 1453.92 1943.02 1168.42 2211.52C882.919 2480.02 288.419 2398.02 328.919 2888.02C369.419 3378.02 165.419 3302.52 421.919 3454.02C678.419 3605.52 1173.92 3716.52 1203.42 3454.02C1232.92 3191.52 1430.92 2928.52 1168.42 2888.02C905.919 2847.52 608.419 3517.52 643.419 3652.02C678.419 3786.52 1103.92 3769.02 1168.42 4014.02C1232.92 4259.02 474.419 4667.52 421.919 4830.52C369.419 4993.52 95.9192 5180.02 328.919 5326.02C561.919 5472.02 748.419 5845.52 876.919 5472.02C1005.42 5098.52 748.919 4714.02 585.419 5209.52C421.919 5705.02 130.919 5862.52 276.419 6125.02C421.919 6387.52 281.419 6528.02 643.419 6463.52C1005.42 6399.02 1168.42 6323.52 1238.42 6411.02"
+          stroke="white"
+          strokeWidth="5"
+          strokeLinecap="round"
+        />
+      </svg>
+    </>
+  );
+}

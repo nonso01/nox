@@ -81,18 +81,24 @@ function HouseModel({ url }) {
 export default function HouseSceneR3F() {
   return (
     <div className="house-scene" style={{ width: "100%", height: "100%" }}>
-      <Canvas shadows dpr={[1, 2]} camera={{ fov: 75, near: 0.1, far: 1000 }}>
+      <Canvas
+        shadows
+        dpr={[1, 2]}
+        camera={{ fov: 75, near: 0.1, far: 1000 }}
+        performance={{ min: 0.5, max: 1 }}
+        frameloop="demand"
+      >
         <Suspense fallback={<Loader />}>
           <Environment files="/hdr/brown_photostudio_02_1k.hdr" />
-          <Stats />
+          {/* <Stats /> */}
           <directionalLight
             castShadow
-            intensity={2}
+            intensity={3}
             position={[0, 10, 10]}
-            shadow-mapSize-width={2048}
-            shadow-mapSize-height={2048}
-            shadow-camera-near={0.1}
-            shadow-camera-far={50}
+            shadow-mapSize-width={1024}
+            shadow-mapSize-height={1024}
+            shadow-camera-near={0.5}
+            shadow-camera-far={20}
             shadow-bias={-0.0001}
             shadow-normalBias={0.05}
           />
@@ -105,7 +111,7 @@ export default function HouseSceneR3F() {
           minDistance={0.5}
           maxDistance={5.5}
           maxPolarAngle={Math.PI / 2}
-          makeDefault
+          enableZoom={false}
         />
       </Canvas>
     </div>

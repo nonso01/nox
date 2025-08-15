@@ -1,6 +1,5 @@
 import MobileApp from "./components/MobileApp";
 import DesktopApp from "./components/DesktopApp";
-import Text from "./components/Text";
 import { useState } from "react";
 
 const CONNECT_DELAY_TIME = 6e3;
@@ -14,7 +13,7 @@ function App() {
     // console.log(event.matches);
   });
 
-  const [connected, setConnected] = useState(!false); 
+  const [connected, setConnected] = useState(!false);
   // set back to true to stop animation
 
   // Simulate a delay for connection, this state
@@ -24,13 +23,15 @@ function App() {
   }
 
   if (isMobile) {
-    return <MobileApp connected={connected} />;
+    return (
+      <MobileApp connected={connected} onSetConnected={handleSetConnected} />
+    );
   } else if (!isMobile) {
     return (
       <DesktopApp connected={connected} onSetConnected={handleSetConnected} />
     );
   } else {
-    return <Text text="An error occured!, Please refresh" />;
+    return <h1>An error occured!, Please refresh</h1>;
   }
 }
 

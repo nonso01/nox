@@ -88,7 +88,6 @@ function TestimonialCard({ data }) {
           <p className="flex center">{data?.rating}.0</p>
         </div>
       </div>
-      {/* <style jsx="true">{``}</style> */}
     </>
   );
 }
