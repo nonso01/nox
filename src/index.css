@@ -22,6 +22,41 @@
 
   --cursor: url("/cursors/jujutsu-cursor-32.png") 5 5, auto;
   --pointer: url("/cursors/jujutsu-pointer-32.png") 5 5, pointer;
+
+  --ease: linear(
+    0 0%,
+    0.2342 12.49%,
+    0.4374 24.99%,
+    0.6093 37.49%,
+    0.6835 43.74%,
+    0.7499 49.99%,
+    0.8086 56.25%,
+    0.8593 62.5%,
+    0.9023 68.75%,
+    0.9375 75%,
+    0.9648 81.25%,
+    0.9844 87.5%,
+    0.9961 93.75%,
+    1 100%
+  );
+
+  --ease-bounce: linear(
+    0 0%,
+    0.4603 6.92%,
+    0.7446 12.45%,
+    0.8526 15.3%,
+    0.9372 18.22%,
+    1.0005 21.28%,
+    1.0442 24.56%,
+    1.0708 28.5%,
+    1.0766 30.68%,
+    1.0775 33.08%,
+    1.0677 38.05%,
+    1.0191 52.63%,
+    1.0021 61.72%,
+    0.9959 73.62%,
+    1 100%
+  );
 }
 
 @property --angle {
@@ -214,12 +249,12 @@ input {
     height: 1020px;
     padding: 30px 130px;
 
-    background-image: url("/images/2d-me.png"); /* test image */
+    background-image: url("/images/2d-me.png");
     background-repeat: no-repeat;
     background-position: 50% -50%;
 
     a {
-      font-size: 1.1rem;
+      /* font-size: 1.1rem; */
       font-weight: bolder;
       &:hover {
         color: var(--pc);
@@ -247,7 +282,7 @@ input {
       .links {
         width: 35%;
         align-items: center;
-        background-color: var(--scl);
+        background-color: var(--black);
         backdrop-filter: blur(5px);
         border-radius: 50px;
 
@@ -256,7 +291,7 @@ input {
       }
     }
 
-    .d-s1 {
+    .say-hello {
       height: 830px;
 
       .intro-name {
@@ -337,18 +372,18 @@ input {
         }
       }
 
-      .intro-links {
+      .hire-me-link {
         height: 100px;
         width: 500px;
         align-self: center;
 
-        /* p:nth-child(1) {
-          background-color: var(--pc);
-        } */
-
         p {
           color: var(--pc);
-          border: 2px solid;
+          /* border: 2px solid; */
+          .lucide {
+            border: 2px solid currentColor;
+            border-radius: 50%;
+          }
         }
 
         p {
@@ -399,7 +434,7 @@ input {
       height: 600px;
 
       .card {
-        width:  500px;
+        width: 500px;
         /* height: 600px; */
         aspect-ratio: 1;
         align-self: center;
@@ -694,29 +729,26 @@ input {
 
   .d-fly {
     background-color: var(--black);
-    height: 7000px;
+    height: 1000px;
     position: relative;
-    overflow: hidden;
+    overflow-y: scroll;
 
     div:has(svg) {
       width: max-content;
     }
 
-    .message-img {
+    .message-fly-cover {
       position: absolute;
-      top: -150px;
+      top: -120px;
       left: -100px;
-      border: 2px solid red;
+      /* border: 2px solid red; */
     }
 
-    div.debbug {
-      position: absolute;
-      width: 50px;
-      height: 50px;
-      top: -25px;
-      left: 0px;
-      transform-origin: 50% 50%;
+    .message-path-cover {
+      /* position: absolute; */
+      visibility: hidden;
     }
+
   }
 }
 

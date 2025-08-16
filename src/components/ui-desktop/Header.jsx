@@ -35,7 +35,7 @@ export default function Header() {
           </span>
         </div>
       </nav>
-      <section className="d-s1 flex column evenly ">
+      <section className="say-hello flex column evenly ">
         <div className="intro-name flex column evenly ">
           <p className="p-hello flex center">
             <span>HELLO</span>
@@ -61,11 +61,9 @@ export default function Header() {
 
           <div className=" flex column end">
             <p className="p-stars flex evenly">
-              <Star />
-              <Star />
-              <Star />
-              <Star />
-              <Star />
+              {Array.from({ length: 5 }, (_, i) => (
+                <Star key={i} />
+              ))}
             </p>
             <p className="p-years">
               <span>4</span> Years
@@ -74,11 +72,10 @@ export default function Header() {
           </div>
         </div>
 
-        <div className="intro-links flex evenly ">
-          {/* <p className="flex center">
-            Portfolio <ArrowUpRight strokeWidth={3} />
-          </p> */}
-          <p className="flex center">Hire me</p>
+        <div className="hire-me-link flex evenly ">
+          <p className="flex center">
+            Hire me <ArrowUpRight />
+          </p>
         </div>
       </section>
     </header>

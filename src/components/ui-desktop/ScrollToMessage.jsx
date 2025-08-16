@@ -3,13 +3,12 @@ import { FlyingMessagePath, FlyingMessage } from "../Svgs";
 export default function ScrollToMessage() {
   return (
     <section className="d-fly bd">
-      <div className="message-img">
+      <div className="message-fly-cover flex center">
         <FlyingMessage />
       </div>
-      <div className="bd">
+      <div className="message-path-cover bd">
         <FlyingMessagePath />
       </div>
-      <div className="debbug">test</div>
     </section>
   );
 }

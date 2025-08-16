@@ -22,7 +22,7 @@ const cards = [
   {
     title: "FullStack Websites & Landing Pages",
     subTitle: "Web Development",
-    note: "JS,React,etc",
+    note: "JS,Node.js,etc",
     fileNumber: 11,
     video: false,
     bgUrl: "/images/nox-psp-390.jpg",
