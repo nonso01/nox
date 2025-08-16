@@ -382,6 +382,7 @@ input {
 
       div:nth-child(1) p {
         font-size: 3.5rem;
+        font-weight: 500;
 
         span {
           color: var(--pc);
@@ -398,7 +399,7 @@ input {
       height: 600px;
 
       .card {
-        width: min(30.5%, 500px);
+        width:  500px;
         /* height: 600px; */
         aspect-ratio: 1;
         align-self: center;
@@ -408,8 +409,8 @@ input {
         box-shadow: 10px 10px 0px var(--scl);
 
         .card-main {
-          width: min(92%, 460px);
-          height: min(92%, 460px);
+          width: max(92%, 460px);
+          height: max(92%, 460px);
           /* background-color: blue; */
           background-size: cover;
           background-repeat: no-repeat;

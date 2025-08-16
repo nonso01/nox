@@ -42,7 +42,7 @@ export default function Header() {
           </p>
           <div className="p-name">
             I'm <span>Martin,</span>
-            <p>Frontend Developer</p>
+            <p>Web Developer</p>
           </div>
         </div>
 

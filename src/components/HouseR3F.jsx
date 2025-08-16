@@ -3,10 +3,9 @@ import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import {
   OrbitControls,
   useGLTF,
-  useProgress,
+  // useProgress,
   Html,
   Environment,
-  Stats,
 } from "@react-three/drei";
 import * as THREE from "three";
 import { Spinner } from "./Svgs";
@@ -90,7 +89,6 @@ export default function HouseSceneR3F() {
       >
         <Suspense fallback={<Loader />}>
           <Environment files="/hdr/brown_photostudio_02_1k.hdr" />
-          {/* <Stats /> */}
           <directionalLight
             castShadow
             intensity={3}

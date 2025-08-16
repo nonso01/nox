@@ -16,7 +16,7 @@ const cards = [
     note: "final & experimental",
     fileNumber: 8,
     video: false,
-    bgUrl: "/images/earth-390.png",
+    bgUrl: "/images/earth-390.jpg",
     id: "3d-animation",
   },
   {
@@ -25,10 +25,15 @@ const cards = [
     note: "JS,React,etc",
     fileNumber: 11,
     video: false,
-    bgUrl: "/images/nox-psp-390.png",
+    bgUrl: "/images/nox-psp-390.jpg",
     id: "web-development",
   },
 ];
+
+function Projects() {
+  return <div></div>;
+}
+
 export default function Service() {
   return (
     <section className="d-service flex column evenly" id="service">
