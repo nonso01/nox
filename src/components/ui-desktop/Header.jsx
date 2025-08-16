@@ -75,9 +75,9 @@ export default function Header() {
         </div>
 
         <div className="intro-links flex evenly ">
-          <p className="flex center">
+          {/* <p className="flex center">
             Portfolio <ArrowUpRight strokeWidth={3} />
-          </p>
+          </p> */}
           <p className="flex center">Hire me</p>
         </div>
       </section>

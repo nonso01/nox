@@ -17,7 +17,7 @@
 
   --pc: #34db69;
   --sc: #222;
-  --black: #000;
+  --black: #101010;
   --scl: #0008;
 
   --cursor: url("/cursors/jujutsu-cursor-32.png") 5 5, auto;
@@ -82,6 +82,17 @@ a {
   &:hover {
     transition-duration: 150ms;
   }
+}
+
+button,
+input {
+  outline: none;
+  border: none;
+  background-color: transparent;
+}
+
+.pointer {
+  cursor: var(--pointer);
 }
 
 .lucide-star {
@@ -331,11 +342,11 @@ a {
         width: 500px;
         align-self: center;
 
-        p:nth-child(1) {
+        /* p:nth-child(1) {
           background-color: var(--pc);
-        }
+        } */
 
-        p:nth-child(2) {
+        p {
           color: var(--pc);
           border: 2px solid;
         }
@@ -386,80 +397,97 @@ a {
     .service-cards {
       height: 600px;
 
-      .cards {
-        position: relative;
+      .card {
         width: min(30.5%, 500px);
-        height: 600px;
+        /* height: 600px; */
+        aspect-ratio: 1;
         align-self: center;
         background-color: var(--sc);
-        clip-path: path(
-          "M450 0C477.614 6.4426e-06 500 22.3858 500 50V389C500 416.614 477.614 439 450 439H387C359.386 439 337 461.386 337 489V550C337 577.614 314.614 600 287 600H50C22.3858 600 8.0543e-07 577.614 0 550V50C0 22.3858 22.3858 4.02663e-07 50 0H450ZM430 460C468.66 460 500 491.34 500 530C500 568.66 468.66 600 430 600C391.34 600 360 568.66 360 530C360 491.34 391.34 460 430 460Z"
-        );
+        border-radius: 60px;
+        /* overflow: hidden; */
+        box-shadow: 10px 10px 0px var(--scl);
 
-        transition-duration: 200ms;
-
-        &:hover {
-          /* background-color: var(--scl); */
-          .arrow {
-            background-color: var(--pc);
-          }
-        }
-
-        .title {
-          height: 20%;
-          padding: 1.5rem;
-          font-size: 2rem;
-          font-weight: 500;
-          /* border-bottom: 2px solid var(--scl); */
-        }
-
-        .folders {
-          height: 80%;
+        .card-main {
+          width: min(92%, 460px);
+          height: min(92%, 460px);
+          /* background-color: blue; */
+          background-size: cover;
+          background-repeat: no-repeat;
+          border-radius: 50px;
+          overflow: hidden;
           position: relative;
+          z-index: 10;
+        }
 
-          div {
-            position: absolute;
-            bottom: 0;
-            height: 60%;
-            width: 100%;
-            border-radius: 25px;
-            overflow: hidden;
-          }
+        .card-title {
+          position: absolute;
+          top: 10px;
+          width: 80%;
+          height: max-content;
+          margin-inline-start: 15%;
+          z-index: 5;
 
-          div:nth-child(1) {
-            background-color: #222b;
-            z-index: 8;
-          }
-
-          div:nth-child(2) {
-            width: 90%;
-            margin-inline: 5%;
-            transform: translateY(-10%);
-            background-color: #000a;
-            z-index: 4;
-          }
-
-          div:nth-child(3) {
-            width: 80%;
-            margin-inline: 10%;
-            transform: translateY(-20%);
-            background-color: #0009;
-            z-index: 2;
+          p {
+            /* color: rgb(233, 233, 233); */
+            font-size: 1.7rem;
+            font-weight: 500;
+            text-align: right;
+            text-wrap: balance;
           }
         }
 
-        .arrow {
-          width: 29%;
-          height: 150px;
-          display: grid;
-          place-items: center;
-          background-color: var(--scl);
+        .card-clip {
+          width: 460px;
+          height: 320px;
+          background-color: var(--black);
           position: absolute;
-          z-index: 10;
-          bottom: -5px;
-          right: -1px;
-          transition-duration: 200ms;
-          cursor: var(--pointer);
+          z-index: 5;
+          bottom: -1px;
+          clip-path: path(
+            "M0 21.0457C0 9.42249 9.4225 0 21.0458 0V0H123.268H138.67C148.138 0 157.298 3.35798 164.522 9.47671L182.733 24.8999C189.957 31.0187 199.117 34.3767 208.585 34.3767H257.56H327.712H446.471V34.3767C453.943 34.3767 460 40.434 460 47.906V280C460 302.091 442.091 320 420 320H40C17.9086 320 0 302.091 0 280V21.0457Z"
+          );
+        }
+
+        .card-note {
+          position: absolute;
+          top: 10px;
+          height: 30%;
+          width: 70%;
+          padding: 1.5%;
+
+          p {
+            margin-block: 0.625rem;
+            opacity: 0.7;
+          }
+        }
+
+        .card-view {
+          position: absolute;
+          bottom: 10px;
+          height: 30%;
+          width: 100%;
+          padding: 3%;
+          p,
+          button {
+            align-self: center;
+            font-size: 1.1rem;
+          }
+
+          button {
+            width: 20%;
+            .lucide {
+              border: 2px solid currentColor;
+              border-radius: 50%;
+            }
+            &:hover * {
+              color: var(--pc);
+            }
+          }
+          span:not(button span) {
+            font-family: "Orbitron", sans-serif;
+            font-size: 2rem;
+            font-weight: 500;
+          }
         }
       }
     }
@@ -581,7 +609,11 @@ a {
 
       &::before,
       &::after {
-        background-image: linear-gradient(to right, #000d 0%, #fff0 100%);
+        background-image: linear-gradient(
+          to right,
+          var(--black) 20%,
+          #fff0 100%
+        );
         content: "";
         height: 100%;
         position: absolute;
@@ -602,7 +634,7 @@ a {
         height: 80%;
         gap: 2rem; /* 2 * 8 */
         width: calc(500px * 8 + 16rem);
-        animation: scroll-t-card 40s linear infinite alternate-reverse;
+        animation: scroll-t-card 40s linear infinite;
       }
 
       .join {
@@ -619,7 +651,7 @@ a {
 
     .t-card {
       /* border: 2px solid var(--pc); */
-      background-color: #222;
+      background-color: var(--sc);
       width: 500px;
       height: 250px;
       border-radius: 0.625rem;
@@ -663,6 +695,7 @@ a {
     background-color: var(--black);
     height: 7000px;
     position: relative;
+    overflow: hidden;
 
     div:has(svg) {
       width: max-content;

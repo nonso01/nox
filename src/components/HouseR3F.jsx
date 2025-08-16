@@ -112,6 +112,7 @@ export default function HouseSceneR3F() {
           maxDistance={5.5}
           maxPolarAngle={Math.PI / 2}
           enableZoom={false}
+          rotateSpeed={0.2}
         />
       </Canvas>
     </div>

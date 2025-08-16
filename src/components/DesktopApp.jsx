@@ -7,7 +7,7 @@ import MyRoom from "./ui-desktop/MyRoom";
 import Testimonial from "./ui-desktop/Testimonial";
 import ScrollToMessage from "./ui-desktop/ScrollToMessage";
 
-import Logo from "/images/favicon.png";
+// import Logo from "/images/favicon.png";
 import {
   createScope,
   createDraggable,
@@ -42,44 +42,44 @@ export default function DesktopApp({ connected, onSetConnected }) {
         loop: true,
       });
 
-      animate(".cards .folders div:nth-child(2)", {
-        y: ["0%", "-10%", "-30%"],
-        delay: stagger(100, { from: "center" }),
-        ease: createSpring({ stiffness: 200, mass: 2 }),
-        alternate: true,
-        loop: true,
-      });
+      // animate(".card .folders div:nth-child(2)", {
+      //   y: ["0%", "-10%", "-30%"],
+      //   delay: stagger(100, { from: "center" }),
+      //   ease: createSpring({ stiffness: 200, mass: 2 }),
+      //   alternate: true,
+      //   loop: true,
+      // });
 
-      animate(".cards .folders div:nth-child(3)", {
-        y: ["0%", "-20%", "-40%"],
-        delay: stagger(200, { from: "first" }),
-        ease: createSpring({ stiffness: 200, mass: 2 }),
-        alternate: true,
-        loop: true,
-      });
+      // animate(".card .folders div:nth-child(3)", {
+      //   y: ["0%", "-20%", "-40%"],
+      //   delay: stagger(200, { from: "first" }),
+      //   ease: createSpring({ stiffness: 200, mass: 2 }),
+      //   alternate: true,
+      //   loop: true,
+      // });
     });
 
-    {
-      const duration = 5000 * 50;
-      const motionPath = svg.createMotionPath(".flying-message-path path");
-      // Animate the transforms properties of .car the motion path values
-      const a = animate(".d-fly .message-img, .d-fly div.debbug", {
-        ease: "linear",
-        duration,
-        loop: true,
-        ...motionPath,
-      });
+    // {
+    //   const duration = 5000 * 2;
+    //   const motionPath = svg.createMotionPath(".flying-message-path path");
+    //   // Animate the transforms properties of .car the motion path values
+    //   const a = animate(".d-fly .message-img, .d-fly div.debbug", {
+    //     ease: "linear",
+    //     duration,
+    //     loop: true,
+    //     ...motionPath,
+    //   });
 
-      // Line drawing animation following the motion path values
-      // For demo aesthetic only
-      animate(svg.createDrawable(".flying-message-path path"), {
-        draw: "0 1",
-        opacity: [0, 1],
-        ease: "linear",
-        duration,
-        loop: true,
-      });
-    }
+    //   // Line drawing animation following the motion path values
+    //   // For demo aesthetic only
+    //   animate(svg.createDrawable(".flying-message-path path"), {
+    //     draw: "0 1",
+    //     opacity: [0, 1],
+    //     ease: "linear",
+    //     duration,
+    //     loop: true,
+    //   });
+    // }
 
     // console.log(connected);
 

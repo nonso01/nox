@@ -1,4 +1,4 @@
-export default function WorldScene() {
+export default function World3RF() {
   return (
     <>
       <div></div>
