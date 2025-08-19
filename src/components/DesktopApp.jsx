@@ -6,6 +6,7 @@ import About from "./ui-desktop/About";
 import MyRoom from "./ui-desktop/MyRoom";
 import Testimonial from "./ui-desktop/Testimonial";
 import ScrollToMessage from "./ui-desktop/ScrollToMessage";
+import Footer from "./ui-desktop/Footer";
 
 // import Logo from "/images/favicon.png";
 import {
@@ -46,7 +47,7 @@ export default function DesktopApp({ connected, onSetConnected }) {
         // initiate scroll on d-fly
         const [$container] = utils.$(".d-fly");
         const debug = true;
-        const duration = 5000 * 2;
+        const duration = 5000;
         const motionPath = svg.createMotionPath(".flying-message-path path");
 
         // Animate the transforms properties of .car the motion path values
@@ -108,6 +109,7 @@ export default function DesktopApp({ connected, onSetConnected }) {
         <MyRoom />
         <Testimonial />
         <ScrollToMessage />
+        <Footer />
       </div>
     );
   }

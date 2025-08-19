@@ -1,3 +1,6 @@
+const strokeColor = "#34db69";
+const strokeColorDark = "#222222";
+
 export function LineFollowCircle() {
   return (
     <svg
@@ -8,18 +11,18 @@ export function LineFollowCircle() {
       xmlns="http://www.w3.org/2000/svg"
     >
       <g clipPath="url(#clip0_119_39)">
-        <path d="M25 48L25 224" stroke="#34db69" strokeWidth="4" />
-        <path d="M25 270L25 446" stroke="#34db69" strokeWidth="4" />
-        <circle cx="25" cy="25" r="23" stroke="#34db69" strokeWidth="4" />
+        <path d="M25 48L25 224" stroke={strokeColor} strokeWidth="4" />
+        <path d="M25 270L25 446" stroke={strokeColor} strokeWidth="4" />
+        <circle cx="25" cy="25" r="23" stroke={strokeColor} strokeWidth="4" />
         <circle
           cx="25"
           cy="247"
           r="23"
-          stroke="#34db69"
-          // fill="#34db69"
+          stroke={strokeColor}
+          // fill={strokeColor}
           strokeWidth="4"
         />
-        <circle cx="25" cy="469" r="23" stroke="#34db69" strokeWidth="4" />
+        <circle cx="25" cy="469" r="23" stroke={strokeColor} strokeWidth="4" />
       </g>
       <defs>
         <clipPath id="clip0_119_39">
@@ -55,7 +58,7 @@ export function ConnectSVG() {
           />
           <path
             d="M26.5674 132.75C26.7599 132.417 27.2401 132.417 27.4326 132.75L38.6914 152.25C38.8838 152.583 38.6434 153 38.2588 153H15.7412C15.3566 153 15.1162 152.583 15.3086 152.25L26.5674 132.75Z"
-            stroke="#34DB69"
+            stroke={strokeColor}
           />
         </g>
         <g className="tris-2">
@@ -72,198 +75,198 @@ export function ConnectSVG() {
           />
           <path
             d="M771.567 137.75C771.76 137.417 772.24 137.417 772.433 137.75L783.691 157.25C783.884 157.583 783.643 158 783.259 158H760.741C760.357 158 760.116 157.583 760.309 157.25L771.567 137.75Z"
-            stroke="#34DB69"
+            stroke={strokeColor}
           />
         </g>
         <g className="loading-bars">
           <path
             d="M141.234 126H151.234L140 176H130L141.234 126Z"
-            fill="#34DB69"
+            fill={strokeColor}
             fillOpacity="0.1"
           />
           <path
             d="M155.234 126H165.234L154 176H144L155.234 126Z"
-            fill="#34DB69"
+            fill={strokeColor}
             fillOpacity="0.1"
           />
           <path
             d="M169.234 126H179.234L168 176H158L169.234 126Z"
-            fill="#34DB69"
+            fill={strokeColor}
             fillOpacity="0.1"
           />
           <path
             d="M183.234 126H193.234L182 176H172L183.234 126Z"
-            fill="#34DB69"
+            fill={strokeColor}
             fillOpacity="0.1"
           />
           <path
             d="M197.234 126H207.234L196 176H186L197.234 126Z"
-            fill="#34DB69"
+            fill={strokeColor}
             fillOpacity="0.1"
           />
           <path
             d="M211.234 126H221.234L210 176H200L211.234 126Z"
-            fill="#34DB69"
+            fill={strokeColor}
             fillOpacity="0.1"
           />
           <path
             d="M225.234 126H235.234L224 176H214L225.234 126Z"
-            fill="#34DB69"
+            fill={strokeColor}
             fillOpacity="0.1"
           />
           <path
             d="M239.234 126H249.234L238 176H228L239.234 126Z"
-            fill="#34DB69"
+            fill={strokeColor}
             fillOpacity="0.1"
           />
           <path
             d="M253.234 126H263.234L252 176H242L253.234 126Z"
-            fill="#34DB69"
+            fill={strokeColor}
             fillOpacity="0.1"
           />
           <path
             d="M267.234 126H277.234L266 176H256L267.234 126Z"
-            fill="#34DB69"
+            fill={strokeColor}
             fillOpacity="0.1"
           />
           <path
             d="M281.234 126H291.234L280 176H270L281.234 126Z"
-            fill="#34DB69"
+            fill={strokeColor}
             fillOpacity="0.1"
           />
           <path
             d="M295.234 126H305.234L294 176H284L295.234 126Z"
-            fill="#34DB69"
+            fill={strokeColor}
             fillOpacity="0.1"
           />
           <path
             d="M309.234 126H319.234L308 176H298L309.234 126Z"
-            fill="#34DB69"
+            fill={strokeColor}
             fillOpacity="0.1"
           />
           <path
             d="M323.234 126H333.234L322 176H312L323.234 126Z"
-            fill="#34DB69"
+            fill={strokeColor}
             fillOpacity="0.1"
           />
           <path
             d="M337.234 126H347.234L336 176H326L337.234 126Z"
-            fill="#34DB69"
+            fill={strokeColor}
             fillOpacity="0.1"
           />
           <path
             d="M351.234 126H361.234L350 176H340L351.234 126Z"
-            fill="#34DB69"
+            fill={strokeColor}
             fillOpacity="0.1"
           />
           <path
             d="M365.234 126H375.234L364 176H354L365.234 126Z"
-            fill="#34DB69"
+            fill={strokeColor}
             fillOpacity="0.1"
           />
           <path
             d="M379.234 126H389.234L378 176H368L379.234 126Z"
-            fill="#34DB69"
+            fill={strokeColor}
             fillOpacity="0.1"
           />
           <path
             d="M393.234 126H403.234L392 176H382L393.234 126Z"
-            fill="#34DB69"
+            fill={strokeColor}
             fillOpacity="0.1"
           />
           <path
             d="M407.234 126H417.234L406 176H396L407.234 126Z"
-            fill="#34DB69"
+            fill={strokeColor}
             fillOpacity="0.1"
           />
           <path
             d="M421.234 126H431.234L420 176H410L421.234 126Z"
-            fill="#34DB69"
+            fill={strokeColor}
             fillOpacity="0.1"
           />
           <path
             d="M435.234 126H445.234L434 176H424L435.234 126Z"
-            fill="#34DB69"
+            fill={strokeColor}
             fillOpacity="0.1"
           />
           <path
             d="M449.234 126H459.234L448 176H438L449.234 126Z"
-            fill="#34DB69"
+            fill={strokeColor}
             fillOpacity="0.1"
           />
           <path
             d="M463.234 126H473.234L462 176H452L463.234 126Z"
-            fill="#34DB69"
+            fill={strokeColor}
             fillOpacity="0.1"
           />
           <path
             d="M477.234 126H487.234L476 176H466L477.234 126Z"
-            fill="#34DB69"
+            fill={strokeColor}
             fillOpacity="0.1"
           />
           <path
             d="M491.234 126H501.234L490 176H480L491.234 126Z"
-            fill="#34DB69"
+            fill={strokeColor}
             fillOpacity="0.1"
           />
           <path
             d="M505.234 126H515.234L504 176H494L505.234 126Z"
-            fill="#34DB69"
+            fill={strokeColor}
             fillOpacity="0.1"
           />
           <path
             d="M519.234 126H529.234L518 176H508L519.234 126Z"
-            fill="#34DB69"
+            fill={strokeColor}
             fillOpacity="0.1"
           />
           <path
             d="M533.234 126H543.234L532 176H522L533.234 126Z"
-            fill="#34DB69"
+            fill={strokeColor}
             fillOpacity="0.1"
           />
           <path
             d="M547.234 126H557.234L546 176H536L547.234 126Z"
-            fill="#34DB69"
+            fill={strokeColor}
             fillOpacity="0.1"
           />
           <path
             d="M561.234 126H571.234L560 176H550L561.234 126Z"
-            fill="#34DB69"
+            fill={strokeColor}
             fillOpacity="0.1"
           />
           <path
             d="M575.234 126H585.234L574 176H564L575.234 126Z"
-            fill="#34DB69"
+            fill={strokeColor}
             fillOpacity="0.1"
           />
           <path
             d="M589.234 126H599.234L588 176H578L589.234 126Z"
-            fill="#34DB69"
+            fill={strokeColor}
             fillOpacity="0.1"
           />
           <path
             d="M603.234 126H613.234L602 176H592L603.234 126Z"
-            fill="#34DB69"
+            fill={strokeColor}
             fillOpacity="0.1"
           />
           <path
             d="M617.234 126H627.234L616 176H606L617.234 126Z"
-            fill="#34DB69"
+            fill={strokeColor}
             fillOpacity="0.1"
           />
           <path
             d="M631.234 126H641.234L630 176H620L631.234 126Z"
-            fill="#34DB69"
+            fill={strokeColor}
             fillOpacity="0.1"
           />
           <path
             d="M645.234 126H655.234L644 176H634L645.234 126Z"
-            fill="#34DB69"
+            fill={strokeColor}
             fillOpacity="0.1"
           />
           <path
             d="M659.234 126H669.234L658 176H648L659.234 126Z"
-            fill="#34DB69"
+            fill={strokeColor}
             fillOpacity="0.1"
           />
         </g>
@@ -291,7 +294,7 @@ export function ConnectSVG() {
             width="20"
             height="20"
             rx="2"
-            stroke="#34DB69"
+            stroke={strokeColor}
             strokeWidth="2"
           />
         </g>
@@ -318,30 +321,30 @@ export function ConnectSVG() {
             width="20"
             height="20"
             rx="2"
-            stroke="#34DB69"
+            stroke={strokeColor}
             strokeWidth="2"
           />
         </g>
         <g className="percent">
           <path
             d="M453.608 73.558C453.884 73.5501 454.109 73.7673 454.11 74.0431C454.112 74.3192 453.889 74.5499 453.613 74.558L451.161 74.6298L451.181 78.0833C451.182 78.3594 450.959 78.59 450.683 78.5982C450.407 78.6063 450.182 78.3887 450.18 78.1125L450.162 74.6597L446.71 74.7613C446.434 74.7694 446.209 74.5518 446.207 74.2756C446.206 73.9995 446.428 73.7688 446.705 73.7607L450.156 73.659L450.143 71.2068C450.141 70.9306 450.364 70.7 450.64 70.6919C450.916 70.6841 451.141 70.9011 451.142 71.1769L451.156 73.6298L453.608 73.558Z"
-            fill="#34DB69"
+            fill={strokeColor}
           />
           <path
             d="M453.607 21.5587C453.883 21.5506 454.107 21.7677 454.109 22.0438C454.11 22.3199 453.888 22.5499 453.612 22.558L451.16 22.6298L451.179 26.084C451.181 26.3599 450.959 26.59 450.683 26.5983C450.407 26.6064 450.181 26.3887 450.18 26.1125L450.161 22.6597L446.71 22.7614C446.434 22.7695 446.208 22.5518 446.207 22.2756C446.205 21.9998 446.427 21.7697 446.703 21.7614L450.155 21.659L450.142 19.2068C450.141 18.9307 450.363 18.7007 450.639 18.6926C450.915 18.6845 451.139 18.9015 451.141 19.1776L451.155 21.6305L453.607 21.5587Z"
-            fill="#34DB69"
+            fill={strokeColor}
           />
           <rect
             width="100"
             height="50"
             transform="translate(350 23)"
-            fill="#34DB69"
+            fill={strokeColor}
             fillOpacity="0.3"
           />
           <text
             x="365"
             y="60"
-            fill="#34DB69"
+            fill={strokeColor}
             fontSize={32}
             fontWeight={500}
             className="text-effect orbitron"
@@ -350,11 +353,11 @@ export function ConnectSVG() {
           </text>
           <path
             d="M351.697 21.6451C351.973 21.6403 352.2 21.8602 352.205 22.1362C352.21 22.4123 351.99 22.6399 351.714 22.6448L349.215 22.6877L349.276 26.1882C349.281 26.464 349.061 26.6916 348.785 26.6968C348.509 26.7016 348.281 26.481 348.276 26.205L348.215 22.7059L344.716 22.7669C344.44 22.7718 344.212 22.5519 344.207 22.2758C344.202 21.9998 344.422 21.772 344.698 21.7672L348.197 21.7061L348.154 19.2068C348.149 18.9307 348.369 18.703 348.645 18.6982C348.921 18.6934 349.149 18.9132 349.154 19.1893L349.198 21.688L351.697 21.6451Z"
-            fill="#34DB69"
+            fill={strokeColor}
           />
           <path
             d="M351.697 73.6451C351.973 73.6403 352.2 73.8602 352.205 74.1362C352.21 74.4123 351.99 74.6399 351.714 74.6448L349.215 74.6877L349.276 78.1882C349.281 78.464 349.061 78.6916 348.785 78.6968C348.509 78.7016 348.281 78.481 348.276 78.205L348.215 74.7059L344.716 74.7669C344.44 74.7718 344.212 74.5519 344.207 74.2758C344.202 73.9998 344.422 73.772 344.698 73.7672L348.197 73.7061L348.154 71.2068C348.149 70.9307 348.369 70.703 348.645 70.6982C348.921 70.6934 349.149 70.9132 349.154 71.1893L349.198 73.688L351.697 73.6451Z"
-            fill="#34DB69"
+            fill={strokeColor}
           />
         </g>
 
@@ -381,7 +384,7 @@ export function ConnectSVG() {
             width="20"
             height="20"
             rx="2"
-            stroke="#34DB69"
+            stroke={strokeColor}
             strokeWidth="2"
           />
         </g>
@@ -408,7 +411,7 @@ export function ConnectSVG() {
             width="20"
             height="20"
             rx="2"
-            stroke="#34DB69"
+            stroke={strokeColor}
             strokeWidth="2"
           />
         </g>
@@ -484,7 +487,7 @@ export function ConnectSVG() {
               dx="2"
               dy="0"
               stdDeviation="5"
-              floodColor="#34DB69"
+              floodColor={strokeColor}
               floodOpacity="0.5"
             />
           </filter>
@@ -498,7 +501,7 @@ export function Spinner() {
   return <div className="spinner"></div>;
 }
 
-export function FlyingMessage({ fill = "#34DB69" }) {
+export function FlyingMessage({ fill = strokeColor }) {
   return (
     <>
       <svg
@@ -576,5 +579,69 @@ export function FlyingMessagePath() {
         />
       </svg>
     </>
+  );
+}
+
+export function Xlogo({ fill = strokeColorDark, size = 30 }) {
+  return (
+    <svg
+      fill={strokeColorDark}
+      role="img"
+      viewBox="0 0 24 24"
+      xmlns="http://www.w3.org/2000/svg"
+      width={size}
+      height={size}
+    >
+      <title>X</title>
+      <path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z" />
+    </svg>
+  );
+}
+
+export function YTlgo({ fill = strokeColorDark, size = 30 }) {
+  return (
+    <svg
+      fill={strokeColorDark}
+      role="img"
+      viewBox="0 0 24 24"
+      xmlns="http://www.w3.org/2000/svg"
+      width={size}
+      height={size}
+    >
+      <title>YouTube</title>
+      <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
+    </svg>
+  );
+}
+
+export function DiscordLogo({ fill = strokeColorDark, size = 30 }) {
+  return (
+    <svg
+      role="img"
+      viewBox="0 0 24 24"
+      xmlns="http://www.w3.org/2000/svg"
+      fill={strokeColorDark}
+      width={size}
+      height={size}
+    >
+      <title>Discord</title>
+      <path d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z" />
+    </svg>
+  );
+}
+
+export function TGlogo({ fill = strokeColorDark, size = 30 }) {
+  return (
+    <svg
+      role="img"
+      viewBox="0 0 24 24"
+      xmlns="http://www.w3.org/2000/svg"
+      fill={strokeColorDark}
+      width={size}
+      height={size}
+    >
+      <title>Telegram</title>
+      <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z" />
+    </svg>
   );
 }

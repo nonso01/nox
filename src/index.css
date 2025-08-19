@@ -16,6 +16,7 @@
   --font-sm: 0.9rem;
 
   --pc: #34db69;
+  --pcl: #34db69b0;
   --sc: #222;
   --black: #101010;
   --scl: #0008;
@@ -113,10 +114,11 @@ a {
   text-decoration: none;
   color: inherit;
   transition-duration: 200ms;
+  transition-timing-function: var(--ease);
   cursor: var(--pointer);
-  &:hover {
+  /* &:hover {
     transition-duration: 150ms;
-  }
+  } */
 }
 
 button,
@@ -137,7 +139,8 @@ input {
 
 /* scroll bar styles */
 ::-webkit-scrollbar {
-  width: 2px;
+  width: 0px;
+  /* controls the width */
   height: 10px;
 }
 
@@ -262,8 +265,8 @@ input {
     }
 
     .d-nav {
-      height: 100px;
-      padding: 1%;
+      height: 70px;
+      /* padding: 1%; */
       position: relative;
       z-index: 5;
 
@@ -283,8 +286,8 @@ input {
         width: 35%;
         align-items: center;
         background-color: var(--black);
-        backdrop-filter: blur(5px);
-        border-radius: 50px;
+        /* backdrop-filter: blur(5px); */
+        border-radius: 20px;
 
         position: relative;
         z-index: inherit;
@@ -670,7 +673,7 @@ input {
         height: 80%;
         gap: 2rem; /* 2 * 8 */
         width: calc(500px * 8 + 16rem);
-        animation: scroll-t-card 40s linear infinite;
+        animation: scroll-t-card 40s linear infinite alternate;
       }
 
       .join {
@@ -729,9 +732,10 @@ input {
 
   .d-fly {
     background-color: var(--black);
-    height: 1000px;
+    height: 867px;
     position: relative;
     overflow-y: scroll;
+    overflow-x: hidden;
 
     div:has(svg) {
       width: max-content;
@@ -745,10 +749,139 @@ input {
     }
 
     .message-path-cover {
-      /* position: absolute; */
-      visibility: hidden;
+      position: absolute;
+      /* height: fit-content; */
+
+      /* visibility: hidden; */
+    }
+  }
+
+  .d-footer {
+    height: 867px;
+
+    .footer-content {
+      width: 70%;
+      height: 90%;
+      align-self: center;
+
+      border-radius: 40px;
+      padding: 1.3%;
+      background-color: var(--scl);
+      display: grid;
+      grid-template-columns: repeat(14, 1fr);
+      grid-template-rows: repeat(10, 1fr);
     }
 
+    .footer-content-words {
+      grid-row: 1/11;
+      grid-column: 1/6;
+
+      .footer-word {
+        height: 70%;
+      }
+
+      .footer-logo {
+        width: max(90px, 20%);
+        align-items: center;
+      }
+
+      .fc {
+        /* border: 2px solid currentColor; */
+        height: 25%;
+        display: flex;
+        justify-content: space-between;
+        .w {
+          width: 80%;
+        }
+        .i {
+          width: 50px;
+          height: 50px;
+          display: grid;
+          place-content: center;
+          border: 2px solid var(--sc);
+          border-radius: 10px;
+          transition-duration: 200ms;
+          transition-timing-function: var(--ease);
+
+          background: linear-gradient(-187deg, transparent 70%, var(--sc) 100%);
+
+          &:hover {
+            border-color: var(--pc);
+            background: linear-gradient(
+              -187deg,
+              transparent 70%,
+              var(--pcl) 100%
+            );
+            svg {
+              stroke: var(--pc);
+            }
+          }
+        }
+
+        .w {
+          /* border: 2px solid blue; */
+          h3 {
+            font-size: 1.3rem;
+          }
+          p {
+            color: #d1d0d0;
+          }
+          a {
+            color: var(--sc);
+            &:hover {
+              color: var(--pc);
+            }
+          }
+          * {
+            margin-block-end: 1.5%;
+            font-weight: 600;
+          }
+        }
+      }
+
+      .footer-links {
+        height: 10%;
+        width: 65%;
+
+        a {
+          display: flex;
+          border: 2px solid var(--sc);
+          border-radius: 10px;
+          width: 50px;
+          height: 50px;
+          align-self: center;
+          align-items: center;
+          justify-content: center;
+
+          &:hover {
+            border-color: var(--pc);
+            svg {
+              fill: var(--pc);
+            }
+          }
+        }
+      }
+    }
+
+    .contact {
+      background-color: var(--sc);
+      border-radius: 30px;
+      padding: 1.5%;
+      grid-row: 1/11;
+      grid-column: 7/15;
+    }
+
+    .copyright {
+      align-self: center;
+      width: 20%;
+      span,
+      svg {
+        color: var(--scl);
+        stroke: var(--scl);
+        font-weight: 500;
+        margin-inline: 1%;
+      }
+    }
   }
 }
 

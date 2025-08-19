@@ -2,7 +2,6 @@ import MobileApp from "./components/MobileApp";
 import DesktopApp from "./components/DesktopApp";
 import { useState } from "react";
 
-const CONNECT_DELAY_TIME = 6e3;
 
 function App() {
   const mobileQuery = window.matchMedia("(max-width: 768px)");

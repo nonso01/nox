@@ -25,3 +25,10 @@ dist-ssr
 
 example.md
 old-image
+
+# work on the server
+server
+
+#n .env files
+.env
+.env.local
