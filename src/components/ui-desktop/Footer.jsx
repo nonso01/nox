@@ -1,4 +1,4 @@
-import { Copyright, MessageCircle, Crown, PhoneMissed } from "lucide-react";
+import { Copyright, MessageCircle, Crown, PhoneCall } from "lucide-react";
 import { Xlogo, YTlgo, DiscordLogo, TGlogo } from "../Svgs";
 import Contact from "./Contact";
 
@@ -6,6 +6,39 @@ import Logo from "/images/favicon.png";
 
 let iconSize = 30;
 let iconColor = "var(--sc)";
+
+const footerChatContent = [
+  {
+    icon: MessageCircle,
+    size: iconSize,
+    stroke: iconColor,
+    h3: "Wanna chat ?",
+    p: "Well i don't bite, i have some cookies",
+    a: "my@email.com",
+    link: "#",
+    title: "chat",
+  },
+  {
+    icon: Crown,
+    size: iconSize,
+    stroke: iconColor,
+    h3: "Let's play chess",
+    p: "let's get to know each other, over our game strategies",
+    a: "chess-0X",
+    link: "#",
+    title: "play chess",
+  },
+  {
+    icon: PhoneCall,
+    size: iconSize,
+    stroke: iconColor,
+    h3: "Call me",
+    p: "My voice is definitely worth hearing :D",
+    a: "(+234) 0814-770-0214",
+    link: "#",
+    title: "call me",
+  },
+];
 
 export default function Footer() {
   return (
@@ -16,56 +49,43 @@ export default function Footer() {
             <div className="footer-logo ">
               <img src={Logo} width={30} height={30} title="Nonso Martin" />
             </div>
-            <div className="footer-chat fc">
-              <div className="i" title="chat with me">
-                <MessageCircle
-                  width={iconSize}
-                  height={iconSize}
-                  stroke={iconColor}
-                />
-              </div>
-              <div className="w">
-                <h3>Wanna chat ?</h3>
-                <p>Well i don't bite, i have some cookies</p>
-                <a href="#">my@email.com</a>
-              </div>
-            </div>
-            <div className="footer-chess fc">
-              <div className="i" title="play chess">
-                <Crown width={iconSize} height={iconSize} stroke={iconColor} />
-              </div>
-              <div className="w">
-                <h3>Let's play chess</h3>
-                <p>let's get to know each other </p>
-                <a href="#">chess-0X</a>
-              </div>
-            </div>
-            <div className="footer-call fc">
-              <div className="i" title="call me">
-                <PhoneMissed
-                  width={iconSize}
-                  height={iconSize}
-                  stroke={iconColor}
-                />
-              </div>
-              <div className="w">
-                <h3>Call me</h3>
-                <p>You are not my GF so i won't pick up</p>
-                <a href="#">(+234) 0814-770-0214</a>
-              </div>
-            </div>
+            {footerChatContent.map(
+              ({ icon, size, stroke, h3, p, a, link, title }, i) => {
+                const Icon = icon;
+                return (
+                  <div className="fc " key={title}>
+                    <div
+                      className="icon dark"
+                      title={title}
+                      style={{ "--i": i + 1 }}
+                    >
+                      <Icon width={size} height={size} stroke={stroke} />
+                    </div>
+                    <div className="w">
+                      <h3>{h3}</h3>
+                      <p>{p}</p>
+                      <a href={link}>{a}</a>
+                    </div>
+                  </div>
+                );
+              }
+            )}
           </div>
           <div className="footer-links flex between ">
-            <a href="https://x.com/nonso0X" target="_blank">
+            <a
+              href="https://x.com/nonso0X"
+              className="icon dark"
+              target="_blank"
+            >
               <Xlogo />
             </a>
-            <a href="#">
+            <a href="#" className="icon dark" style={{ "--i": 2 }}>
               <TGlogo />
             </a>
-            <a href="#">
+            <a href="#" className="icon dark" style={{ "--i": 3 }}>
               <DiscordLogo />
             </a>
-            <a href="#">
+            <a href="#" className="icon dark" style={{ "--i": 4 }}>
               <YTlgo />
             </a>
           </div>
@@ -75,8 +95,9 @@ export default function Footer() {
       </div>
 
       <div className="copyright flex center ">
-        <span>All CopyRight</span> <Copyright />{" "}
-        <span>Reserved - {new Date().getUTCFullYear()}</span>
+        <span>
+          All CopyRight &copy; Reserved - {new Date().getUTCFullYear()}
+        </span>
       </div>
     </div>
   );

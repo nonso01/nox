@@ -54,7 +54,7 @@ export default function Header() {
               brand success. Highly recommended!
             </p>
             <div className="p-client">
-              <p>30+</p>
+              <p className="font-orbitron">30+</p>
               <p>Client Served</p>
             </div>
           </div>

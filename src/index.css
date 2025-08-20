@@ -19,6 +19,7 @@
   --pcl: #34db69b0;
   --sc: #222;
   --black: #101010;
+  --white: whitesmoke;
   --scl: #0008;
 
   --cursor: url("/cursors/jujutsu-cursor-32.png") 5 5, auto;
@@ -122,14 +123,70 @@ a {
 }
 
 button,
-input {
+input,
+textarea {
   outline: none;
   border: none;
   background-color: transparent;
 }
 
+form {
+  input,
+  textarea {
+    transition-duration: 150ms;
+    transition-property: border, background-color;
+    transition-timing-function: var(--ease);
+  }
+}
+
+/* @layer fonts { */
+.font-orbitron {
+  font-family: "Orbitron", system-ui, -apple-system, sans-serif;
+}
+/* } */
+
 .pointer {
   cursor: var(--pointer);
+}
+
+.icon {
+  --sc: #2e2e2eec;
+  /* --pc: #34db69ea; */
+  width: 50px;
+  height: 50px;
+  display: grid;
+  place-content: center;
+  border: 2px solid currentColor;
+  border-radius: 10px;
+  transition-timing-function: var(--ease);
+  transition-duration: 150ms;
+  animation: rotateGradient calc(6s * var(--i, 1)) var(--ease) infinite;
+
+  &.dark {
+    border: 2px solid var(--sc);
+    background: linear-gradient(var(--angle), transparent 70%, var(--sc) 100%);
+
+    &:hover {
+      border-color: var(--pc);
+      background: linear-gradient(-200deg, transparent 70%, var(--pc) 100%);
+      svg {
+        stroke: var(--pc);
+      }
+    }
+  }
+
+  &.light {
+    border: 2px solid var(--pc);
+    background: linear-gradient(var(--angle), transparent 70%, var(--pc) 100%);
+
+    &:hover {
+      border-color: var(--sc);
+      background: linear-gradient(-200deg, transparent 70%, var(--sc) 100%);
+      svg {
+        stroke: var(--sc);
+      }
+    }
+  }
 }
 
 .lucide-star {
@@ -345,7 +402,6 @@ input {
           p:nth-child(1) {
             font-size: 2rem;
             font-weight: bold;
-            font-family: "Orbitron";
           }
           p:nth-child(2) {
             margin-top: 0.6rem;
@@ -382,8 +438,9 @@ input {
 
         p {
           color: var(--pc);
-          /* border: 2px solid; */
           .lucide {
+            color: var(--pc);
+            stroke: var(--pcl);
             border: 2px solid currentColor;
             border-radius: 50%;
           }
@@ -595,9 +652,7 @@ input {
 
     p {
       font-size: clamp(14vw, 15vw, 18rem);
-      font-family: "Orbitron";
       font-weight: 600;
-      /* text-shadow: 50px 50px 10px #fff1; */
     }
   }
 
@@ -793,30 +848,6 @@ input {
         .w {
           width: 80%;
         }
-        .i {
-          width: 50px;
-          height: 50px;
-          display: grid;
-          place-content: center;
-          border: 2px solid var(--sc);
-          border-radius: 10px;
-          transition-duration: 200ms;
-          transition-timing-function: var(--ease);
-
-          background: linear-gradient(-187deg, transparent 70%, var(--sc) 100%);
-
-          &:hover {
-            border-color: var(--pc);
-            background: linear-gradient(
-              -187deg,
-              transparent 70%,
-              var(--pcl) 100%
-            );
-            svg {
-              stroke: var(--pc);
-            }
-          }
-        }
 
         .w {
           /* border: 2px solid blue; */
@@ -827,7 +858,9 @@ input {
             color: #d1d0d0;
           }
           a {
+            --sc: #3e3d3dec;
             color: var(--sc);
+            text-decoration: underline;
             &:hover {
               color: var(--pc);
             }
@@ -843,20 +876,12 @@ input {
         height: 10%;
         width: 65%;
 
-        a {
-          display: flex;
-          border: 2px solid var(--sc);
-          border-radius: 10px;
-          width: 50px;
-          height: 50px;
-          align-self: center;
-          align-items: center;
-          justify-content: center;
-
+        a.icon {
+          align-self: flex-end;
           &:hover {
-            border-color: var(--pc);
             svg {
               fill: var(--pc);
+              stroke: none;
             }
           }
         }
@@ -866,18 +891,103 @@ input {
     .contact {
       background-color: var(--sc);
       border-radius: 30px;
-      padding: 1.5%;
+      padding: 5%;
       grid-row: 1/11;
       grid-column: 7/15;
+
+      .contact-title {
+        height: 25%;
+        h2 {
+          font-size: 2.5rem;
+          text-wrap: balance;
+          font-weight: 500;
+        }
+        p {
+          font-weight: 500;
+        }
+      }
+
+      .contact-form {
+        height: 70%;
+      }
+
+      form {
+        --white: rgb(186, 186, 186);
+        height: 100%;
+        width: 100%;
+        border-color: #34db69;
+
+        .input-text {
+          /* border-color: blue; */
+          height: 13%;
+          position: relative;
+
+          input {
+            border: 3px solid transparent;
+            border-bottom-color: var(--black);
+            padding-inline: 1% 5%;
+            width: 100%;
+            height: 100%;
+            color: var(--white);
+
+            &:focus {
+              border-radius: 10px;
+              background-color: var(--scl);
+              &:hover {
+                border-color: var(--scl);
+              }
+            }
+            &:hover {
+              border-bottom-color: var(--pc);
+            }
+          }
+        }
+
+        .input-area {
+          /* border-color: orange; */
+          height: 22%;
+
+          textarea {
+            border: 3px solid transparent;
+            border-bottom-color: var(--black);
+            padding-inline-start: 1%;
+            width: 100%;
+            height: 100%;
+            resize: none;
+            color: var(--white);
+            /* background-color: transparent; */
+
+            &:focus {
+              border-radius: 10px;
+              background-color: var(--scl);
+              &:hover {
+                border-color: var(--scl);
+              }
+            }
+            &:hover {
+              border-bottom-color: var(--pc);
+            }
+          }
+        }
+
+        .input-checkbox {
+          border-color: violet;
+          height: 30%;
+        }
+
+        .input-button {
+          border-color: midnightblue;
+          height: 10%;
+        }
+      }
     }
 
     .copyright {
+      --black: #3e3d3dec;
       align-self: center;
       width: 20%;
-      span,
-      svg {
-        color: var(--scl);
-        stroke: var(--scl);
+      span {
+        color: var(--black);
         font-weight: 500;
         margin-inline: 1%;
       }
