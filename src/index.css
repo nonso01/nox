@@ -124,20 +124,27 @@ a {
 
 button,
 input,
-textarea {
+textarea,
+fieldset {
   outline: none;
   border: none;
   background-color: transparent;
+
+  /* transitions */
+  transition-duration: 150ms;
+  transition-property: border, background-color, transform color;
+  transition-timing-function: var(--ease);
 }
 
-form {
+/* form {
   input,
-  textarea {
+  textarea,
+  fieldset {
     transition-duration: 150ms;
     transition-property: border, background-color;
     transition-timing-function: var(--ease);
   }
-}
+} */
 
 /* @layer fonts { */
 .font-orbitron {
@@ -168,7 +175,11 @@ form {
 
     &:hover {
       border-color: var(--pc);
-      background: linear-gradient(-200deg, transparent 70%, var(--pc) 100%);
+      background: linear-gradient(
+        var(--angle),
+        transparent 70%,
+        var(--pc) 100%
+      );
       svg {
         stroke: var(--pc);
       }
@@ -181,7 +192,11 @@ form {
 
     &:hover {
       border-color: var(--sc);
-      background: linear-gradient(-200deg, transparent 70%, var(--sc) 100%);
+      background: linear-gradient(
+        var(--angle),
+        transparent 70%,
+        var(--sc) 100%
+      );
       svg {
         stroke: var(--sc);
       }
@@ -845,12 +860,14 @@ form {
         height: 25%;
         display: flex;
         justify-content: space-between;
-        .w {
-          width: 80%;
+        .icon {
+          --sc: rgb(109, 109, 109);
+          /* --pc: blue; */
         }
 
         .w {
           /* border: 2px solid blue; */
+          width: 80%;
           h3 {
             font-size: 1.3rem;
           }
@@ -858,7 +875,7 @@ form {
             color: #d1d0d0;
           }
           a {
-            --sc: #3e3d3dec;
+            --sc: rgb(109, 109, 109);
             color: var(--sc);
             text-decoration: underline;
             &:hover {
@@ -877,7 +894,11 @@ form {
         width: 65%;
 
         a.icon {
+          --sc: rgb(109, 109, 109);
           align-self: flex-end;
+          svg {
+            fill: var(--sc);
+          }
           &:hover {
             svg {
               fill: var(--pc);
@@ -909,13 +930,14 @@ form {
 
       .contact-form {
         height: 70%;
+        border-color: green;
       }
 
       form {
         --white: rgb(186, 186, 186);
         height: 100%;
         width: 100%;
-        border-color: #34db69;
+        /* border-color: #34db69; */
 
         .input-text {
           /* border-color: blue; */
@@ -923,7 +945,7 @@ form {
           position: relative;
 
           input {
-            border: 3px solid transparent;
+            border: 2px solid transparent;
             border-bottom-color: var(--black);
             padding-inline: 1% 5%;
             width: 100%;
@@ -948,7 +970,7 @@ form {
           height: 22%;
 
           textarea {
-            border: 3px solid transparent;
+            border: 2px solid transparent;
             border-bottom-color: var(--black);
             padding-inline-start: 1%;
             width: 100%;
@@ -971,13 +993,44 @@ form {
         }
 
         .input-checkbox {
-          border-color: violet;
+          /* border-color: violet; */
           height: 30%;
+
+          fieldset {
+            border: 2px dotted transparent;
+            height: 100%;
+            &:hover {
+              border-color: var(--pc);
+            }
+            input,
+            span {
+              margin-inline: 1%;
+              color: var(--white);
+            }
+
+            input:checked + span {
+              color: var(--pcl);
+              text-decoration: line-through;
+            }
+          }
         }
 
         .input-button {
           border-color: midnightblue;
           height: 10%;
+          button {
+            height: 100%;
+            width: 50%;
+            font-weight: 500;
+            border-radius: 10px;
+            background-color: var(--black);
+            box-shadow: 0 5px 0 black;
+            &:hover {
+              transform: translate3d(0, 3px, 0);
+              background-color: var(--pc);
+              box-shadow: 0 3px 1rem var(--pcl);
+            }
+          }
         }
       }
     }

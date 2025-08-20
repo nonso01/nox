@@ -8,14 +8,14 @@ export default function Contact({
         <p>Tell me more about yourself and what you got in mind</p>
       </div>
       {/*  */}
-      <div className="contact-form">
+      <div className="contact-form ">
         <form
           method="POST"
           action={formActionURL}
           id="nox-form"
           className="flex column evenly "
         >
-          <div className=" input-text">
+          <div className=" input-text ">
             <label htmlFor="noxName"></label>
             <input
               type="text"
@@ -26,18 +26,18 @@ export default function Contact({
               autoComplete="on"
             />
           </div>
-          <div className=" input-text">
+          <div className=" input-text ">
             <label htmlFor="noxEmail"></label>
             <input
               type="email"
               name="noxEmail"
               id="noxEmail"
-              placeholder="your@email"
+              placeholder="your@email.todo"
               required
               autoComplete="on"
             />
           </div>
-          <div className=" input-area">
+          <div className=" input-area ">
             <label htmlFor="noxMessage"></label>
             <textarea
               name="noxMessage"
@@ -50,11 +50,11 @@ export default function Contact({
               required
             ></textarea>
           </div>
-          <div className=" input-checkbox">
-            <fieldset form="nox-form">
+          <div className=" input-checkbox ">
+            <fieldset form="nox-form" className="flex column evenly">
               <legend>How can i help</legend>
 
-              <label htmlFor="web-dev">
+              <label htmlFor="webDevelopment">
                 <input type="checkbox" name="webDevelopment" id="webDevelopment" />
                 <span>Website Development</span>
               </label>
@@ -68,7 +68,7 @@ export default function Contact({
               </label>
             </fieldset>
           </div>
-          <div className="input-button ">
+          <div className="input-button flex center ">
             <button type="submit">Let's Go!</button>
           </div>
         </form>

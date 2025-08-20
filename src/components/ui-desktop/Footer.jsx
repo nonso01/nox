@@ -1,5 +1,5 @@
 import { Copyright, MessageCircle, Crown, PhoneCall } from "lucide-react";
-import { Xlogo, YTlgo, DiscordLogo, TGlogo } from "../Svgs";
+import { Xlogo, YTlgo, UpworkLogo, TGlogo } from "../Svgs";
 import Contact from "./Contact";
 
 import Logo from "/images/favicon.png";
@@ -14,8 +14,8 @@ const footerChatContent = [
     stroke: iconColor,
     h3: "Wanna chat ?",
     p: "Well i don't bite, i have some cookies",
-    a: "my@email.com",
-    link: "#",
+    a: "Nonso Martin",
+    link: "mailto:chukwunonsomartin01@gmail.com",
     title: "chat",
   },
   {
@@ -25,7 +25,7 @@ const footerChatContent = [
     h3: "Let's play chess",
     p: "let's get to know each other, over our game strategies",
     a: "chess-0X",
-    link: "#",
+    link: "https://chess-0x.vercel.app",
     title: "play chess",
   },
   {
@@ -35,7 +35,7 @@ const footerChatContent = [
     h3: "Call me",
     p: "My voice is definitely worth hearing :D",
     a: "(+234) 0814-770-0214",
-    link: "#",
+    link: "tel:+2348147700214",
     title: "call me",
   },
 ];
@@ -64,7 +64,7 @@ export default function Footer() {
                     <div className="w">
                       <h3>{h3}</h3>
                       <p>{p}</p>
-                      <a href={link}>{a}</a>
+                      <a href={link} target="_blank">{a}</a>
                     </div>
                   </div>
                 );
@@ -83,7 +83,7 @@ export default function Footer() {
               <TGlogo />
             </a>
             <a href="#" className="icon dark" style={{ "--i": 3 }}>
-              <DiscordLogo />
+              <UpworkLogo />
             </a>
             <a href="#" className="icon dark" style={{ "--i": 4 }}>
               <YTlgo />
