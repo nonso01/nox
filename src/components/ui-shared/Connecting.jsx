@@ -34,8 +34,8 @@ export default function Connecting({ connected, onSetConnected }) {
         delay: stagger(HUNDRED * 3),
         ease: "inBounce",
         onComplete({ duration }) {
-          const dt = duration / ONESEC;
-          log(`completed after: ${dt}sec`);
+          // const dt = duration / ONESEC;
+          // log(`completed after: ${dt}sec`);
           onSetConnected(true);
         },
         onUpdate({ currentTime, duration }) {
@@ -88,7 +88,6 @@ export default function Connecting({ connected, onSetConnected }) {
   return (
     <div className="connecting flex center" ref={root}>
       <ConnectSVG />
-      {/* <style jsx="true">{``}</style> */}
     </div>
   );
 }

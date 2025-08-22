@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Orbitron:wght@400..900&family=Outfit:wght@100..900&display=swap");
+/* @import url("https://fonts.googleapis.com/css2?family=Orbitron:wght@400..900&family=Outfit:wght@100..900&display=swap"); */
 
 /* CSS Reset */
 * {
@@ -59,6 +59,31 @@
     0.9959 73.62%,
     1 100%
   );
+}
+/* latin */
+@font-face {
+  font-family: "Orbitron";
+  font-style: normal;
+  font-weight: 400 900;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/orbitron/v34/yMJRMIlzdpvBhQQL_Qq7dy0.woff2)
+    format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+    U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/* latin */
+@font-face {
+  font-family: "Outfit";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/outfit/v14/QGYvz_MVcBeNP4NJtEtq.woff2)
+    format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+    U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
 @property --angle {
@@ -133,12 +158,9 @@ fieldset {
   transition-timing-function: var(--ease);
 }
 
-
-/* @layer fonts { */
 .font-orbitron {
   font-family: "Orbitron", system-ui, -apple-system, sans-serif;
 }
-/* } */
 
 .pointer {
   cursor: var(--pointer);
@@ -335,9 +357,10 @@ fieldset {
       }
 
       .logo {
-        width: 10%;
+        width: 12%;
+        /* border: 2px solid currentColor; */
         img {
-          width: 40%;
+          max-width: 60px;
           aspect-ratio: 1;
         }
       }
@@ -1036,9 +1059,71 @@ fieldset {
   }
 }
 
-/* .mobile-app {
-
-} */
+.mobile-app {
+  .m-nav {
+    .menu {
+      position: relative;
+      display: block;
+      width: 2rem;
+      height: 2rem;
+      margin: 1%;
+      cursor: pointer;
+      transition: transform 0.4s var(--ease);
+      transform-style: preserve-3d;
+      transform-origin: center center 1rem;
+      /* Credit Pedro Ondiviela
+      https://codepen.io/Pedro-Ondiviela */
+    }
+    .menu__face {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 2rem;
+      height: 2rem;
+      transition: transform 0.4s var(--ease);
+      transform-origin: center center 1rem;
+    }
+    .menu__face--d2 {
+      transform: rotate3d(0, 1, 0, 90deg);
+    }
+    .menu__face--d3 {
+      transform: translateZ(2rem);
+    }
+    .menu__face--d4 {
+      transform: rotate3d(0, -1, 0, 90deg);
+    }
+    .menu__face--d5 {
+      transform: rotate3d(-1, 0, 0, 90deg);
+    }
+    .menu__face--d6 {
+      transform: rotate3d(1, 0, 0, 90deg);
+    }
+    .menu__face--axis-vertical {
+      transform: translateZ(1rem);
+    }
+    .menu__face--axis-horizontal {
+      transform: rotate3d(-1, 0, 0, 90deg) translateZ(1rem);
+    }
+    .menu__face--square {
+      background-color: #2229;
+    }
+    .menu--minimal .menu__face--square {
+      background: none;
+    }
+    .menu[data-position="1"] {
+      transform: rotate3d(0, 1, 0, 90deg);
+    }
+    .menu[data-position="2"] {
+      transform: rotate3d(0, 1, 0, 90deg) rotate3d(0, 0, 1, 90deg)
+        rotate3d(0, 1, 0, 90deg);
+    }
+    .menu[data-position="3"] {
+      transform: rotate3d(0, 1, 0, 90deg) rotate3d(0, 0, 1, 90deg)
+        rotate3d(0, 1, 0, 90deg) rotate3d(0, 1, 0, 90deg)
+        rotate3d(0, 0, 1, 90deg);
+    }
+  }
+}
 
 @keyframes scroll-t-card {
   0% {

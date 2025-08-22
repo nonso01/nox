@@ -1,7 +1,9 @@
-import MobileApp from "./components/MobileApp";
-import DesktopApp from "./components/DesktopApp";
-import { useState } from "react";
+// import MobileApp from "./components/MobileApp";
+// import DesktopApp from "./components/DesktopApp";
+import { useState, lazy } from "react";
 
+const MobileApp = lazy(() => import("./components/MobileApp"));
+const DesktopApp = lazy(() => import("./components/DesktopApp"));
 
 function App() {
   const mobileQuery = window.matchMedia("(max-width: 768px)");

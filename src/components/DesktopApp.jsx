@@ -1,12 +1,12 @@
-import Connecting from "./ui-shared/Connecting";
-import Header from "./ui-desktop/Header";
-import Service from "./ui-desktop/Service";
-import Experience from "./ui-desktop/Experience";
-import About from "./ui-desktop/About";
-import MyRoom from "./ui-desktop/MyRoom";
-import Testimonial from "./ui-desktop/Testimonial";
-import ScrollToMessage from "./ui-desktop/ScrollToMessage";
-import Footer from "./ui-desktop/Footer";
+// import Connecting from "./ui-shared/Connecting";
+// import Header from "./ui-desktop/Header";
+// import Service from "./ui-desktop/Service";
+// import Experience from "./ui-desktop/Experience";
+// import About from "./ui-desktop/About";
+// import MyRoom from "./ui-desktop/MyRoom";
+// import Testimonial from "./ui-desktop/Testimonial";
+// import ScrollToMessage from "./ui-desktop/ScrollToMessage";
+// import Footer from "./ui-desktop/Footer";
 
 import {
   createScope,
@@ -18,7 +18,17 @@ import {
   utils,
   onScroll,
 } from "animejs";
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, lazy } from "react";
+
+const Connecting = lazy(() => import("./ui-shared/Connecting"));
+const Header = lazy(() => import("./ui-desktop/Header"));
+const Service = lazy(() => import("./ui-desktop/Service"));
+const Experience = lazy(() => import("./ui-desktop/Experience"));
+const About = lazy(() => import("./ui-desktop/About"));
+const MyRoom = lazy(() => import("./ui-desktop/MyRoom"));
+const Testimonial = lazy(() => import("./ui-desktop/Testimonial"));
+const ScrollToMessage = lazy(() => import("./ui-desktop/ScrollToMessage"));
+const Footer = lazy(() => import("./ui-desktop/Footer"));
 
 export default function DesktopApp({ connected, onSetConnected }) {
   const root = useRef(null);

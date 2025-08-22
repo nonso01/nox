@@ -1,3 +1,6 @@
+import { useState } from "react";
+import { useRef } from "react";
+
 const strokeColor = "#34db69";
 const strokeColorDark = "#222222";
 
@@ -585,7 +588,7 @@ export function FlyingMessagePath() {
 export function Xlogo({ fill = strokeColorDark, size = 30 }) {
   return (
     <svg
-      fill={strokeColorDark}
+      fill={fill}
       role="img"
       viewBox="0 0 24 24"
       xmlns="http://www.w3.org/2000/svg"
@@ -601,7 +604,7 @@ export function Xlogo({ fill = strokeColorDark, size = 30 }) {
 export function YTlgo({ fill = strokeColorDark, size = 30 }) {
   return (
     <svg
-      fill={strokeColorDark}
+      fill={fill}
       role="img"
       viewBox="0 0 24 24"
       xmlns="http://www.w3.org/2000/svg"
@@ -620,7 +623,7 @@ export function UpworkLogo({ fill = strokeColorDark, size = 30 }) {
       role="img"
       viewBox="0 0 24 24"
       xmlns="http://www.w3.org/2000/svg"
-      fill={strokeColorDark}
+      fill={fill}
       width={size}
       height={size}
     >
@@ -636,12 +639,198 @@ export function TGlogo({ fill = strokeColorDark, size = 30 }) {
       role="img"
       viewBox="0 0 24 24"
       xmlns="http://www.w3.org/2000/svg"
-      fill={strokeColorDark}
+      fill={fill}
       width={size}
       height={size}
     >
       <title>Telegram</title>
       <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z" />
     </svg>
+  );
+}
+
+export function LinkedInLogo({ fill = strokeColorDark, size = 35 }) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 16 16"
+      xmlns="http://www.w3.org/2000/svg"
+      fill={fill}
+    >
+      <title>linkedin</title>
+      <path
+        // fill="#0A66C2"
+        d="M12.225 12.225h-1.778V9.44c0-.664-.012-1.519-.925-1.519-.926 0-1.068.724-1.068 1.47v2.834H6.676V6.498h1.707v.783h.024c.348-.594.996-.95 1.684-.925 1.802 0 2.135 1.185 2.135 2.728l-.001 3.14zM4.67 5.715a1.037 1.037 0 01-1.032-1.031c0-.566.466-1.032 1.032-1.032.566 0 1.031.466 1.032 1.032 0 .566-.466 1.032-1.032 1.032zm.889 6.51h-1.78V6.498h1.78v5.727zM13.11 2H2.885A.88.88 0 002 2.866v10.268a.88.88 0 00.885.866h10.226a.882.882 0 00.889-.866V2.865a.88.88 0 00-.889-.864z"
+      />
+    </svg>
+  );
+}
+
+export function MobileMenu({ fill = "#fff", setState }) {
+  let position = 0;
+  const positionsNumber = 4;
+  const menuRef = useRef(null);
+
+  useState(() => {
+    return (menuRef.current = null);
+  }, []);
+
+  return (
+    <div
+      className="menu"
+      title="menu"
+      ref={menuRef}
+      onClick={() => {
+        position = (position + 1) % positionsNumber;
+        menuRef.current.dataset.position = position;
+        console.log(position);
+        try {
+          if (setState) {
+            setState((c) => !c);
+          }
+        } catch (error) {
+          console.warn(error);
+        }
+      }}
+    >
+      <div className="menu__face menu__face--square menu__face--d1 menu__face--hamburger">
+        <svg
+          width="2rem"
+          height="2rem"
+          viewBox="0 0 40 40"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <g fill={fill} fillRule="evenodd">
+            <rect x="0" y="0" width="40" height="5" />
+            <rect x="0" y="35" width="40" height="5" />
+          </g>
+        </svg>
+      </div>
+      <div className="menu__face menu__face--square menu__face--d2 menu__face--cross">
+        <svg
+          width="2rem"
+          height="2rem"
+          viewBox="0 0 40 40"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <g fill={fill} fillRule="evenodd">
+            <rect x="0" y="0" width="5" height="5" />
+            <rect x="35" y="0" width="5" height="5" />
+            <rect x="0" y="35" width="5" height="5" />
+            <rect x="35" y="35" width="5" height="5" />
+            <rect
+              x="-5"
+              y="16.5"
+              width="50"
+              height="7"
+              style={{ transform: "rotate(45deg)", transformOrigin: "center" }}
+            />
+            <rect
+              x="-5"
+              y="16.5"
+              width="50"
+              height="7"
+              style={{ transform: "rotate(-45deg)", transformOrigin: "center" }}
+            />
+          </g>
+        </svg>
+      </div>
+      <div className="menu__face menu__face--square menu__face--d3 menu__face--hamburger">
+        <svg
+          width="2rem"
+          height="2rem"
+          viewBox="0 0 40 40"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <g fill={fill} fillRule="evenodd">
+            <rect x="0" y="0" width="40" height="5" />
+            <rect x="0" y="35" width="40" height="5" />
+          </g>
+        </svg>
+      </div>
+      <div className="menu__face menu__face--square menu__face--d4 menu__face--cross">
+        <svg
+          width="2rem"
+          height="2rem"
+          viewBox="0 0 40 40"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <g fill={fill} fillRule="evenodd">
+            <rect x="0" y="0" width="5" height="5" />
+            <rect x="35" y="0" width="5" height="5" />
+            <rect x="0" y="35" width="5" height="5" />
+            <rect x="35" y="35" width="5" height="5" />
+            <rect
+              x="-5"
+              y="16.5"
+              width="50"
+              height="7"
+              style={{ transform: "rotate(45deg)", transformOrigin: "center" }}
+            />
+            <rect
+              x="-5"
+              y="16.5"
+              width="50"
+              height="7"
+              style={{ transform: "rotate(-45deg)", transformOrigin: "center" }}
+            />
+          </g>
+        </svg>
+      </div>
+      <div className="menu__face menu__face--square menu__face--d5 menu__face--hamburger menu__face--hamburger-rotated">
+        <svg
+          width="2rem"
+          height="2rem"
+          viewBox="0 0 40 40"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <g fill={fill} fillRule="evenodd">
+            <rect x="0" y="0" width="40" height="5" />
+            <rect x="0" y="35" width="40" height="5" />
+          </g>
+        </svg>
+      </div>
+      <div className="menu__face menu__face--square menu__face--d6 menu__face--hamburger menu__face--hamburger-rotated">
+        <svg
+          className="menu__hamburger"
+          width="2rem"
+          height="2rem"
+          viewBox="0 0 40 40"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <g fill={fill} fillRule="evenodd">
+            <rect x="0" y="0" width="40" height="5" />
+            <rect x="0" y="35" width="40" height="5" />
+          </g>
+        </svg>
+      </div>
+      <div className="menu__face menu__face--axis menu__face--axis-vertical">
+        <svg
+          width="2rem"
+          height="2rem"
+          viewBox="0 0 40 40"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <g fill={fill} fillRule="evenodd">
+            <rect x="0" y="17.5" width="40" height="5" />
+          </g>
+        </svg>
+      </div>
+      <div className="menu__face menu__face--axis menu__face--axis-horizontal">
+        <svg
+          width="2rem"
+          height="2rem"
+          viewBox="0 0 40 40"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <g fill={fill} fillRule="evenodd">
+            <rect x="0" y="17.5" width="40" height="5" />
+          </g>
+        </svg>
+      </div>
+      {/* Credit Pedro Ondiviela
+      https://codepen.io/Pedro-Ondiviela */}
+    </div>
   );
 }

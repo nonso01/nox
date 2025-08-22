@@ -1,5 +1,11 @@
-import { Copyright, MessageCircle, Crown, PhoneCall } from "lucide-react";
-import { Xlogo, YTlgo, UpworkLogo, TGlogo } from "../ui-shared/Svgs";
+import {  MessageCircle, Crown, PhoneCall } from "lucide-react";
+import {
+  Xlogo,
+  YTlgo,
+  UpworkLogo,
+  // TGlogo,
+  LinkedInLogo,
+} from "../ui-shared/Svgs";
 import Contact from "./Contact";
 
 import Logo from "/images/favicon.png";
@@ -82,7 +88,7 @@ export default function Footer() {
               <Xlogo />
             </a>
             <a href="#" className="icon dark" style={{ "--i": 2 }}>
-              <TGlogo />
+              <LinkedInLogo />
             </a>
             <a href="#" className="icon dark" style={{ "--i": 3 }}>
               <UpworkLogo />
