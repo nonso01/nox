@@ -1,4 +1,4 @@
-import HouseScene from "../HouseR3F";
+import HouseScene from "../ui-shared/HouseR3F";
 
 export default function MyRoom() {
   return (

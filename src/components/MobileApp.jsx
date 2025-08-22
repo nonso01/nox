@@ -1,4 +1,4 @@
-import Connecting from "./Connecting";
+import Connecting from "./ui-shared/Connecting";
 
 export default function MobileApp({ connected, onSetConnected }) {
   if (!connected) {
@@ -9,7 +9,7 @@ export default function MobileApp({ connected, onSetConnected }) {
     );
   } else {
     return (
-      <div className="mobile-app">
+      <div className="mobile-app" id="m-app">
         <p>Welcome to the mobile version!</p>
       </div>
     );

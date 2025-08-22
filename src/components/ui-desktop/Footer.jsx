@@ -1,5 +1,5 @@
 import { Copyright, MessageCircle, Crown, PhoneCall } from "lucide-react";
-import { Xlogo, YTlgo, UpworkLogo, TGlogo } from "../Svgs";
+import { Xlogo, YTlgo, UpworkLogo, TGlogo } from "../ui-shared/Svgs";
 import Contact from "./Contact";
 
 import Logo from "/images/favicon.png";
@@ -43,7 +43,7 @@ const footerChatContent = [
 export default function Footer() {
   return (
     <div className="d-footer flex column evenly ">
-      <div className="footer-content">
+      <div className="footer-content" id="contact">
         <div className="footer-content-words flex column between  ">
           <div className="footer-word flex column between ">
             <div className="footer-logo ">
@@ -64,7 +64,9 @@ export default function Footer() {
                     <div className="w">
                       <h3>{h3}</h3>
                       <p>{p}</p>
-                      <a href={link} target="_blank">{a}</a>
+                      <a href={link} target="_blank">
+                        {a}
+                      </a>
                     </div>
                   </div>
                 );

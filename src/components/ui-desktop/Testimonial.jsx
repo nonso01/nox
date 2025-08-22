@@ -1,4 +1,4 @@
-import { TestimonialCard , TData} from "../TestimonialCard";
+import { TestimonialCard , TData} from "../ui-shared/TestimonialCard";
 
 export default function Testimonial() {
   return (

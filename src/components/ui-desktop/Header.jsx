@@ -1,4 +1,13 @@
-import { Star, ArrowUpRight } from "lucide-react";
+import {
+  Star,
+  ArrowUpRight,
+  House,
+  CircleUser,
+  HandPlatter,
+  FileDigit,
+  MessageCircle,
+  FolderOpenDot,
+} from "lucide-react";
 import Logo from "/images/favicon.png";
 
 export default function Header() {
@@ -6,44 +15,78 @@ export default function Header() {
     <header className="d-header flex column between " id="home">
       <nav className="d-nav flex between ">
         <div className=" links flex evenly ">
-          <span>
-            <a href="#home" className="home-link">
-              Home
+          <span title="home">
+            <a
+              href="#home"
+              aria-label="move on to the home section"
+              className="home-link icon dark"
+            >
+              <House />
             </a>
           </span>
-          <span>
-            <a href="#about">About</a>
+          <span title="about me">
+            <a
+              href="#about"
+              aria-label="view more about Nonso Martin and his core skills"
+              className="icon dark"
+            >
+              <CircleUser />
+            </a>
           </span>
-          <span>
-            <a href="#service">Service</a>
+          <span title="service">
+            <a
+              href="#service"
+              aria-label="Browse the different services offered by Nonso Martin"
+              className="icon dark"
+            >
+              <HandPlatter />
+            </a>
           </span>
         </div>
 
-        <div className="logo flex center">
+        <div className="logo flex center" title="Martin">
           <img src={Logo} alt="Martin's logo" />
         </div>
 
         <div className="links flex evenly ">
-          <span>
-            <a href="#">Resume</a>
+          <span title="resume">
+            <a
+              href="#"
+              aria-label="Download and Read Nonso Martin's Resume"
+              className="icon dark"
+            >
+              <FileDigit />
+            </a>
           </span>
-          <span>
-            <a href="#">Projects</a>
+          <span title="projects">
+            <a
+              href="#"
+              aria-label="check Nonso Martin's completed and ongoing projects"
+              className="icon dark"
+            >
+              <FolderOpenDot />
+            </a>
           </span>
-          <span>
-            <a href="#">Let's chat</a>
+          <span title="let's chat">
+            <a
+              href="#contact"
+              aria-label="chat with Nonso Martin in your next project idea"
+              className="icon dark"
+            >
+              <MessageCircle />
+            </a>
           </span>
         </div>
       </nav>
       <section className="say-hello flex column evenly ">
         <div className="intro-name flex column evenly ">
           <p className="p-hello flex center">
-            <span>HELLO</span>
+            <span className="font-orbitron">HELLO</span>
           </p>
-          <div className="p-name">
+          <h1 className="p-name">
             I'm <span>Martin,</span>
             <p>Web Developer</p>
-          </div>
+          </h1>
         </div>
 
         <div className="intro-rating flex between ">

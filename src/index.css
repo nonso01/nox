@@ -117,9 +117,6 @@ a {
   transition-duration: 200ms;
   transition-timing-function: var(--ease);
   cursor: var(--pointer);
-  /* &:hover {
-    transition-duration: 150ms;
-  } */
 }
 
 button,
@@ -136,15 +133,6 @@ fieldset {
   transition-timing-function: var(--ease);
 }
 
-/* form {
-  input,
-  textarea,
-  fieldset {
-    transition-duration: 150ms;
-    transition-property: border, background-color;
-    transition-timing-function: var(--ease);
-  }
-} */
 
 /* @layer fonts { */
 .font-orbitron {
@@ -379,7 +367,6 @@ fieldset {
           width: 100px;
           font-weight: bold;
           span {
-            font-family: "Orbitron";
             letter-spacing: 3px;
           }
         }
@@ -802,7 +789,7 @@ fieldset {
 
   .d-fly {
     background-color: var(--black);
-    height: 867px;
+    height: 100dvh;
     position: relative;
     overflow-y: scroll;
     overflow-x: hidden;
@@ -997,7 +984,8 @@ fieldset {
           height: 30%;
 
           fieldset {
-            border: 2px dotted transparent;
+            border: 2px solid transparent;
+            border-radius: 5px;
             height: 100%;
             &:hover {
               border-color: var(--pc);
@@ -1036,7 +1024,7 @@ fieldset {
     }
 
     .copyright {
-      --black: #3e3d3dec;
+      --black: rgb(109, 109, 109);
       align-self: center;
       width: 20%;
       span {
@@ -1047,6 +1035,10 @@ fieldset {
     }
   }
 }
+
+/* .mobile-app {
+
+} */
 
 @keyframes scroll-t-card {
   0% {

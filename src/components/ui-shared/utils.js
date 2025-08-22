@@ -57,3 +57,4 @@ export function animateGlitchText(
 }
 
 export function scrollProgress(dom = window) {}
+export function onlineStatus(setState) {}

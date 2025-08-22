@@ -1,4 +1,4 @@
-import { LineFollowCircle } from "../Svgs";
+import { LineFollowCircle } from "../ui-shared/Svgs";
 
 export default function Experience() {
   return (

@@ -1,4 +1,4 @@
-import Connecting from "./Connecting";
+import Connecting from "./ui-shared/Connecting";
 import Header from "./ui-desktop/Header";
 import Service from "./ui-desktop/Service";
 import Experience from "./ui-desktop/Experience";
@@ -8,7 +8,6 @@ import Testimonial from "./ui-desktop/Testimonial";
 import ScrollToMessage from "./ui-desktop/ScrollToMessage";
 import Footer from "./ui-desktop/Footer";
 
-// import Logo from "/images/favicon.png";
 import {
   createScope,
   createDraggable,
@@ -16,11 +15,10 @@ import {
   animate,
   stagger,
   svg,
-  createAnimatable,
   utils,
   onScroll,
 } from "animejs";
-import { useRef, useState, useEffect } from "react";
+import { useRef, useEffect } from "react";
 
 export default function DesktopApp({ connected, onSetConnected }) {
   const root = useRef(null);
@@ -63,7 +61,7 @@ export default function DesktopApp({ connected, onSetConnected }) {
             // enter: top top, leave: bottom bottom works ;D
             enter: "top+=50 100",
             leave: "bottom bottom",
-            sync: .8,
+            sync: 0.8,
             onEnter() {
               console.log("entering");
             },
@@ -101,7 +99,7 @@ export default function DesktopApp({ connected, onSetConnected }) {
     );
   } else {
     return (
-      <div className="desktop-app" ref={root}>
+      <div className="desktop-app" id="d-app" ref={root}>
         <Header />
         <Service />
         <Experience />

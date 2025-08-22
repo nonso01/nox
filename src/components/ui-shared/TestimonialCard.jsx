@@ -76,7 +76,7 @@ function TestimonialCard({ data }) {
     <>
       <div className="t-card flex column evenly">
         <div className="detail flex ">
-          <img src={data?.image} alt={data?.name} />
+          <img src={data?.image} alt={data?.name} loading="lazy" />
           <div className="flex column evenly ">
             <p className="name"> {data?.name}</p>
             <p className="role">{data?.role}</p>

@@ -1,0 +1,43 @@
+.desktop-app {
+  .d-fly {
+    .user-flow {
+      position: relative;
+      border-color: green;
+      border-width: 4px;
+      margin-block: 5%;
+      height: 850px;
+
+      .description {
+        border-color: orange;
+        height: 20%;
+
+        .number {
+          /* background-color: red; */
+          width: 20%;
+          font-weight: 500;
+          font-size: clamp(7rem, 7dvw, 9rem);
+          color: var(--sc);
+        }
+
+        .title {
+          /* background-color: red; */
+          width: 30%;
+
+          h4 {
+            font-size: 1.7rem;
+            font-weight: 500;
+          }
+
+          p {
+            text-wrap: balance;
+          }
+        }
+      }
+
+      .illustration {
+        border-color: hotpink;
+        height: 75%;
+      }
+    }
+  }
+}
