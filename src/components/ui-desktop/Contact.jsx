@@ -1,5 +1,9 @@
+//Which server should i use Rust or Nodejs ? 
+// i enjoy both :D
+
 export default function Contact({
   formActionURL = "http://localhost:3000/nox-form",
+  // formActionURL = "http://127.0.0.1:7878",
 }) {
   return (
     <div className="contact flex column between ">
@@ -7,11 +11,11 @@ export default function Contact({
         <h2>Got ideas ? I've got the skills. Let's make it happen</h2>
         <p>Tell me more about yourself and what you got in mind</p>
       </div>
-      {/*  */}
       <div className="contact-form ">
         <form
           method="POST"
           action={formActionURL}
+          enctype="application/x-www-form-urlencoded"
           id="nox-form"
           className="flex column evenly "
         >
@@ -55,7 +59,11 @@ export default function Contact({
               <legend>How can i help</legend>
 
               <label htmlFor="webDevelopment">
-                <input type="checkbox" name="webDevelopment" id="webDevelopment" />
+                <input
+                  type="checkbox"
+                  name="webDevelopment"
+                  id="webDevelopment"
+                />
                 <span>Website Development</span>
               </label>
               <label htmlFor="frontend">

@@ -1,4 +1,4 @@
-import {  MessageCircle, Crown, PhoneCall } from "lucide-react";
+import { MessageCircle, Crown, PhoneCall } from "lucide-react";
 import {
   Xlogo,
   YTlgo,
@@ -82,18 +82,24 @@ export default function Footer() {
           <div className="footer-links flex between ">
             <a
               href="https://x.com/nonso0X"
+              aria-label="connect with me on X"
               className="icon dark"
               target="_blank"
             >
               <Xlogo />
             </a>
-            <a href="#" className="icon dark" style={{ "--i": 2 }}>
+            <a
+              href="#"
+              aria-label="Connect with me on LinkedIn"
+              className="icon dark"
+              style={{ "--i": 2 }}
+            >
               <LinkedInLogo />
             </a>
-            <a href="#" className="icon dark" style={{ "--i": 3 }}>
+            <a href="#" aria-label="Hire me on Upwork" className="icon dark" style={{ "--i": 3 }}>
               <UpworkLogo />
             </a>
-            <a href="#" className="icon dark" style={{ "--i": 4 }}>
+            <a href="#" aria-label="Browse my Youtube contents" className="icon dark" style={{ "--i": 4 }}>
               <YTlgo />
             </a>
           </div>
