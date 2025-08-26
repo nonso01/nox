@@ -3,5 +3,5 @@
 version = 3
 
 [[package]]
-name = "nox-server"
+name = "nox-rs"
 version = "0.1.0"
