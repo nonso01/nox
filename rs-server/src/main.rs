@@ -8,7 +8,8 @@ use std::{
 };
 
 fn main() {
-    let listener = TcpListener::bind("127.0.0.1:8080").unwrap();
+    // render requires 0.0.0.0:10000
+    let listener = TcpListener::bind("0.0.0.0:10000").unwrap();
     println!("Server running on http://127.0.0.1:8080");
     println!("Serving static files from ../dist/");
 
