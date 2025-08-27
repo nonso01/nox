@@ -8,7 +8,7 @@ import {
 } from "../ui-shared/Svgs";
 import Contact from "./Contact";
 
-import Logo from "/images/favicon.png";
+import Logo from "../../assets/images/favicon.png";
 
 let iconSize = 30;
 let iconColor = "var(--sc)";

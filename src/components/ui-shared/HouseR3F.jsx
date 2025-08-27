@@ -10,6 +10,9 @@ import {
 import * as THREE from "three";
 import { Spinner } from "./Svgs";
 
+import house3D from "../../assets/3d-models/fornitures-house.glb";
+import brownPhotoStudioHdr from "../../assets/hdr/brown_photostudio_02_1k.hdr";
+
 const log = console.log;
 const BG_COLOR = 0x222222;
 
@@ -88,7 +91,7 @@ export default function HouseSceneR3F() {
         frameloop="demand"
       >
         <Suspense fallback={<Loader />}>
-          <Environment files="/hdr/brown_photostudio_02_1k.hdr" />
+          <Environment files={brownPhotoStudioHdr} />
           <directionalLight
             castShadow
             intensity={3}
@@ -100,7 +103,7 @@ export default function HouseSceneR3F() {
             shadow-bias={-0.0001}
             shadow-normalBias={0.05}
           />
-          <HouseModel url="/3d-models/fornitures-house.glb" />
+          <HouseModel url={house3D} />
           <Ground />
         </Suspense>
         <OrbitControls
@@ -117,4 +120,5 @@ export default function HouseSceneR3F() {
   );
 }
 
-useGLTF.preload("/3d-models/fornitures-house.glb");
+useGLTF.preload(house3D);
+useGLTF.preload(brownPhotoStudioHdr);

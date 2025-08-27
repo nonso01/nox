@@ -1,10 +1,14 @@
-//Which server should i use Rust or Nodejs ? 
+//Which server should i use Rust or Nodejs ?
 // i enjoy both :D
 
 export default function Contact({
-  formActionURL = "http://localhost:3000/nox-form",
-  // formActionURL = "http://127.0.0.1:7878",
+  // formActionURL = "http://localhost:3000/nox-form",
+  formActionURL = "http://127.0.0.1:8080",
 }) {
+  function handleInputName() {}
+  function handleInputEmail() {}
+  function handleTextArea() {}
+  
   return (
     <div className="contact flex column between ">
       <div className="contact-title flex column evenly ">
@@ -15,7 +19,7 @@ export default function Contact({
         <form
           method="POST"
           action={formActionURL}
-          enctype="application/x-www-form-urlencoded"
+          // enctype="application/x-www-form-urlencoded"
           id="nox-form"
           className="flex column evenly "
         >

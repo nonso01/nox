@@ -22,8 +22,8 @@
   --white: whitesmoke;
   --scl: #0008;
 
-  --cursor: url("/cursors/jujutsu-cursor-32.png") 5 5, auto;
-  --pointer: url("/cursors/jujutsu-pointer-32.png") 5 5, pointer;
+  --cursor: url("./assets/cursors/jujutsu-cursor-32.png") 5 5, auto;
+  --pointer: url("./assets/cursors/jujutsu-pointer-32.png") 5 5, pointer;
 
   --ease: linear(
     0 0%,
@@ -310,7 +310,7 @@ fieldset {
     height: 1020px;
     padding: 30px 130px;
 
-    background-image: url("/images/2d-me.png");
+    background-image: url("../src/assets/images/2d-me.png");
     background-repeat: no-repeat;
     background-position: 50% -50%;
 

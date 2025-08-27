@@ -1,4 +1,7 @@
 import { ArrowUpRight } from "lucide-react";
+import diceVideo from "../../assets/images/dice-390.webm";
+import earthImage from "../../assets/images/earth-390.jpg";
+import noxPspImage from "../../assets/images/nox-psp.jpg";
 
 const cards = [
   {
@@ -16,7 +19,7 @@ const cards = [
     note: "final & experimental",
     fileNumber: 8,
     video: false,
-    bgUrl: "/images/earth-390.jpg",
+    bgUrl: earthImage,
     id: "3d-animation",
   },
   {
@@ -25,7 +28,7 @@ const cards = [
     note: "JS,Node.js,etc",
     fileNumber: 11,
     video: false,
-    bgUrl: "/images/nox-psp-390.jpg",
+    bgUrl: noxPspImage,
     id: "web-development",
   },
 ];
@@ -95,7 +98,7 @@ export default function Service() {
                         width={"100%"}
                         height={"100%"}
                       >
-                        <source src="/images/dice-390.webm" />
+                        <source src={diceVideo} />
                       </video>
                     </div>
                   ) : (

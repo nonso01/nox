@@ -8,7 +8,7 @@ import {
   MessageCircle,
   FolderOpenDot,
 } from "lucide-react";
-import Logo from "/images/favicon.png";
+import Logo from "../../assets/images/favicon.png";
 
 export default function Header() {
   return (
