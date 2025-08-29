@@ -1,27 +1,78 @@
-#[allow(dead_code)]
 use std::{
     collections::HashMap,
+    env, // test .env
     fs,
     io::{prelude::*, BufReader},
     net::{TcpListener, TcpStream},
     path::{Path, PathBuf},
+
+    // think about this thread_pool impl
+    sync::{mpsc, Arc, Mutex}, // mpsc = multiple producer , single consumer
+    thread,
 };
 
+// use nox::nox_server;
+
+#[allow(dead_code)]
+struct ThreadPool {
+    workers: Vec<Worker>,
+    sender: mpsc::Sender<TcpStream>,
+}
+#[allow(dead_code)]
+struct Worker {
+    id: usize,
+    thread: thread::JoinHandle<()>,
+}
+
+impl ThreadPool {
+    fn new(size: usize) -> ThreadPool {
+        let (sender, receiver) = mpsc::channel();
+        let receiver = Arc::new(Mutex::new(receiver));
+        let mut workers = Vec::with_capacity(size);
+
+        for id in 0..size {
+            workers.push(Worker::new(id, Arc::clone(&receiver)));
+        }
+
+        ThreadPool { workers, sender }
+    }
+
+    fn execute(&self, stream: TcpStream) {
+        self.sender.send(stream).unwrap();
+    }
+}
+
+impl Worker {
+    fn new(id: usize, receiver: Arc<Mutex<mpsc::Receiver<TcpStream>>>) -> Worker {
+        let thread = thread::spawn(move || loop {
+            let stream = receiver.lock().unwrap().recv();
+            match stream {
+                Ok(stream) => {
+                    handle_connection(stream);
+                }
+                Err(_) => break, // Channel closed
+            }
+        });
+        Worker { id, thread }
+    }
+}
+
 fn main() {
-    let listener = TcpListener::bind("127.0.0.1:8080").unwrap();
-    println!("Server running on http://127.0.0.1:8080");
+    let port = env::var("PORT").unwrap_or_else(|_| "8080".to_string());
+    let addr = format!("127.0.0.1:{}", port);
+    // While hosting on a public space consider changing the port from
+    // localhost:8080 or 127.0.0.1:8080 to 0.0.0.0:10000
+    let listener = TcpListener::bind(&addr).unwrap();
+    println!("Server running on http://{}", &addr);
     println!("Serving static files from ../dist/");
 
+    let pool = ThreadPool::new(2); // let us work with this
     for stream in listener.incoming() {
-        // let stream = stream.unwrap();
-        // handle_connection(stream);
         match stream {
             Ok(stream) => {
-                std::thread::spawn(|| {
-                    handle_connection(stream);
-                });
+                pool.execute(stream);
             }
-            Err(error_occured) => eprintln!("Connection Failed: {}", error_occured),
+            Err(e) => eprintln!("Connection failed: {}", e),
         }
     }
 }
@@ -101,7 +152,7 @@ fn serve_static_file(stream: &mut TcpStream, path: &str) {
     match fs::read(&final_path) {
         Ok(content) => {
             let mime_type = get_mime_type(&final_path);
-            send_file_response(stream, &content, mime_type);
+            let _ = send_file_response(stream, &content, mime_type);
         }
         Err(_) => {
             send_error_response(stream, "404 Not Found", "File not found");
@@ -196,15 +247,20 @@ fn get_mime_type(path: &Path) -> &'static str {
     }
 }
 
-fn send_file_response(stream: &mut TcpStream, content: &[u8], mime_type: &str) {
+fn send_file_response(
+    stream: &mut TcpStream,
+    content: &[u8],
+    mime_type: &str,
+) -> std::io::Result<()> {
     let response = format!(
         "HTTP/1.1 200 OK\r\nContent-Type: {}\r\nContent-Length: {}\r\nAccess-Control-Allow-Origin: *\r\n\r\n",
-        mime_type,
-        content.len()
+        mime_type, content.len()
     );
 
-    stream.write_all(response.as_bytes()).unwrap();
-    stream.write_all(content).unwrap();
+    stream.write_all(response.as_bytes())?;
+    stream.write_all(content)?;
+    stream.flush()?;
+    Ok(())
 }
 
 fn send_error_response(stream: &mut TcpStream, status: &str, message: &str) {
