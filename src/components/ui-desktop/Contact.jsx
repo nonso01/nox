@@ -2,8 +2,8 @@
 // i enjoy both :D
 
 export default function Contact({
-  // formActionURL = "http://localhost:3000/nox-form",
-  formActionURL = "http://127.0.0.1:8080",
+  formActionURL = "https://nox-hltl.onrender.com",
+  // formActionURL = "http://127.0.0.1:8080",
 }) {
   function handleInputName() {}
   function handleInputEmail() {}
