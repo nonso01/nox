@@ -143,7 +143,7 @@ impl Worker {
 
 fn main() {
     let port = env::var("PORT").unwrap_or_else(|_| "8080".to_string());
-    let addr = format!("0.0.0.0:{}", port);
+    let addr = format!("127.0.0.1:{}", port);
 
     // Initialize CORS configuration
     let cors_config = CorsConfig::new();
@@ -370,9 +370,9 @@ fn serve_hello_file(stream: &mut TcpStream, cors_config: &CorsConfig, origin: Op
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nonso Martin</title>
+    <title>Server Running</title>
     <style>
-        body { font-family: system-ui, sans-serif; max-width: 600px; margin: 50px auto; padding: 20px; }
+        body { font-family: Arial, sans-serif; max-width: 600px; margin: 50px auto; padding: 20px; }
         .status { color: #28a745; }
         .warning { color: #ffc107; background: #fff3cd; padding: 10px; border-radius: 4px; }
     </style>
@@ -436,9 +436,12 @@ fn handle_post_request_with_cors(
     origin: Option<&str>,
 ) {
     if content_length == 0 {
-        send_json_response_with_cors(
+        send_html_response_with_cors(
             &mut buf_reader,
-            r#"{"status": "error", "message": "No data received"}"#,
+            "Error",
+            "No data received",
+            None,
+            None,
             cors_config,
             origin,
         );
@@ -448,9 +451,12 @@ fn handle_post_request_with_cors(
     let mut body = vec![0; content_length];
     if let Err(e) = buf_reader.read_exact(&mut body) {
         println!("Error reading body: {}", e);
-        send_json_response_with_cors(
+        send_html_response_with_cors(
             &mut buf_reader,
-            r#"{"status": "error", "message": "Error reading data"}"#,
+            "Error",
+            "Error reading data",
+            None,
+            None,
             cors_config,
             origin,
         );
@@ -460,44 +466,49 @@ fn handle_post_request_with_cors(
     let body_str = String::from_utf8_lossy(&body);
     println!("POST data received from origin {:?}: {}", origin, body_str);
 
-    if body_str.contains("Content-Disposition: form-data") {
-        let form_data = parse_multipart_data(&body_str);
-        for (key, value) in &form_data {
-            println!("Field '{}': '{}'", key, value);
-        }
-        send_json_response_with_cors(
+    let form_data = if body_str.contains("Content-Disposition: form-data") {
+        parse_multipart_data(&body_str)
+    } else {
+        parse_form_data(&body_str)
+    };
+
+    for (key, value) in &form_data {
+        println!("Field '{}': '{}'", key, value);
+    }
+
+    if form_data.is_empty() {
+        send_html_response_with_cors(
             &mut buf_reader,
-            r#"{"status": "success", "message": "Form submitted successfully"}"#,
+            "Error",
+            "Could not parse form data",
+            None,
+            None,
             cors_config,
             origin,
         );
     } else {
-        let form_data = parse_form_data(&body_str);
-        for (key, value) in &form_data {
-            println!("Field '{}': '{}'", key, value);
-        }
+        // Extract name and email from form data
+        let name = form_data.get("name").cloned();
+        let email = form_data.get("email").cloned();
 
-        if form_data.is_empty() {
-            send_json_response_with_cors(
-                &mut buf_reader,
-                r#"{"status": "error", "message": "Could not parse form data"}"#,
-                cors_config,
-                origin,
-            );
-        } else {
-            send_json_response_with_cors(
-                &mut buf_reader,
-                r#"{"status": "success", "message": "Form submitted successfully"}"#,
-                cors_config,
-                origin,
-            );
-        }
+        send_html_response_with_cors(
+            &mut buf_reader,
+            "Success",
+            "Form submitted successfully",
+            name.as_deref(),
+            email.as_deref(),
+            cors_config,
+            origin,
+        );
     }
 }
 
-fn send_json_response_with_cors(
+fn send_html_response_with_cors(
     buf_reader: &mut BufReader<&mut TcpStream>,
-    json_content: &str,
+    status_type: &str,
+    message: &str,
+    name: Option<&str>,
+    email: Option<&str>,
     cors_config: &CorsConfig,
     origin: Option<&str>,
 ) {
@@ -508,13 +519,164 @@ fn send_json_response_with_cors(
         format!("{}\r\n", origin_header)
     };
 
+    let html_content = generate_response_html(status_type, message, name, email);
+
     let response = format!(
-        "HTTP/1.1 200 OK\r\nContent-Type: application/json\r\nContent-Length: {}\r\n{}\r\n{}",
-        json_content.len(),
+        "HTTP/1.1 200 OK\r\nContent-Type: text/html\r\nContent-Length: {}\r\n{}\r\n{}",
+        html_content.len(),
         cors_headers,
-        json_content
+        html_content
     );
     let _ = buf_reader.get_mut().write_all(response.as_bytes());
+}
+
+fn generate_response_html(
+    status_type: &str,
+    message: &str,
+    name: Option<&str>,
+    email: Option<&str>,
+) -> String {
+    let (title, heading, content) = match status_type {
+        "Success" => {
+            let name_display = name.unwrap_or("Your name");
+            let email_display = email.unwrap_or("your email");
+
+            let thank_you_message = format!(
+                "Thank you <strong>{}</strong>! You will receive a message shortly to your designated email: <strong>{}</strong>",
+                name_display, email_display
+            );
+
+            (
+                "Form Submitted Successfully",
+                "🥂 Success!",
+                thank_you_message,
+            )
+        }
+        "Error" => (
+            "Form Submission Error",
+            "❌ Error",
+            format!("Sorry, there was an issue: {}", message),
+        ),
+        _ => ("Form Response", "Response", message.to_string()),
+    };
+
+    format!(
+        r#"<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400..900&family=Outfit:wght@100..900&display=swap"
+      rel="stylesheet"
+    />
+    <title>{}</title>
+    <style>
+
+        * {{
+        padding: 0;
+        margin: 0;
+        box-sizing: border-box;
+        }}
+
+        body {{
+            font-family: "Outfit", system-ui, sans-serif;
+            max-width: 100vw;
+            background-color: #222;
+            color: white;
+            min-height: 100vh;
+
+            overflow: hidden;
+            display: grid;
+            place-content: center;
+        }}
+
+        .container {{
+            background-color: #101010;
+            height: 300px;
+            width: 500px;
+            border-radius: 15px;
+            padding: 2% 3%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-evenly;
+        }}
+
+        h1 {{
+            color: #fff;
+            text-align: center;
+            font-size: 2.5em;
+        }}
+
+        .message {{
+            border-left: 4px solid #34db69;
+            padding:2%;
+            height: 50%;
+            border-radius: 5px;
+
+            font-size: 1.2rem;
+            line-height: 1.5;
+
+        }}
+
+        .back-link {{
+            display: inline-block;
+            width: 40%;
+            height: 15%;
+
+            display: grid;
+            place-content: center;
+
+            background-color: #222;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition-duration: 0.2s;
+            border: 1px solid #474646ff;
+        }}
+        .back-link:hover {{
+            background: #34db69ff;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px #34db695b;
+        }}
+        .error {{
+            border-left-color: #ff6b6b;
+        }}
+        .success {{
+            border-left-color: #51cf66;
+        }}
+
+        @media screen and (max-width: 508px) {{
+        .container {{
+             width: 100vw !important;
+         }}
+         .back-link {{
+         width: 60%;
+         }}
+        }}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>{}</h1>
+        <div class="message {}">
+            {}
+        </div>
+        <a href="/" class="back-link">← Back to Homepage</a>
+    </div>
+</body>
+</html>"#,
+        title,
+        heading,
+        if status_type == "Success" {
+            "success"
+        } else {
+            "error"
+        },
+        content
+    )
 }
 
 fn send_error_response_with_cors(

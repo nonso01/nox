@@ -1,14 +1,35 @@
-//Which server should i use Rust or Nodejs ?
-// i enjoy both :D
+// import { useEffect, useState } from "react";
+
+//Which server should i use Rust or Nodejs ? i enjoy both :D
+// initialize a dummy get request to your server to wake it up
+// currently on a free instance
 
 export default function Contact({
-  formActionURL = "https://nox-hltl.onrender.com",
-  // formActionURL = "http://127.0.0.1:8080",
+  // formActionURL = "https://nox-hltl.onrender.com",
+  formActionURL = "http://127.0.0.1:8080",
 }) {
-  function handleInputName() {}
-  function handleInputEmail() {}
-  function handleTextArea() {}
-  
+  // const [status, setStatus] = useState(false); // your cloud server
+
+  // const getCloudServerStatus = useEffect(() => {
+  //   let f = fetch("https://nox-hltl.onrender.com")
+  //     .then((res) => console.log(res.status))
+  //     .catch((error) => console.warn(error));
+  // }, []);
+
+  function handleInputName({ target }) {
+    const maxNameLength = target?.maxLength ?? 40;
+    let remaining = maxNameLength - target?.value.length;
+
+    console.log(r);
+  }
+  function handleInputEmail() {
+    // const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    //  emailRegex.test(email);
+  }
+  function handleInputMessage() {}
+
+  function handleFormSubmit() {}
+
   return (
     <div className="contact flex column between ">
       <div className="contact-title flex column evenly ">
@@ -19,7 +40,6 @@ export default function Contact({
         <form
           method="POST"
           action={formActionURL}
-          // enctype="application/x-www-form-urlencoded"
           id="nox-form"
           className="flex column evenly "
         >
@@ -27,28 +47,32 @@ export default function Contact({
             <label htmlFor="noxName"></label>
             <input
               type="text"
-              name="noxName"
+              name="name"
               id="noxName"
               placeholder="your name"
               required
               autoComplete="on"
+              maxLength={40}
+              minLength={2}
+              onInput={handleInputName}
             />
           </div>
           <div className=" input-text ">
             <label htmlFor="noxEmail"></label>
             <input
               type="email"
-              name="noxEmail"
+              name="email"
               id="noxEmail"
               placeholder="your@email.todo"
               required
               autoComplete="on"
+              maxLength={80}
             />
           </div>
           <div className=" input-area ">
             <label htmlFor="noxMessage"></label>
             <textarea
-              name="noxMessage"
+              name="message"
               id="noxMessage"
               placeholder="what would you like me to do for you ?"
               autoCorrect="on"
@@ -56,6 +80,7 @@ export default function Contact({
               cols={30}
               wrap="hard"
               required
+              maxLength={2000}
             ></textarea>
           </div>
           <div className=" input-checkbox ">
@@ -81,7 +106,9 @@ export default function Contact({
             </fieldset>
           </div>
           <div className="input-button flex center ">
-            <button type="submit">Let's Go!</button>
+            <button title="submit" type="submit">
+              Let's Go!
+            </button>
           </div>
         </form>
       </div>
