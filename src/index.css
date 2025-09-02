@@ -61,7 +61,6 @@
   );
 }
 
-
 @property --angle {
   syntax: "<angle>";
   inherits: false;
@@ -310,7 +309,7 @@ fieldset {
     height: 1020px;
     padding: 30px 130px;
 
-    background-image: url("../src/assets/images/2d-me.png");
+    background-image: url("../src/assets/images/2d-me.webp");
     background-repeat: no-repeat;
     background-position: 50% -50%;
 
