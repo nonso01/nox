@@ -81,13 +81,14 @@ export default function Contact({
               cols={30}
               wrap="hard"
               required
+              minLength={2}
               maxLength={2000}
             ></textarea>
           </div>
           <div className=" input-checkbox ">
             <fieldset form="nox-form" className="flex column evenly">
               <legend>How can i help</legend>
-
+              {/* no values should be set on the checkbox "check=on" is ok, if you decide otherwise then uodate your post handler */}
               <label htmlFor="webDevelopment">
                 <input
                   type="checkbox"

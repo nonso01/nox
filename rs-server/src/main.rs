@@ -8,9 +8,11 @@ use std::{
     thread,
 };
 
+use regex::Regex;
+
 use nox::nox_server::{
     get_mime_type, is_safe_path, parse_form_data, parse_multipart_data, sanitize_path,
-    REQUIRED_FIELDS,
+    FIELD_CONSTRAINTS, OPTIONAL_CHECKBOX,
 };
 
 // CORS Configuration
@@ -148,7 +150,8 @@ impl Worker {
 
 fn main() {
     let port = env::var("PORT").unwrap_or_else(|_| "8080".to_string());
-    let addr = format!("127.0.0.1:{}", port);
+    let host = env::var("HOST").unwrap_or_else(|_| "127.0.0.1".to_string());
+    let addr = format!("{}:{}", host, port);
 
     // Initialize CORS configuration
     let cors_config = CorsConfig::new();
@@ -480,19 +483,10 @@ fn handle_post_request_with_cors(
         parse_form_data(&body_str)
     };
 
-    // Only allow specific fields
-    let allowed_fields: HashSet<&str> = [
-        "name",
-        "email",
-        "message",
-        "frontend",
-        "webDevelopment",
-        "blender",
-    ]
-    .iter()
-    .cloned()
-    .collect();
+    // Collect allowed field names for quick lookup
+    let allowed_fields: HashSet<&str> = FIELD_CONSTRAINTS.iter().map(|c| c.name).collect();
 
+    // Check for unexpected fields
     let unexpected_fields: Vec<&String> = form_data
         .keys()
         .filter(|k| !allowed_fields.contains(k.as_str()))
@@ -511,18 +505,46 @@ fn handle_post_request_with_cors(
         return;
     }
 
-    // Ensure required fields are present
-    let missing_fields: Vec<&str> = REQUIRED_FIELDS
-        .iter()
-        .filter(|&&field| !form_data.contains_key(field))
-        .copied()
-        .collect();
+    // Validate required fields and constraints
+    let mut errors = Vec::new();
+    let email_regex = Regex::new(r"^[\w\.-]+@[\w\.-]+\.\w+$").unwrap();
 
-    if !missing_fields.is_empty() {
+    for constraint in FIELD_CONSTRAINTS {
+        match form_data.get(constraint.name) {
+            Some(value) => {
+                if value.len() > constraint.max_length {
+                    errors.push(format!(
+                        "{} too long (max {} characters)",
+                        constraint.name, constraint.max_length
+                    ));
+                }
+                // Email format check
+                if constraint.email && !email_regex.is_match(value) {
+                    errors.push("Invalid email format".to_string());
+                }
+            }
+            None => {
+                if constraint.required {
+                    errors.push(format!("Missing required field: {}", constraint.name));
+                }
+            }
+        }
+    }
+
+    // Validate checkbox fields: only "on" is allowed if present
+    for &cb_name in &OPTIONAL_CHECKBOX {
+        if let Some(cb_value) = form_data.get(cb_name) {
+            if cb_value != "on" {
+                errors.push(format!("Invalid value for checkbox '{}'", cb_name));
+            }
+        }
+    }
+
+    if !errors.is_empty() {
         send_html_response_with_cors(
             &mut buf_reader,
             "Error",
-            &format!("Missing required field(s): {:?}", missing_fields),
+            &format!("Validation errors: {}", errors.join(", ")),
             None,
             None,
             cors_config,
@@ -535,7 +557,6 @@ fn handle_post_request_with_cors(
         println!("Field '{}': '{}'", key, value);
     }
 
-    // Extract name and email from form data
     let name = form_data.get("name").cloned();
     let email = form_data.get("email").cloned();
 

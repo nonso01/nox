@@ -1,5 +1,12 @@
 import { animate, stagger, utils } from "animejs";
 
+/**
+ * 
+ * @param {SVGTextElement} textEl 
+ * receives a Text element from an svg and breaks each
+ * char into a corresponding tspan element
+ * @returns 
+ */
 export function splitTextToTspan(textEl) {
   const textContent = textEl.textContent;
   textEl.textContent = "";

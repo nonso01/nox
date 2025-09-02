@@ -4,7 +4,53 @@
 pub mod nox_server {
     use std::{collections::HashMap, path::Path};
 
-    pub const REQUIRED_FIELDS: [&str; 3] = ["name", "email", "message"];
+    pub struct FieldConstraint {
+        pub name: &'static str,
+        pub max_length: usize,
+        pub required: bool,
+        pub email: bool, // true for email field, enables regex validation
+    }
+
+    pub const FIELD_CONSTRAINTS: &[FieldConstraint] = &[
+        FieldConstraint {
+            name: "name",
+            max_length: 40,
+            required: true,
+            email: false,
+        },
+        FieldConstraint {
+            name: "email",
+            max_length: 80,
+            required: true,
+            email: true,
+        },
+        FieldConstraint {
+            name: "message",
+            max_length: 2000,
+            required: true,
+            email: false,
+        },
+        FieldConstraint {
+            name: "frontend",
+            max_length: 10,
+            required: false,
+            email: false,
+        },
+        FieldConstraint {
+            name: "webDevelopment",
+            max_length: 10,
+            required: false,
+            email: false,
+        },
+        FieldConstraint {
+            name: "blender",
+            max_length: 10,
+            required: false,
+            email: false,
+        },
+    ];
+
+    pub const OPTIONAL_CHECKBOX: [&str; 3] = ["blender", "frontend", "webDevelopment"];
 
     // Helper functions.
     pub fn sanitize_path(path: &str) -> String {

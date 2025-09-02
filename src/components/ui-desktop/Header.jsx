@@ -45,7 +45,7 @@ export default function Header() {
         </div>
 
         <div className="logo flex center" title="Martin">
-          <img src={Logo} alt="Martin's logo" />
+          <img src={Logo} alt="Martin's logo" width={60} height={60} />
         </div>
 
         <div className="links flex evenly ">
