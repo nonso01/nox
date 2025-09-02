@@ -1,11 +1,16 @@
 use std::{
-    collections::HashMap,
-    env, fs,
+    // collections::HashMap,
+    env,
+    fs,
     io::{prelude::*, BufReader},
     net::{TcpListener, TcpStream},
     path::{Path, PathBuf},
     sync::{mpsc, Arc, Mutex},
     thread,
+};
+
+use nox::nox_server::{
+    get_mime_type, is_safe_path, parse_form_data, parse_multipart_data, sanitize_path,
 };
 
 // CORS Configuration
@@ -34,7 +39,7 @@ impl CorsConfig {
     fn cross_origin_config() -> Self {
         CorsConfig {
             allow_origins: vec![
-                "http://localhost:5173".to_string(), // React dev server
+                "http://localhost:5173".to_string(),      // React dev server
                 "https://nox-dev.vercel.app".to_string(), // Production frontend
             ],
             allow_all_origins: false, // Set to true for development only
@@ -354,7 +359,10 @@ fn serve_static_file_with_cors(
 }
 
 fn serve_hello_file(stream: &mut TcpStream, cors_config: &CorsConfig, origin: Option<&str>) {
-    let hello_path = PathBuf::from("./src/hello.html");
+    let hello_path = std::env::current_dir()
+        .unwrap_or_default()
+        .join("src")
+        .join("hello.html");
 
     match fs::read(&hello_path) {
         Ok(content) => {
@@ -707,138 +715,4 @@ fn send_error_response_with_cors(
     );
 
     let _ = stream.write_all(response.as_bytes());
-}
-
-// Helper functions
-fn sanitize_path(path: &str) -> String {
-    let path = if path.starts_with('/') {
-        &path[1..]
-    } else {
-        path
-    };
-    let decoded = url_decode(path);
-    let parts: Vec<&str> = decoded
-        .split('/')
-        .filter(|part| !part.is_empty() && *part != "." && *part != "..")
-        .collect();
-    parts.join("/")
-}
-
-fn is_safe_path(path: &Path) -> bool {
-    match path.canonicalize() {
-        Ok(canonical) => {
-            let dist_path = match std::env::current_dir() {
-                Ok(current) => current.parent().unwrap_or(&current).join("dist"),
-                Err(_) => return false,
-            };
-            match dist_path.canonicalize() {
-                Ok(canonical_dist) => canonical.starts_with(canonical_dist),
-                Err(_) => false,
-            }
-        }
-        Err(_) => {
-            if let Some(parent) = path.parent() {
-                match parent.canonicalize() {
-                    Ok(canonical_parent) => {
-                        let dist_path = match std::env::current_dir() {
-                            Ok(current) => current.parent().unwrap_or(&current).join("dist"),
-                            Err(_) => return false,
-                        };
-                        match dist_path.canonicalize() {
-                            Ok(canonical_dist) => canonical_parent.starts_with(canonical_dist),
-                            Err(_) => false,
-                        }
-                    }
-                    Err(_) => false,
-                }
-            } else {
-                false
-            }
-        }
-    }
-}
-
-fn get_mime_type(path: &Path) -> &'static str {
-    match path.extension().and_then(|ext| ext.to_str()) {
-        Some("html") | Some("htm") => "text/html",
-        Some("css") => "text/css",
-        Some("js") => "application/javascript",
-        Some("json") => "application/json",
-        Some("png") => "image/png",
-        Some("jpg") | Some("jpeg") => "image/jpeg",
-        Some("gif") => "image/gif",
-        Some("svg") => "image/svg+xml",
-        Some("ico") => "image/x-icon",
-        Some("woff") => "font/woff",
-        Some("woff2") => "font/woff2",
-        Some("ttf") => "font/ttf",
-        Some("eot") => "application/vnd.ms-fontobject",
-        Some("glb") => "model/gltf-binary",
-        Some("gltf") => "model/gltf+json",
-        Some("mp4") => "video/mp4",
-        Some("webm") => "video/webm",
-        Some("mp3") => "audio/mpeg",
-        Some("wav") => "audio/wav",
-        Some("pdf") => "application/pdf",
-        Some("zip") => "application/zip",
-        Some("txt") => "text/plain",
-        _ => "application/octet-stream",
-    }
-}
-
-fn parse_multipart_data(body: &str) -> HashMap<String, String> {
-    let mut form_data = HashMap::new();
-    let parts: Vec<&str> = body.split("--").collect();
-
-    for part in parts {
-        if part.contains("Content-Disposition: form-data") {
-            if let Some(name_start) = part.find("name=\"") {
-                let name_start = name_start + 6;
-                if let Some(name_end) = part[name_start..].find('"') {
-                    let field_name = &part[name_start..name_start + name_end];
-                    if let Some(value_start) = part.find("\r\n\r\n") {
-                        let value_start = value_start + 4;
-                        let field_value = part[value_start..].trim();
-                        if !field_value.is_empty() {
-                            form_data.insert(field_name.to_string(), field_value.to_string());
-                        }
-                    }
-                }
-            }
-        }
-    }
-    form_data
-}
-
-fn parse_form_data(body: &str) -> HashMap<String, String> {
-    let mut form_data = HashMap::new();
-    for pair in body.split('&') {
-        if let Some((key, value)) = pair.split_once('=') {
-            let decoded_key = url_decode(key);
-            let decoded_value = url_decode(value);
-            form_data.insert(decoded_key, decoded_value);
-        }
-    }
-    form_data
-}
-
-fn url_decode(s: &str) -> String {
-    let mut result = String::new();
-    let mut chars = s.chars().peekable();
-
-    while let Some(ch) = chars.next() {
-        match ch {
-            '%' => {
-                let hex_str: String = chars.by_ref().take(2).collect();
-                if hex_str.len() == 2 {
-                    if let Ok(byte) = u8::from_str_radix(&hex_str, 16) {
-                        result.push(byte as char);
-                    }
-                }
-            }
-            '+' => result.push(' '),
-            _ => result.push(ch),
-        }
-    }
-    result
 }

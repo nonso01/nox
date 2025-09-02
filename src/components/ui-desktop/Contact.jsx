@@ -1,6 +1,7 @@
 // import { useEffect, useState } from "react";
 
 //Which server should i use Rust or Nodejs ? i enjoy both :D
+
 // initialize a dummy get request to your server to wake it up
 // currently on a free instance
 
@@ -20,7 +21,7 @@ export default function Contact({
     const maxNameLength = target?.maxLength ?? 40;
     let remaining = maxNameLength - target?.value.length;
 
-    console.log(r);
+    console.log(remaining);
   }
   function handleInputEmail() {
     // const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;

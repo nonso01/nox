@@ -1,7 +1,7 @@
 import { ArrowUpRight } from "lucide-react";
 import diceVideo from "../../assets/images/dice-390.webm";
-import earthImage from "../../assets/images/earth-390.jpg";
-import noxPspImage from "../../assets/images/nox-psp.jpg";
+import earthImage from "../../assets/images/earth-390.webp";
+import noxPspImage from "../../assets/images/nox-psp.webp";
 
 const cards = [
   {
