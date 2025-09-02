@@ -4,6 +4,8 @@
 pub mod nox_server {
     use std::{collections::HashMap, path::Path};
 
+    pub const REQUIRED_FIELDS: [&str; 3] = ["name", "email", "message"];
+
     // Helper functions.
     pub fn sanitize_path(path: &str) -> String {
         let path = if path.starts_with('/') {

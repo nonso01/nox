@@ -1,7 +1,6 @@
 use std::{
-    // collections::HashMap,
-    env,
-    fs,
+    collections::HashSet,
+    env, fs,
     io::{prelude::*, BufReader},
     net::{TcpListener, TcpStream},
     path::{Path, PathBuf},
@@ -11,6 +10,7 @@ use std::{
 
 use nox::nox_server::{
     get_mime_type, is_safe_path, parse_form_data, parse_multipart_data, sanitize_path,
+    REQUIRED_FIELDS,
 };
 
 // CORS Configuration
@@ -480,35 +480,74 @@ fn handle_post_request_with_cors(
         parse_form_data(&body_str)
     };
 
+    // Only allow specific fields
+    let allowed_fields: HashSet<&str> = [
+        "name",
+        "email",
+        "message",
+        "frontend",
+        "webDevelopment",
+        "blender",
+    ]
+    .iter()
+    .cloned()
+    .collect();
+
+    let unexpected_fields: Vec<&String> = form_data
+        .keys()
+        .filter(|k| !allowed_fields.contains(k.as_str()))
+        .collect();
+
+    if !unexpected_fields.is_empty() {
+        send_html_response_with_cors(
+            &mut buf_reader,
+            "Error",
+            &format!("Unexpected fields found: {:?}", unexpected_fields),
+            None,
+            None,
+            cors_config,
+            origin,
+        );
+        return;
+    }
+
+    // Ensure required fields are present
+    let missing_fields: Vec<&str> = REQUIRED_FIELDS
+        .iter()
+        .filter(|&&field| !form_data.contains_key(field))
+        .copied()
+        .collect();
+
+    if !missing_fields.is_empty() {
+        send_html_response_with_cors(
+            &mut buf_reader,
+            "Error",
+            &format!("Missing required field(s): {:?}", missing_fields),
+            None,
+            None,
+            cors_config,
+            origin,
+        );
+        return;
+    }
+
     for (key, value) in &form_data {
         println!("Field '{}': '{}'", key, value);
     }
 
-    if form_data.is_empty() {
-        send_html_response_with_cors(
-            &mut buf_reader,
-            "Error",
-            "Could not parse form data",
-            None,
-            None,
-            cors_config,
-            origin,
-        );
-    } else {
-        // Extract name and email from form data
-        let name = form_data.get("name").cloned();
-        let email = form_data.get("email").cloned();
+    // Extract name and email from form data
+    let name = form_data.get("name").cloned();
+    let email = form_data.get("email").cloned();
 
-        send_html_response_with_cors(
-            &mut buf_reader,
-            "Success",
-            "Form submitted successfully",
-            name.as_deref(),
-            email.as_deref(),
-            cors_config,
-            origin,
-        );
-    }
+    send_html_response_with_cors(
+        &mut buf_reader,
+        "Success",
+        "Form submitted successfully",
+        name.as_deref(),
+        email.as_deref(),
+        cors_config,
+        origin,
+    );
 }
 
 fn send_html_response_with_cors(
@@ -650,7 +689,7 @@ fn generate_response_html(
             box-shadow: 0 4px 12px #34db695b;
         }}
         .error {{
-            border-left-color: #ff6b6b;
+            border-left-color: #fa4646ff;
         }}
         .success {{
             border-left-color: #51cf66;
