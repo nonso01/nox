@@ -2,7 +2,14 @@
 // keep main.rs brief
 
 pub mod nox_server {
-    use std::{collections::HashMap, path::Path};
+    use std::{collections::HashMap, env, path::Path};
+
+    use lettre::{
+        transport::smtp::authentication::Credentials, // for emails
+        Message,
+        SmtpTransport,
+        Transport,
+    };
 
     pub struct FieldConstraint {
         pub name: &'static str,
@@ -11,6 +18,7 @@ pub mod nox_server {
         pub email: bool, // true for email field, enables regex validation
     }
 
+    // constants
     pub const FIELD_CONSTRAINTS: &[FieldConstraint] = &[
         FieldConstraint {
             name: "name",
@@ -51,6 +59,43 @@ pub mod nox_server {
     ];
 
     pub const OPTIONAL_CHECKBOX: [&str; 3] = ["blender", "frontend", "webDevelopment"];
+
+    /// Sends an email using lettre.
+    ///
+    /// # Arguments
+    /// * `to` - Recipient email address
+    /// * `subject` - Subject of the email
+    /// * `body` - Text body of the email
+    ///
+    /// # Returns
+    /// * `Result<(), Box<dyn std::error::Error>>` - Ok on success, Err on failure
+    pub fn send_email(
+        to: &str,
+        subject: &str,
+        body: &str,
+    ) -> Result<(), Box<dyn std::error::Error>> {
+        // Load credentials and SMTP server from environment variables for security
+        let smtp_user = env::var("MY_EMAIL")?;
+        let smtp_pass = env::var("MY_PASSWORD")?;
+        let smtp_server = env::var("SMTP_SERVER").unwrap_or_else(|_| "smtp.gmail.com".to_string());
+        let from_addr = env::var("SMTP_FROM").unwrap_or_else(|_| smtp_user.clone());
+
+        let email = Message::builder()
+            .from(from_addr.parse()?)
+            .reply_to(from_addr.parse()?)
+            .to(to.parse()?)
+            .subject(subject)
+            .body(body.to_string())?;
+
+        let creds = Credentials::new(smtp_user, smtp_pass);
+
+        let mailer = SmtpTransport::relay(&smtp_server)?
+            .credentials(creds)
+            .build();
+
+        mailer.send(&email)?;
+        Ok(())
+    }
 
     // Helper functions.
     pub fn sanitize_path(path: &str) -> String {

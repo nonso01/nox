@@ -11,7 +11,7 @@ use std::{
 use regex::Regex;
 
 use nox::nox_server::{
-    get_mime_type, is_safe_path, parse_form_data, parse_multipart_data, sanitize_path,
+    get_mime_type, is_safe_path, parse_form_data, parse_multipart_data, sanitize_path, send_email,
     FIELD_CONSTRAINTS, OPTIONAL_CHECKBOX,
 };
 
@@ -569,6 +569,17 @@ fn handle_post_request_with_cors(
         cors_config,
         origin,
     );
+
+    // Try Sending and Testing Emails
+
+    let subject = "Form Submission Received";
+    let body = format!(
+        "Hello {:?},\nThank you for your submission! I received your Message and i will attain to your queries shortly.",
+        name.unwrap_or("Dear".to_string()),
+    );
+    if let Err(e) = send_email(email.unwrap().as_str(), &subject, &body) {
+        eprintln!("Warning failed to send email: {}", e);
+    }
 }
 
 fn send_html_response_with_cors(
@@ -732,7 +743,7 @@ fn generate_response_html(
         <div class="message {}">
             {}
         </div>
-        <a href="/" class="back-link">← Back to Homepage</a>
+        <a href="/" class="back-link">Back to Homepage</a>
     </div>
 </body>
 </html>"#,
