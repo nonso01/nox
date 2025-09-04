@@ -5,10 +5,9 @@ pub mod nox_server {
     use std::{collections::HashMap, env, path::Path};
 
     use lettre::{
-        transport::smtp::authentication::Credentials, // for emails
-        Message,
-        SmtpTransport,
-        Transport,
+        message::{header::ContentType, MultiPart, SinglePart},
+        transport::smtp::authentication::Credentials,
+        Message, SmtpTransport, Transport,
     };
 
     pub struct FieldConstraint {
@@ -60,24 +59,27 @@ pub mod nox_server {
 
     pub const OPTIONAL_CHECKBOX: [&str; 3] = ["blender", "frontend", "webDevelopment"];
 
-    /// Sends an email using lettre.
-    ///
-    /// # Arguments
-    /// * `to` - Recipient email address
-    /// * `subject` - Subject of the email
-    /// * `body` - Text body of the email
-    ///
-    /// # Returns
-    /// * `Result<(), Box<dyn std::error::Error>>` - Ok on success, Err on failure
+    // Sends an email using lettre.
+    // returns
+    // * `Result<(), Box<dyn std::error::Error>>` - Ok on success, Err on failure
     pub fn send_email(
         to: &str,
         subject: &str,
         body: &str,
     ) -> Result<(), Box<dyn std::error::Error>> {
         // Load credentials and SMTP server from environment variables for security
-        let smtp_user = env::var("MY_EMAIL")?;
-        let smtp_pass = env::var("MY_PASSWORD")?;
+        let smtp_user = env::var("MY_EMAIL").map_err(|_| {
+            eprintln!("Warning: MY_EMAIL env was not set");
+            "MY_EMAIL environment variable not set"
+        })?;
+
+        let smtp_pass = env::var("MY_PASSWORD").map_err(|_| {
+            eprintln!("Warning: MY_PASSWORD env was not set");
+            "MY_PASSWORD environment variable not set"
+        })?;
+
         let smtp_server = env::var("SMTP_SERVER").unwrap_or_else(|_| "smtp.gmail.com".to_string());
+
         let from_addr = env::var("SMTP_FROM").unwrap_or_else(|_| smtp_user.clone());
 
         let email = Message::builder()
@@ -93,8 +95,169 @@ pub mod nox_server {
             .credentials(creds)
             .build();
 
-        mailer.send(&email)?;
+        mailer.send(&email).map_err(|e| {
+            eprintln!("Failed to send email to: {}", to);
+            e
+        })?;
+
+        println!("Email sent successfully to: {}", to);
         Ok(())
+    }
+
+    //  function for HTML emails
+    pub fn send_html_email(
+        to: &str,
+        subject: &str,
+        html_body: &str,
+        text_body: Option<&str>,
+    ) -> Result<(), Box<dyn std::error::Error>> {
+        // Load credentials and SMTP server from environment variables
+        let smtp_user = env::var("MY_EMAIL").map_err(|_| {
+            eprintln!("Warning: MY_EMAIL env was not set");
+            "MY_EMAIL environment variable not set"
+        })?;
+
+        let smtp_pass = env::var("MY_PASSWORD").map_err(|_| {
+            eprintln!("Warning: MY_PASSWORD env was not set");
+            "MY_PASSWORD environment variable not set"
+        })?;
+
+        let smtp_server = env::var("SMTP_SERVER").unwrap_or_else(|_| "smtp.gmail.com".to_string());
+
+        let from_addr = env::var("SMTP_FROM").unwrap_or_else(|_| smtp_user.clone());
+
+        // Create email with HTML and optional plain text parts
+        let email_builder = Message::builder()
+            .from(from_addr.parse()?)
+            .reply_to(from_addr.parse()?)
+            .to(to.parse()?)
+            .subject(subject);
+
+        let email = if let Some(plain_text) = text_body {
+            // Send both HTML and plain text versions
+            email_builder.multipart(
+                MultiPart::alternative()
+                    .singlepart(
+                        SinglePart::builder()
+                            .header(ContentType::TEXT_PLAIN)
+                            .body(plain_text.to_string()),
+                    )
+                    .singlepart(
+                        SinglePart::builder()
+                            .header(ContentType::TEXT_HTML)
+                            .body(html_body.to_string()),
+                    ),
+            )?
+        } else {
+            // Send only HTML version
+            email_builder.singlepart(
+                SinglePart::builder()
+                    .header(ContentType::TEXT_HTML)
+                    .body(html_body.to_string()),
+            )?
+        };
+
+        let creds = Credentials::new(smtp_user, smtp_pass);
+
+        let mailer = SmtpTransport::relay(&smtp_server)?
+            .credentials(creds)
+            .build();
+
+        mailer.send(&email).map_err(|e| {
+            eprintln!("Failed to send HTML email to: {}", to);
+            e
+        })?;
+
+        println!("HTML email sent successfully to: {}", to);
+        Ok(())
+    }
+
+    // Helper function to generate HTML email template
+    pub fn generate_email_html(name: &str, message: &str) -> String {
+        format!(
+            r#"
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Submission Received</title>
+    <style>
+        body {{
+            font-family: system-ui, sans-serif, 'Ariel';
+            line-height: 1.4;
+            color: #222;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }}
+        .container {{
+            width: max(350px, 70%);
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            border: 2px solid #2222221c;
+        }}
+        .header {{
+            text-align: center;
+            color: #2c3e50;
+            border-bottom: 2px solid #2222221c;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }}
+        .content {{
+            font-size: 15px;
+            margin-bottom: 30px;
+        }}
+        .highlight {{
+            color: #34db69;
+            font-weight: bold;
+        }}
+        .footer {{
+            text-align: center;
+            text-wrap: balance;
+            color: #7f8c8d;
+            border-top: 1px solid #ecf0f1;
+            padding-top: 20px;
+            margin-top: 30px;
+            font-size: 12px;
+        }}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🤩 Thank You for Your Submission!</h1>
+        </div>
+        
+        <div class="content">
+            <p>Hello <span class="highlight">{}</span>,</p>
+            
+            <p>Thank you for reaching out! I have received your message and will respond to your queries shortly 🫡.</p>
+            
+            <p><strong>Your message:</strong></p>
+            <blockquote style="padding: 10px; border-left: 2px solid currentColor; margin: 10px 0; font-style: italic; font-size: 12px;">
+                {}
+            </blockquote>
+            
+            <p>I appreciate you taking the time to contact me, and I'll get back to you as soon as possible ⚡️⚡️⚡️.</p>
+            
+            <p>Best regards,<br>
+            <strong>Nonso Martin</strong></p>
+        </div>
+        
+        <div class="footer">
+            <p>This is an automated response to confirm we received your form submission.</p>
+            <p>If you didn't initiate this message please ignore.</p>
+        </div>
+    </div>
+</body>
+</html>
+    "#,
+            name, message
+        )
     }
 
     // Helper functions.

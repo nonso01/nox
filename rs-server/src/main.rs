@@ -1,6 +1,6 @@
 use std::{
-    collections::HashSet,
-    env, fs,
+    collections::{HashMap, HashSet},
+    env, fmt, fs,
     io::{prelude::*, BufReader},
     net::{TcpListener, TcpStream},
     path::{Path, PathBuf},
@@ -11,9 +11,50 @@ use std::{
 use regex::Regex;
 
 use nox::nox_server::{
-    get_mime_type, is_safe_path, parse_form_data, parse_multipart_data, sanitize_path, send_email,
-    FIELD_CONSTRAINTS, OPTIONAL_CHECKBOX,
+    generate_email_html, get_mime_type, is_safe_path, parse_form_data, parse_multipart_data,
+    sanitize_path, send_email, send_html_email, FIELD_CONSTRAINTS, OPTIONAL_CHECKBOX,
 };
+
+// Custom error types for better error handling
+#[derive(Debug)]
+pub enum ServerError {
+    IoError(std::io::Error),
+    ParseError(String),
+    ValidationError(String),
+    EmailError(Box<dyn std::error::Error>),
+    ThreadPoolError(String),
+    NetworkError(String),
+}
+
+impl fmt::Display for ServerError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match self {
+            ServerError::IoError(e) => write!(f, "IO error: {}", e),
+            ServerError::ParseError(msg) => write!(f, "Parse error: {}", msg),
+            ServerError::ValidationError(msg) => write!(f, "Validation error: {}", msg),
+            ServerError::EmailError(e) => write!(f, "Email error: {}", e),
+            ServerError::ThreadPoolError(msg) => write!(f, "Thread pool error: {}", msg),
+            ServerError::NetworkError(msg) => write!(f, "Network error: {}", msg),
+        }
+    }
+}
+
+impl std::error::Error for ServerError {}
+
+impl From<std::io::Error> for ServerError {
+    fn from(error: std::io::Error) -> Self {
+        ServerError::IoError(error)
+    }
+}
+
+impl From<Box<dyn std::error::Error>> for ServerError {
+    fn from(error: Box<dyn std::error::Error>) -> Self {
+        ServerError::EmailError(error)
+    }
+}
+
+// Result type alias for convenience
+type ServerResult<T> = Result<T, ServerError>;
 
 // CORS Configuration
 #[derive(Clone)]
@@ -93,39 +134,72 @@ impl CorsConfig {
         self.allow_origins.contains(&origin.to_string())
     }
 }
-
 #[allow(dead_code)]
 struct ThreadPool {
     workers: Vec<Worker>,
-    sender: mpsc::Sender<TcpStream>,
+    sender: Option<mpsc::Sender<TcpStream>>,
     cors_config: CorsConfig,
 }
 
-#[allow(dead_code)]
 struct Worker {
     id: usize,
-    thread: thread::JoinHandle<()>,
+    thread: Option<thread::JoinHandle<()>>,
 }
 
 impl ThreadPool {
-    fn new(size: usize, cors_config: CorsConfig) -> ThreadPool {
+    fn new(size: usize, cors_config: CorsConfig) -> ServerResult<ThreadPool> {
+        if size == 0 {
+            return Err(ServerError::ThreadPoolError(
+                "Thread pool size cannot be zero".to_string(),
+            ));
+        }
+
         let (sender, receiver) = mpsc::channel();
         let receiver = Arc::new(Mutex::new(receiver));
         let mut workers = Vec::with_capacity(size);
 
         for id in 0..size {
-            workers.push(Worker::new(id, Arc::clone(&receiver), cors_config.clone()));
+            match Worker::new(id, Arc::clone(&receiver), cors_config.clone()) {
+                Ok(worker) => workers.push(worker),
+                Err(e) => {
+                    return Err(ServerError::ThreadPoolError(format!(
+                        "Failed to create worker {}: {}",
+                        id, e
+                    )));
+                }
+            }
         }
 
-        ThreadPool {
+        Ok(ThreadPool {
             workers,
-            sender,
+            sender: Some(sender),
             cors_config,
-        }
+        })
     }
 
-    fn execute(&self, stream: TcpStream) {
-        self.sender.send(stream).unwrap();
+    fn execute(&self, stream: TcpStream) -> ServerResult<()> {
+        if let Some(sender) = &self.sender {
+            sender
+                .send(stream)
+                .map_err(|e| ServerError::ThreadPoolError(format!("Failed to send task: {}", e)))?;
+        }
+        Ok(())
+    }
+}
+
+impl Drop for ThreadPool {
+    fn drop(&mut self) {
+        drop(self.sender.take());
+
+        for worker in &mut self.workers {
+            println!("Shutting down worker {}", worker.id);
+
+            if let Some(thread) = worker.thread.take() {
+                thread.join().unwrap_or_else(|_| {
+                    eprintln!("Worker {} failed to join", worker.id);
+                });
+            }
+        }
     }
 }
 
@@ -134,21 +208,34 @@ impl Worker {
         id: usize,
         receiver: Arc<Mutex<mpsc::Receiver<TcpStream>>>,
         cors_config: CorsConfig,
-    ) -> Worker {
+    ) -> ServerResult<Worker> {
         let thread = thread::spawn(move || loop {
-            let stream = receiver.lock().unwrap().recv();
+            let stream = {
+                let receiver_guard = receiver.lock().unwrap();
+                receiver_guard.recv()
+            };
+
             match stream {
                 Ok(stream) => {
-                    handle_connection(stream, &cors_config);
+                    if let Err(e) = handle_connection_safe(stream, &cors_config) {
+                        eprintln!("Worker {} encountered error: {}", id, e);
+                    }
                 }
-                Err(_) => break,
+                Err(_) => {
+                    println!("Worker {} shutting down", id);
+                    break;
+                }
             }
         });
-        Worker { id, thread }
+
+        Ok(Worker {
+            id,
+            thread: Some(thread),
+        })
     }
 }
 
-fn main() {
+fn main() -> ServerResult<()> {
     let port = env::var("PORT").unwrap_or_else(|_| "8080".to_string());
     let host = env::var("HOST").unwrap_or_else(|_| "127.0.0.1".to_string());
     let addr = format!("{}:{}", host, port);
@@ -160,7 +247,12 @@ fn main() {
     // Check if dist folder exists
     let dist_exists = Path::new("../dist").exists();
 
-    let listener = TcpListener::bind(&addr).unwrap();
+    // Better error handling for server binding
+    let listener = TcpListener::bind(&addr).map_err(|e| {
+        eprintln!("Failed to bind to address {}: {}", addr, e);
+        ServerError::IoError(e)
+    })?;
+
     println!("Server running on http://{}", &addr);
     println!("CORS Mode: {}", cors_mode);
     println!("Allowed HTTP methods: GET, POST, OPTIONS");
@@ -172,56 +264,53 @@ fn main() {
         println!("Serving hello.html from current directory as fallback");
     }
 
-    let pool = ThreadPool::new(4, cors_config); // Increased to 4 workers
+    // Handle thread pool creation errors
+    let pool = ThreadPool::new(4, cors_config)?;
 
+    // Better error handling in the main loop
     for stream in listener.incoming() {
         match stream {
             Ok(stream) => {
-                pool.execute(stream);
+                if let Err(e) = pool.execute(stream) {
+                    eprintln!("Failed to execute task: {}", e);
+                    // Continue running even if individual requests fail
+                }
             }
-            Err(e) => eprintln!("Connection failed: {}", e),
+            Err(e) => {
+                eprintln!("Connection failed: {}", e);
+                // Continue accepting other connections
+            }
         }
     }
+
+    Ok(())
 }
 
-fn handle_connection(mut stream: TcpStream, cors_config: &CorsConfig) {
+fn handle_connection_safe(stream: TcpStream, cors_config: &CorsConfig) -> ServerResult<()> {
+    let mut stream = stream;
     let mut buf_reader = BufReader::new(&mut stream);
     let mut request_line = String::new();
 
-    if buf_reader.read_line(&mut request_line).is_err() {
-        return;
+    // Better error handling for reading request line
+    buf_reader.read_line(&mut request_line)?;
+
+    if request_line.trim().is_empty() {
+        return Err(ServerError::NetworkError("Empty request line".to_string()));
     }
 
-    // Read headers
-    let mut content_length = 0;
-    let mut origin = None;
-    let mut line = String::new();
-
-    loop {
-        line.clear();
-        if buf_reader.read_line(&mut line).is_err() {
-            break;
-        }
-
-        if line.trim().is_empty() {
-            break;
-        }
-
-        let line_lower = line.to_lowercase();
-        if line_lower.starts_with("content-length:") {
-            if let Some(length_str) = line.split(": ").nth(1) {
-                content_length = length_str.trim().parse().unwrap_or(0);
-            }
-        } else if line_lower.starts_with("origin:") {
-            if let Some(origin_str) = line.split(": ").nth(1) {
-                origin = Some(origin_str.trim().to_string());
-            }
-        }
-    }
+    // Read headers with better error handling
+    let (content_length, origin) = parse_headers(&mut buf_reader)?;
 
     let parts: Vec<&str> = request_line.split_whitespace().collect();
     if parts.len() < 2 {
-        return;
+        send_error_response_with_cors(
+            &mut stream,
+            "400 Bad Request",
+            "Invalid request line",
+            cors_config,
+            None,
+        )?;
+        return Ok(());
     }
 
     let method = parts[0];
@@ -238,8 +327,8 @@ fn handle_connection(mut stream: TcpStream, cors_config: &CorsConfig) {
             "Method not allowed",
             cors_config,
             origin.as_deref(),
-        );
-        return;
+        )?;
+        return Ok(());
     }
 
     match method {
@@ -261,11 +350,45 @@ fn handle_connection(mut stream: TcpStream, cors_config: &CorsConfig) {
     }
 }
 
+// Helper function to parse headers with better error handling
+fn parse_headers(
+    buf_reader: &mut BufReader<&mut TcpStream>,
+) -> ServerResult<(usize, Option<String>)> {
+    let mut content_length = 0;
+    let mut origin = None;
+    let mut line = String::new();
+
+    loop {
+        line.clear();
+        buf_reader.read_line(&mut line)?;
+
+        if line.trim().is_empty() {
+            break;
+        }
+
+        let line_lower = line.to_lowercase();
+        if line_lower.starts_with("content-length:") {
+            if let Some(length_str) = line.split(": ").nth(1) {
+                content_length = length_str
+                    .trim()
+                    .parse()
+                    .map_err(|_| ServerError::ParseError("Invalid content-length".to_string()))?;
+            }
+        } else if line_lower.starts_with("origin:") {
+            if let Some(origin_str) = line.split(": ").nth(1) {
+                origin = Some(origin_str.trim().to_string());
+            }
+        }
+    }
+
+    Ok((content_length, origin))
+}
+
 fn handle_preflight_request(
     stream: &mut TcpStream,
     cors_config: &CorsConfig,
     origin: Option<&str>,
-) {
+) -> ServerResult<()> {
     let origin_header = get_cors_origin_header(cors_config, origin);
 
     let response = format!(
@@ -276,9 +399,10 @@ fn handle_preflight_request(
         cors_config.max_age
     );
 
-    let _ = stream.write_all(response.as_bytes());
-    let _ = stream.flush();
+    stream.write_all(response.as_bytes())?;
+    stream.flush()?;
     println!("Sent preflight response for origin: {:?}", origin);
+    Ok(())
 }
 
 fn get_cors_origin_header(cors_config: &CorsConfig, origin: Option<&str>) -> String {
@@ -314,14 +438,14 @@ fn serve_static_file_with_cors(
     path: &str,
     cors_config: &CorsConfig,
     origin: Option<&str>,
-) {
+) -> ServerResult<()> {
     // Check if dist folder exists
     let dist_exists = Path::new("../dist").exists();
 
     if !dist_exists {
         // Serve hello.html from current directory as fallback
-        serve_hello_file(stream, cors_config, origin);
-        return;
+        serve_hello_file(stream, cors_config, origin)?;
+        return Ok(());
     }
 
     let safe_path = sanitize_path(path);
@@ -334,8 +458,8 @@ fn serve_static_file_with_cors(
             "Access denied",
             cors_config,
             origin,
-        );
-        return;
+        )?;
+        return Ok(());
     }
 
     let final_path = if safe_path.is_empty() || safe_path == "/" {
@@ -347,7 +471,7 @@ fn serve_static_file_with_cors(
     match fs::read(&final_path) {
         Ok(content) => {
             let mime_type = get_mime_type(&final_path);
-            let _ = send_file_response_with_cors(stream, &content, mime_type, cors_config, origin);
+            send_file_response_with_cors(stream, &content, mime_type, cors_config, origin)?;
         }
         Err(_) => {
             send_error_response_with_cors(
@@ -356,12 +480,17 @@ fn serve_static_file_with_cors(
                 "File not found",
                 cors_config,
                 origin,
-            );
+            )?;
         }
     }
+    Ok(())
 }
 
-fn serve_hello_file(stream: &mut TcpStream, cors_config: &CorsConfig, origin: Option<&str>) {
+fn serve_hello_file(
+    stream: &mut TcpStream,
+    cors_config: &CorsConfig,
+    origin: Option<&str>,
+) -> ServerResult<()> {
     let hello_path = std::env::current_dir()
         .unwrap_or_default()
         .join("src")
@@ -370,8 +499,7 @@ fn serve_hello_file(stream: &mut TcpStream, cors_config: &CorsConfig, origin: Op
     match fs::read(&hello_path) {
         Ok(content) => {
             println!("Serving hello.html from current directory");
-            let _ =
-                send_file_response_with_cors(stream, &content, "text/html", cors_config, origin);
+            send_file_response_with_cors(stream, &content, "text/html", cors_config, origin)?;
         }
         Err(_) => {
             println!("Warning: hello.html not found in current directory");
@@ -402,15 +530,16 @@ fn serve_hello_file(stream: &mut TcpStream, cors_config: &CorsConfig, origin: Op
     </ul>
 </body>
 </html>"#;
-            let _ = send_file_response_with_cors(
+            send_file_response_with_cors(
                 stream,
                 fallback_html.as_bytes(),
                 "text/html",
                 cors_config,
                 origin,
-            );
+            )?;
         }
     }
+    Ok(())
 }
 
 fn send_file_response_with_cors(
@@ -419,7 +548,7 @@ fn send_file_response_with_cors(
     mime_type: &str,
     cors_config: &CorsConfig,
     origin: Option<&str>,
-) -> std::io::Result<()> {
+) -> ServerResult<()> {
     let origin_header = get_cors_origin_header(cors_config, origin);
     let cors_headers = if origin_header.is_empty() {
         "".to_string()
@@ -440,50 +569,8 @@ fn send_file_response_with_cors(
     Ok(())
 }
 
-fn handle_post_request_with_cors(
-    mut buf_reader: BufReader<&mut TcpStream>,
-    content_length: usize,
-    cors_config: &CorsConfig,
-    origin: Option<&str>,
-) {
-    if content_length == 0 {
-        send_html_response_with_cors(
-            &mut buf_reader,
-            "Error",
-            "No data received",
-            None,
-            None,
-            cors_config,
-            origin,
-        );
-        return;
-    }
-
-    let mut body = vec![0; content_length];
-    if let Err(e) = buf_reader.read_exact(&mut body) {
-        println!("Error reading body: {}", e);
-        send_html_response_with_cors(
-            &mut buf_reader,
-            "Error",
-            "Error reading data",
-            None,
-            None,
-            cors_config,
-            origin,
-        );
-        return;
-    }
-
-    let body_str = String::from_utf8_lossy(&body);
-    println!("POST data received from origin {:?}: {}", origin, body_str);
-
-    let form_data = if body_str.contains("Content-Disposition: form-data") {
-        parse_multipart_data(&body_str)
-    } else {
-        parse_form_data(&body_str)
-    };
-
-    // Collect allowed field names for quick lookup
+// Improved form validation with detailed error reporting
+fn validate_form_data(form_data: &HashMap<String, String>) -> ServerResult<()> {
     let allowed_fields: HashSet<&str> = FIELD_CONSTRAINTS.iter().map(|c| c.name).collect();
 
     // Check for unexpected fields
@@ -493,21 +580,16 @@ fn handle_post_request_with_cors(
         .collect();
 
     if !unexpected_fields.is_empty() {
-        send_html_response_with_cors(
-            &mut buf_reader,
-            "Error",
-            &format!("Unexpected fields found: {:?}", unexpected_fields),
-            None,
-            None,
-            cors_config,
-            origin,
-        );
-        return;
+        return Err(ServerError::ValidationError(format!(
+            "Unexpected fields found: {:?}",
+            unexpected_fields
+        )));
     }
 
     // Validate required fields and constraints
     let mut errors = Vec::new();
-    let email_regex = Regex::new(r"^[\w\.-]+@[\w\.-]+\.\w+$").unwrap();
+    let email_regex = Regex::new(r"^[\w\.-]+@[\w\.-]+\.\w+$")
+        .map_err(|e| ServerError::ParseError(format!("Invalid regex: {}", e)))?;
 
     for constraint in FIELD_CONSTRAINTS {
         match form_data.get(constraint.name) {
@@ -518,7 +600,6 @@ fn handle_post_request_with_cors(
                         constraint.name, constraint.max_length
                     ));
                 }
-                // Email format check
                 if constraint.email && !email_regex.is_match(value) {
                     errors.push("Invalid email format".to_string());
                 }
@@ -541,16 +622,57 @@ fn handle_post_request_with_cors(
     }
 
     if !errors.is_empty() {
+        return Err(ServerError::ValidationError(errors.join(", ")));
+    }
+
+    Ok(())
+}
+
+fn handle_post_request_with_cors(
+    mut buf_reader: BufReader<&mut TcpStream>,
+    content_length: usize,
+    cors_config: &CorsConfig,
+    origin: Option<&str>,
+) -> ServerResult<()> {
+    if content_length == 0 {
         send_html_response_with_cors(
             &mut buf_reader,
             "Error",
-            &format!("Validation errors: {}", errors.join(", ")),
+            "No data received",
             None,
             None,
             cors_config,
             origin,
-        );
-        return;
+        )?;
+        return Ok(());
+    }
+
+    let mut body = vec![0; content_length];
+    buf_reader
+        .read_exact(&mut body)
+        .map_err(|e| ServerError::IoError(e))?;
+
+    let body_str = String::from_utf8_lossy(&body);
+    println!("POST data received from origin {:?}: {}", origin, body_str);
+
+    let form_data = if body_str.contains("Content-Disposition: form-data") {
+        parse_multipart_data(&body_str)
+    } else {
+        parse_form_data(&body_str)
+    };
+
+    // Validate form data
+    if let Err(e) = validate_form_data(&form_data) {
+        send_html_response_with_cors(
+            &mut buf_reader,
+            "Error",
+            &e.to_string(),
+            None,
+            None,
+            cors_config,
+            origin,
+        )?;
+        return Ok(());
     }
 
     for (key, value) in &form_data {
@@ -568,18 +690,39 @@ fn handle_post_request_with_cors(
         email.as_deref(),
         cors_config,
         origin,
-    );
+    )?;
 
     // Try Sending and Testing Emails
+    if let Some(email_addr) = &email {
+        let user_name = name.as_deref().unwrap_or("Dear Friend");
+        let user_message = form_data
+            .get("message")
+            .map(|s| s.as_str())
+            .unwrap_or("Your form submission");
 
-    let subject = "Form Submission Received";
-    let body = format!(
-        "Hello {:?},\nThank you for your submission! I received your Message and i will attain to your queries shortly.",
-        name.unwrap_or("Dear".to_string()),
+        let subject = "Thank you for contacting me!";
+
+        // Generate HTML email
+        let html_body = generate_email_html(user_name, user_message);
+
+        // Fallback plain text version
+        let plain_text_body = format!(
+        "Hello {},\n\nThank you for your submission! I received your message and will attend to your queries shortly.\n\nYour message: {}\n\nBest regards,\nNonso Martin",
+        user_name, user_message
     );
-    if let Err(e) = send_email(email.unwrap().as_str(), &subject, &body) {
-        eprintln!("Warning failed to send email: {}", e);
+
+        // Send HTML email with plain text fallback
+        if let Err(e) = send_html_email(email_addr, subject, &html_body, Some(&plain_text_body)) {
+            eprintln!("Warning: Failed to send HTML email: {}", e);
+
+            // Fallback to plain text if HTML email fails
+            if let Err(e2) = send_email(email_addr, subject, &plain_text_body) {
+                eprintln!("Warning: Failed to send fallback plain text email: {}", e2);
+            }
+        }
     }
+
+    Ok(())
 }
 
 fn send_html_response_with_cors(
@@ -590,7 +733,7 @@ fn send_html_response_with_cors(
     email: Option<&str>,
     cors_config: &CorsConfig,
     origin: Option<&str>,
-) {
+) -> ServerResult<()> {
     let origin_header = get_cors_origin_header(cors_config, origin);
     let cors_headers = if origin_header.is_empty() {
         "".to_string()
@@ -606,7 +749,10 @@ fn send_html_response_with_cors(
         cors_headers,
         html_content
     );
-    let _ = buf_reader.get_mut().write_all(response.as_bytes());
+
+    buf_reader.get_mut().write_all(response.as_bytes())?;
+    buf_reader.get_mut().flush()?;
+    Ok(())
 }
 
 fn generate_response_html(
@@ -633,7 +779,7 @@ fn generate_response_html(
         }
         "Error" => (
             "Form Submission Error",
-            "❌ Error",
+            "🚫 Error",
             format!("Sorry, there was an issue: {}", message),
         ),
         _ => ("Form Response", "Response", message.to_string()),
@@ -764,7 +910,7 @@ fn send_error_response_with_cors(
     message: &str,
     cors_config: &CorsConfig,
     origin: Option<&str>,
-) {
+) -> ServerResult<()> {
     let origin_header = get_cors_origin_header(cors_config, origin);
     let cors_headers = if origin_header.is_empty() {
         "".to_string()
@@ -785,5 +931,7 @@ fn send_error_response_with_cors(
         html_content
     );
 
-    let _ = stream.write_all(response.as_bytes());
+    stream.write_all(response.as_bytes())?;
+    stream.flush()?;
+    Ok(())
 }
