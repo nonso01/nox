@@ -2,13 +2,56 @@
 // keep main.rs brief
 
 pub mod nox_server {
-    use std::{collections::HashMap, env, path::Path};
+    use std::{
+        collections::HashMap,
+        env,
+        path::Path,
+        sync::{Arc, Mutex},
+        time::{Duration, Instant},
+    };
 
     use lettre::{
         message::{header::ContentType, MultiPart, SinglePart},
         transport::smtp::authentication::Credentials,
         Message, SmtpTransport, Transport,
     };
+
+    pub struct RateLimiter {
+        pub requests: Arc<Mutex<HashMap<String, Vec<Instant>>>>,
+        pub max_requests: usize,
+        pub window_duration: Duration,
+    }
+
+    impl RateLimiter {
+        pub fn new(max_requests: usize, window_minutes: u64) -> Self {
+            RateLimiter {
+                requests: Arc::new(Mutex::new(HashMap::new())),
+                max_requests,
+                window_duration: Duration::from_secs(window_minutes * 60),
+            }
+        }
+
+        pub fn is_allowed(&self, client_id: &str) -> bool {
+            let mut requests = self.requests.lock().unwrap();
+            let now = Instant::now();
+
+            // Clean old entries
+            let cutoff = now - self.window_duration;
+            requests
+                .entry(client_id.to_string())
+                .or_insert_with(Vec::new)
+                .retain(|&timestamp| timestamp > cutoff);
+
+            let client_requests = requests.get_mut(client_id).unwrap();
+
+            if client_requests.len() >= self.max_requests {
+                false
+            } else {
+                client_requests.push(now);
+                true
+            }
+        }
+    }
 
     pub struct FieldConstraint {
         pub name: &'static str,
@@ -58,6 +101,10 @@ pub mod nox_server {
     ];
 
     pub const OPTIONAL_CHECKBOX: [&str; 3] = ["blender", "frontend", "webDevelopment"];
+
+    pub const MAX_CONTENT_LENGTH: usize = 50 * 1024;
+
+    pub const MAX_FORM_DATA_LENGTH: usize = 10 * 1024;
 
     // Sends an email using lettre.
     // returns
@@ -260,6 +307,17 @@ pub mod nox_server {
         )
     }
 
+    // HTML escaping function to prevent XSS
+    pub fn html_escape(input: &str) -> String {
+        input
+            .replace('&', "&amp;")
+            .replace('<', "&lt;")
+            .replace('>', "&gt;")
+            .replace('"', "&quot;")
+            .replace('\'', "&#x27;")
+            .replace('/', "&#x2F;")
+    }
+
     // Helper functions.
     pub fn sanitize_path(path: &str) -> String {
         let path = if path.starts_with('/') {
@@ -392,5 +450,53 @@ pub mod nox_server {
             }
         }
         result
+    }
+
+    // Sanitize email content to prevent header injection
+    pub fn sanitize_email_content(input: &str) -> String {
+        input
+            .chars()
+            .filter(|c| !matches!(c, '\r' | '\n' | '\0'))
+            .collect()
+    }
+
+    // Helper function to detect potential XSS attempts
+    pub fn contains_potential_xss(input: &str) -> bool {
+        let input_lower = input.to_lowercase();
+        let xss_patterns = [
+            "<script",
+            "</script",
+            "javascript:",
+            "vbscript:",
+            "onload=",
+            "onerror=",
+            "onclick=",
+            "onmouseover=",
+            "onfocus=",
+            "onblur=",
+            "onchange=",
+            "onsubmit=",
+            "<iframe",
+            "<object",
+            "<embed",
+            "<applet",
+            "<meta",
+            "<link",
+            "data:text/html",
+            "data:application",
+            "&#",
+            "&#x",
+            "\\u",
+            "\\x",
+            "expression(",
+            "url(",
+            "@import",
+            "behavior:",
+            "-moz-binding:",
+        ];
+
+        xss_patterns
+            .iter()
+            .any(|pattern| input_lower.contains(pattern))
     }
 }

@@ -1,3 +1,4 @@
+/// I LOVE SECURITY 🦀
 use std::{
     collections::{HashMap, HashSet},
     env, fmt, fs,
@@ -6,14 +7,43 @@ use std::{
     path::{Path, PathBuf},
     sync::{mpsc, Arc, Mutex},
     thread,
+    time::Duration,
 };
 
 use regex::Regex;
 
 use nox::nox_server::{
-    generate_email_html, get_mime_type, is_safe_path, parse_form_data, parse_multipart_data,
-    sanitize_path, send_email, send_html_email, FIELD_CONSTRAINTS, OPTIONAL_CHECKBOX,
+    contains_potential_xss, generate_email_html, get_mime_type, html_escape, is_safe_path,
+    parse_form_data, parse_multipart_data, sanitize_email_content, sanitize_path, send_email,
+    send_html_email, RateLimiter, FIELD_CONSTRAINTS, MAX_CONTENT_LENGTH, MAX_FORM_DATA_LENGTH,
+    OPTIONAL_CHECKBOX,
 };
+
+// 1 hour = 60 min
+const WINDOW_LIMIT_MINS: u64 = 60; //  change values here
+
+// Connection and Rate Limiting Configurations
+#[derive(Clone)]
+#[allow(dead_code)]
+struct SecurityConfig {
+    max_content_length: usize,
+    max_connections: usize,
+    connection_timeout: Duration,
+    max_requests_per_hour: usize,
+    enable_rate_limiting: bool,
+}
+
+impl SecurityConfig {
+    fn new() -> Self {
+        SecurityConfig {
+            max_content_length: MAX_CONTENT_LENGTH, // 50KB instead of 10KB
+            max_connections: 100,
+            connection_timeout: Duration::from_secs(30),
+            max_requests_per_hour: 50, // 10 requests per hour per IP
+            enable_rate_limiting: true,
+        }
+    }
+}
 
 // Custom error types for better error handling
 #[derive(Debug)]
@@ -135,10 +165,13 @@ impl CorsConfig {
     }
 }
 #[allow(dead_code)]
+// Update ThreadPool to include rate limiter and security config
 struct ThreadPool {
     workers: Vec<Worker>,
     sender: Option<mpsc::Sender<TcpStream>>,
     cors_config: CorsConfig,
+    rate_limiter: Arc<RateLimiter>,
+    security_config: SecurityConfig,
 }
 
 struct Worker {
@@ -147,7 +180,11 @@ struct Worker {
 }
 
 impl ThreadPool {
-    fn new(size: usize, cors_config: CorsConfig) -> ServerResult<ThreadPool> {
+    fn new(
+        size: usize,
+        cors_config: CorsConfig,
+        security_config: SecurityConfig,
+    ) -> ServerResult<ThreadPool> {
         if size == 0 {
             return Err(ServerError::ThreadPoolError(
                 "Thread pool size cannot be zero".to_string(),
@@ -158,8 +195,20 @@ impl ThreadPool {
         let receiver = Arc::new(Mutex::new(receiver));
         let mut workers = Vec::with_capacity(size);
 
+        // Create rate limiter
+        let rate_limiter = Arc::new(RateLimiter::new(
+            security_config.max_requests_per_hour,
+            WINDOW_LIMIT_MINS, // 1 hour window
+        ));
+
         for id in 0..size {
-            match Worker::new(id, Arc::clone(&receiver), cors_config.clone()) {
+            match Worker::new(
+                id,
+                Arc::clone(&receiver),
+                cors_config.clone(),
+                Arc::clone(&rate_limiter),
+                security_config.clone(),
+            ) {
                 Ok(worker) => workers.push(worker),
                 Err(e) => {
                     return Err(ServerError::ThreadPoolError(format!(
@@ -174,10 +223,17 @@ impl ThreadPool {
             workers,
             sender: Some(sender),
             cors_config,
+            rate_limiter,
+            security_config,
         })
     }
 
     fn execute(&self, stream: TcpStream) -> ServerResult<()> {
+        // Set socket timeout
+        if let Err(e) = stream.set_read_timeout(Some(self.security_config.connection_timeout)) {
+            eprintln!("Warning: Could not set socket timeout: {}", e);
+        }
+
         if let Some(sender) = &self.sender {
             sender
                 .send(stream)
@@ -208,6 +264,8 @@ impl Worker {
         id: usize,
         receiver: Arc<Mutex<mpsc::Receiver<TcpStream>>>,
         cors_config: CorsConfig,
+        rate_limiter: Arc<RateLimiter>,
+        security_config: SecurityConfig,
     ) -> ServerResult<Worker> {
         let thread = thread::spawn(move || loop {
             let stream = {
@@ -217,7 +275,12 @@ impl Worker {
 
             match stream {
                 Ok(stream) => {
-                    if let Err(e) = handle_connection_safe(stream, &cors_config) {
+                    if let Err(e) = handle_connection_safe(
+                        stream,
+                        &cors_config,
+                        &*rate_limiter,
+                        &security_config,
+                    ) {
                         eprintln!("Worker {} encountered error: {}", id, e);
                     }
                 }
@@ -240,45 +303,49 @@ fn main() -> ServerResult<()> {
     let host = env::var("HOST").unwrap_or_else(|_| "127.0.0.1".to_string());
     let addr = format!("{}:{}", host, port);
 
-    // Initialize CORS configuration
+    // Initialize security configuration
+    let security_config = SecurityConfig::new();
     let cors_config = CorsConfig::new();
     let cors_mode = env::var("CORS_MODE").unwrap_or_else(|_| "same-origin".to_string());
 
-    // Check if dist folder exists
     let dist_exists = Path::new("../dist").exists();
 
-    // Better error handling for server binding
     let listener = TcpListener::bind(&addr).map_err(|e| {
         eprintln!("Failed to bind to address {}: {}", addr, e);
         ServerError::IoError(e)
     })?;
 
-    println!("Server running on http://{}", &addr);
-    println!("CORS Mode: {}", cors_mode);
-    println!("Allowed HTTP methods: GET, POST, OPTIONS");
+    println!("🚀 Server running on http://{}", &addr);
+    println!(
+        "🛡️  Security enabled - Max content: {}KB, Timeout: {}s",
+        security_config.max_content_length / 1024,
+        security_config.connection_timeout.as_secs()
+    );
+    println!("🔒 CORS Mode: {}", cors_mode);
+    println!(
+        "📧 Rate limiting: {} requests/hour per IP",
+        security_config.max_requests_per_hour
+    );
 
     if dist_exists {
-        println!("Serving static files from ../dist/");
+        println!("📁 Serving static files from ../dist/");
     } else {
-        println!("Warning: ../dist/ folder not found!");
-        println!("Serving hello.html from current directory as fallback");
+        println!("⚠️  Warning: ../dist/ folder not found!");
+        println!("📄 Serving hello.html from current directory as fallback");
     }
 
-    // Handle thread pool creation errors
-    let pool = ThreadPool::new(4, cors_config)?;
+    // Create thread pool with security config
+    let pool = ThreadPool::new(4, cors_config, security_config)?;
 
-    // Better error handling in the main loop
     for stream in listener.incoming() {
         match stream {
             Ok(stream) => {
                 if let Err(e) = pool.execute(stream) {
                     eprintln!("Failed to execute task: {}", e);
-                    // Continue running even if individual requests fail
                 }
             }
             Err(e) => {
                 eprintln!("Connection failed: {}", e);
-                // Continue accepting other connections
             }
         }
     }
@@ -286,20 +353,66 @@ fn main() -> ServerResult<()> {
     Ok(())
 }
 
-fn handle_connection_safe(stream: TcpStream, cors_config: &CorsConfig) -> ServerResult<()> {
+fn handle_connection_safe(
+    stream: TcpStream,
+    cors_config: &CorsConfig,
+    rate_limiter: &RateLimiter,
+    security_config: &SecurityConfig,
+) -> ServerResult<()> {
     let mut stream = stream;
+
+    // Get client IP for rate limiting
+    let client_ip = stream
+        .peer_addr()
+        .map(|addr| addr.ip().to_string())
+        .unwrap_or_else(|_| "unknown".to_string());
+
+    // Check rate limiting FIRST
+    if security_config.enable_rate_limiting && !rate_limiter.is_allowed(&client_ip) {
+        println!("🚫 Rate limit exceeded for IP: {}", client_ip);
+        send_error_response_with_cors(
+            &mut stream,
+            "429 Too Many Requests",
+            "Rate limit exceeded. Please try again later.",
+            cors_config,
+            None,
+        )?;
+        return Ok(());
+    }
+
     let mut buf_reader = BufReader::new(&mut stream);
     let mut request_line = String::new();
 
-    // Better error handling for reading request line
-    buf_reader.read_line(&mut request_line)?;
+    // Add timeout for reading request line
+    match buf_reader.read_line(&mut request_line) {
+        Ok(0) => {
+            return Err(ServerError::NetworkError(
+                "Connection closed by client".to_string(),
+            ))
+        }
+        Ok(_) => {}
+        Err(e) => return Err(ServerError::IoError(e)),
+    }
 
     if request_line.trim().is_empty() {
         return Err(ServerError::NetworkError("Empty request line".to_string()));
     }
 
-    // Read headers with better error handling
-    let (content_length, origin) = parse_headers(&mut buf_reader)?;
+    // Limit request line length to prevent DoS
+    if request_line.len() > 8192 {
+        // 8KB max request line
+        send_error_response_with_cors(
+            &mut stream,
+            "414 Request-URI Too Long",
+            "Request line too long",
+            cors_config,
+            None,
+        )?;
+        return Ok(());
+    }
+
+    // Read headers with security limits
+    let (content_length, origin) = parse_headers_secure(&mut buf_reader, security_config)?;
 
     let parts: Vec<&str> = request_line.split_whitespace().collect();
     if parts.len() < 2 {
@@ -316,11 +429,17 @@ fn handle_connection_safe(stream: TcpStream, cors_config: &CorsConfig) -> Server
     let method = parts[0];
     let path = parts[1];
 
-    println!("Received: {} {} (Origin: {:?})", method, path, origin);
+    println!(
+        "📥 {} {} from {} (Content: {}KB)",
+        method,
+        path,
+        client_ip,
+        content_length / 1024
+    );
 
     // Check if method is allowed
     if !cors_config.is_method_allowed(method) {
-        println!("Method {} not allowed", method);
+        println!("🚫 Method {} not allowed for {}", method, client_ip);
         send_error_response_with_cors(
             &mut stream,
             "405 Method Not Allowed",
@@ -333,11 +452,13 @@ fn handle_connection_safe(stream: TcpStream, cors_config: &CorsConfig) -> Server
 
     match method {
         "OPTIONS" => handle_preflight_request(&mut stream, cors_config, origin.as_deref()),
-        "POST" => handle_post_request_with_cors(
+        "POST" => handle_post_request_secure(
             buf_reader,
             content_length,
             cors_config,
             origin.as_deref(),
+            security_config,
+            &client_ip,
         ),
         "GET" => serve_static_file_with_cors(&mut stream, path, cors_config, origin.as_deref()),
         _ => send_error_response_with_cors(
@@ -350,13 +471,16 @@ fn handle_connection_safe(stream: TcpStream, cors_config: &CorsConfig) -> Server
     }
 }
 
-// Helper function to parse headers with better error handling
-fn parse_headers(
+// Secure header parsing with limits
+fn parse_headers_secure(
     buf_reader: &mut BufReader<&mut TcpStream>,
+    security_config: &SecurityConfig,
 ) -> ServerResult<(usize, Option<String>)> {
     let mut content_length = 0;
     let mut origin = None;
     let mut line = String::new();
+    let mut header_count = 0;
+    let max_headers = 50; // Limit number of headers
 
     loop {
         line.clear();
@@ -366,6 +490,16 @@ fn parse_headers(
             break;
         }
 
+        header_count += 1;
+        if header_count > max_headers {
+            return Err(ServerError::ParseError("Too many headers".to_string()));
+        }
+
+        // Limit header line length
+        if line.len() > 8192 {
+            return Err(ServerError::ParseError("Header line too long".to_string()));
+        }
+
         let line_lower = line.to_lowercase();
         if line_lower.starts_with("content-length:") {
             if let Some(length_str) = line.split(": ").nth(1) {
@@ -373,10 +507,25 @@ fn parse_headers(
                     .trim()
                     .parse()
                     .map_err(|_| ServerError::ParseError("Invalid content-length".to_string()))?;
+
+                // CRITICAL: Check content length against security limits
+                if content_length > security_config.max_content_length {
+                    return Err(ServerError::ValidationError(format!(
+                        "Content length {} exceeds maximum allowed {}",
+                        content_length, security_config.max_content_length
+                    )));
+                }
             }
         } else if line_lower.starts_with("origin:") {
             if let Some(origin_str) = line.split(": ").nth(1) {
-                origin = Some(origin_str.trim().to_string());
+                let origin_trimmed = origin_str.trim();
+                // Limit origin header length
+                if origin_trimmed.len() > 200 {
+                    return Err(ServerError::ParseError(
+                        "Origin header too long".to_string(),
+                    ));
+                }
+                origin = Some(origin_trimmed.to_string());
             }
         }
     }
@@ -569,7 +718,7 @@ fn send_file_response_with_cors(
     Ok(())
 }
 
-// Improved form validation with detailed error reporting
+// Improved form validation with ReDoS-resistant email regex
 fn validate_form_data(form_data: &HashMap<String, String>) -> ServerResult<()> {
     let allowed_fields: HashSet<&str> = FIELD_CONSTRAINTS.iter().map(|c| c.name).collect();
 
@@ -588,20 +737,86 @@ fn validate_form_data(form_data: &HashMap<String, String>) -> ServerResult<()> {
 
     // Validate required fields and constraints
     let mut errors = Vec::new();
-    let email_regex = Regex::new(r"^[\w\.-]+@[\w\.-]+\.\w+$")
+
+    // ReDoS-resistant email regex - avoids catastrophic backtracking
+    let email_regex = Regex::new(r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$")
         .map_err(|e| ServerError::ParseError(format!("Invalid regex: {}", e)))?;
 
     for constraint in FIELD_CONSTRAINTS {
         match form_data.get(constraint.name) {
             Some(value) => {
+                // Check for null bytes and control characters
+                if value.contains('\0')
+                    || value
+                        .chars()
+                        .any(|c| c.is_control() && c != '\n' && c != '\r' && c != '\t')
+                {
+                    errors.push(format!("{} contains invalid characters", constraint.name));
+                    continue;
+                }
+
+                // Length validation
                 if value.len() > constraint.max_length {
                     errors.push(format!(
-                        "{} too long (max {} characters)",
-                        constraint.name, constraint.max_length
+                        "{} too long (max {} characters, got {})",
+                        constraint.name,
+                        constraint.max_length,
+                        value.len()
                     ));
                 }
-                if constraint.email && !email_regex.is_match(value) {
-                    errors.push("Invalid email format".to_string());
+
+                // Email specific validation
+                if constraint.email {
+                    // Additional length check for email before regex
+                    if value.len() > 254 {
+                        // RFC 5321 limit
+                        errors.push("Email address too long".to_string());
+                    } else if !email_regex.is_match(value) {
+                        errors.push("Invalid email format".to_string());
+                    }
+
+                    // Additional email security checks
+                    let local_domain: Vec<&str> = value.split('@').collect();
+                    if local_domain.len() == 2 {
+                        let local_part = local_domain[0];
+                        let domain_part = local_domain[1];
+
+                        if local_part.len() > 64 {
+                            // RFC 5321 local part limit
+                            errors.push("Email local part too long".to_string());
+                        }
+                        if domain_part.len() > 253 {
+                            // Domain length limit
+                            errors.push("Email domain too long".to_string());
+                        }
+                    }
+                }
+
+                // Content validation for message field
+                if constraint.name == "message" {
+                    // Check for suspicious patterns that might indicate spam
+                    let suspicious_patterns = [
+                        "http://",
+                        "https://",
+                        "www.",
+                        ".com",
+                        ".org",
+                        ".net",
+                        "<script",
+                        "<iframe",
+                        "javascript:",
+                        "data:",
+                    ];
+
+                    let value_lower = value.to_lowercase();
+                    let suspicious_count = suspicious_patterns
+                        .iter()
+                        .filter(|pattern| value_lower.contains(*pattern))
+                        .count();
+
+                    if suspicious_count > 2 {
+                        errors.push("Message contains suspicious content".to_string());
+                    }
                 }
             }
             None => {
@@ -621,6 +836,23 @@ fn validate_form_data(form_data: &HashMap<String, String>) -> ServerResult<()> {
         }
     }
 
+    // Additional security validations
+    let total_content_size: usize = form_data.values().map(|v| v.len()).sum();
+    if total_content_size > MAX_FORM_DATA_LENGTH {
+        // 10KB total form data limit
+        errors.push("Total form data too large".to_string());
+    }
+
+    // Check for potential XSS attempts in any field
+    for (field_name, value) in form_data {
+        if contains_potential_xss(value) {
+            errors.push(format!(
+                "Field '{}' contains potentially malicious content",
+                field_name
+            ));
+        }
+    }
+
     if !errors.is_empty() {
         return Err(ServerError::ValidationError(errors.join(", ")));
     }
@@ -628,14 +860,17 @@ fn validate_form_data(form_data: &HashMap<String, String>) -> ServerResult<()> {
     Ok(())
 }
 
-fn handle_post_request_with_cors(
+// FIXED: Secure POST request handler with proper email logic
+fn handle_post_request_secure(
     mut buf_reader: BufReader<&mut TcpStream>,
     content_length: usize,
     cors_config: &CorsConfig,
     origin: Option<&str>,
+    security_config: &SecurityConfig,
+    client_ip: &str,
 ) -> ServerResult<()> {
     if content_length == 0 {
-        send_html_response_with_cors(
+        send_html_response_with_cors_secure(
             &mut buf_reader,
             "Error",
             "No data received",
@@ -647,26 +882,17 @@ fn handle_post_request_with_cors(
         return Ok(());
     }
 
-    let mut body = vec![0; content_length];
-    buf_reader
-        .read_exact(&mut body)
-        .map_err(|e| ServerError::IoError(e))?;
-
-    let body_str = String::from_utf8_lossy(&body);
-    println!("POST data received from origin {:?}: {}", origin, body_str);
-
-    let form_data = if body_str.contains("Content-Disposition: form-data") {
-        parse_multipart_data(&body_str)
-    } else {
-        parse_form_data(&body_str)
-    };
-
-    // Validate form data
-    if let Err(e) = validate_form_data(&form_data) {
-        send_html_response_with_cors(
+    // Use security config limits
+    if content_length > security_config.max_content_length {
+        println!(
+            "🚫 Payload too large from {}: {}KB",
+            client_ip,
+            content_length / 1024
+        );
+        send_html_response_with_cors_secure(
             &mut buf_reader,
             "Error",
-            &e.to_string(),
+            "Payload too large",
             None,
             None,
             cors_config,
@@ -675,57 +901,154 @@ fn handle_post_request_with_cors(
         return Ok(());
     }
 
-    for (key, value) in &form_data {
-        println!("Field '{}': '{}'", key, value);
-    }
+    // CRITICAL: Validate content_length before allocating memory
+    let mut body = vec![0; content_length];
+    buf_reader.read_exact(&mut body).map_err(|e| {
+        eprintln!("🚫 Failed to read POST body from {}: {}", client_ip, e);
+        ServerError::IoError(e)
+    })?;
 
-    let name = form_data.get("name").cloned();
-    let email = form_data.get("email").cloned();
+    let body_str = String::from_utf8_lossy(&body);
+    println!("📧 POST data received from {} ({}B)", client_ip, body.len());
 
-    send_html_response_with_cors(
-        &mut buf_reader,
-        "Success",
-        "Form submitted successfully",
-        name.as_deref(),
-        email.as_deref(),
-        cors_config,
-        origin,
-    )?;
+    let form_data = if body_str.contains("Content-Disposition: form-data") {
+        parse_multipart_data(&body_str)
+    } else {
+        parse_form_data(&body_str)
+    };
 
-    // Try Sending and Testing Emails
-    if let Some(email_addr) = &email {
-        let user_name = name.as_deref().unwrap_or("Dear Friend");
-        let user_message = form_data
-            .get("message")
-            .map(|s| s.as_str())
-            .unwrap_or("Your form submission");
+    // CRITICAL: Validate form data BEFORE proceeding
+    match validate_form_data(&form_data) {
+        Ok(()) => {
+            println!("✅ Form validation passed for {}", client_ip);
 
-        let subject = "Thank you for contacting me!";
-
-        // Generate HTML email
-        let html_body = generate_email_html(user_name, user_message);
-
-        // Fallback plain text version
-        let plain_text_body = format!(
-        "Hello {},\n\nThank you for your submission! I received your message and will attend to your queries shortly.\n\nYour message: {}\n\nBest regards,\nNonso Martin",
-        user_name, user_message
-    );
-
-        // Send HTML email with plain text fallback
-        if let Err(e) = send_html_email(email_addr, subject, &html_body, Some(&plain_text_body)) {
-            eprintln!("Warning: Failed to send HTML email: {}", e);
-
-            // Fallback to plain text if HTML email fails
-            if let Err(e2) = send_email(email_addr, subject, &plain_text_body) {
-                eprintln!("Warning: Failed to send fallback plain text email: {}", e2);
+            // Log sanitized form data (don't log sensitive info)
+            for (key, value) in &form_data {
+                if key == "email" {
+                    println!("📧 Field '{}': '***@***'", key);
+                } else if key == "message" {
+                    println!(
+                        "📝 Field '{}': '{}' ({}chars)",
+                        key,
+                        &value.chars().take(50).collect::<String>(),
+                        value.len()
+                    );
+                } else {
+                    println!("📄 Field '{}': '{}'", key, value);
+                }
             }
+
+            let name = form_data.get("name").cloned();
+            let email = form_data.get("email").cloned();
+
+            // FIXED: Send email ONLY after successful validation
+            let email_sent = if let Some(email_addr) = &email {
+                send_confirmation_email(&form_data, email_addr, client_ip)
+            } else {
+                false
+            };
+
+            // Send success response
+            send_html_response_with_cors_secure(
+                &mut buf_reader,
+                "Success",
+                if email_sent {
+                    "Form submitted successfully and confirmation email sent!"
+                } else {
+                    "Form submitted successfully!"
+                },
+                name.as_deref(),
+                email.as_deref(),
+                cors_config,
+                origin,
+            )?;
+        }
+        Err(e) => {
+            println!("🚫 Form validation failed for {}: {}", client_ip, e);
+            send_html_response_with_cors_secure(
+                &mut buf_reader,
+                "Error",
+                &e.to_string(),
+                None,
+                None,
+                cors_config,
+                origin,
+            )?;
         }
     }
 
     Ok(())
 }
 
-fn send_html_response_with_cors(
+// Helper function for sending confirmation email
+fn send_confirmation_email(
+    form_data: &HashMap<String, String>,
+    email_addr: &str,
+    client_ip: &str,
+) -> bool {
+    let user_name = form_data
+        .get("name")
+        .map(|s| s.as_str())
+        .unwrap_or("Dear Friend");
+    let user_message = form_data
+        .get("message")
+        .map(|s| s.as_str())
+        .unwrap_or("Your form submission");
+
+    let subject = "Thank you for contacting me!";
+
+    // Sanitize email content
+    let email_addr = sanitize_email_content(email_addr);
+    let user_name = sanitize_email_content(user_name);
+    let user_message = sanitize_email_content(user_message);
+
+    // Generate HTML email
+    let html_body = generate_email_html(&user_name, &user_message);
+
+    // Fallback plain text version
+    let plain_text_body = format!(
+        "Hello {},\n\nThank you for your submission! I received your message and will attend to your queries shortly.\n\nYour message: {}\n\nBest regards,\nNonso Martin",
+        user_name, user_message
+    );
+
+    // Try to send HTML email with plain text fallback
+    match send_html_email(&email_addr, subject, &html_body, Some(&plain_text_body)) {
+        Ok(()) => {
+            println!(
+                "✅ Email sent successfully to {} from {}",
+                email_addr, client_ip
+            );
+            true
+        }
+        Err(e) => {
+            eprintln!(
+                "⚠️ Failed to send HTML email to {} from {}: {}",
+                email_addr, client_ip, e
+            );
+
+            // Fallback to plain text
+            match send_email(&email_addr, subject, &plain_text_body) {
+                Ok(()) => {
+                    println!(
+                        "✅ Fallback plain text email sent to {} from {}",
+                        email_addr, client_ip
+                    );
+                    true
+                }
+                Err(e2) => {
+                    eprintln!(
+                        "🚫 Failed to send any email to {} from {}: {}",
+                        email_addr, client_ip, e2
+                    );
+                    false
+                }
+            }
+        }
+    }
+}
+
+// Updated HTML response function with security
+fn send_html_response_with_cors_secure(
     buf_reader: &mut BufReader<&mut TcpStream>,
     status_type: &str,
     message: &str,
@@ -741,10 +1064,11 @@ fn send_html_response_with_cors(
         format!("{}\r\n", origin_header)
     };
 
+    // Use the secure HTML generation function
     let html_content = generate_response_html(status_type, message, name, email);
 
     let response = format!(
-        "HTTP/1.1 200 OK\r\nContent-Type: text/html\r\nContent-Length: {}\r\n{}\r\n{}",
+        "HTTP/1.1 200 OK\r\nContent-Type: text/html; charset=utf-8\r\nContent-Length: {}\r\nX-Content-Type-Options: nosniff\r\nX-Frame-Options: DENY\r\nX-XSS-Protection: 1; mode=block\r\n{}\r\n{}",
         html_content.len(),
         cors_headers,
         html_content
@@ -755,6 +1079,7 @@ fn send_html_response_with_cors(
     Ok(())
 }
 
+// Fixed generate_response_html function with HTML escaping
 fn generate_response_html(
     status_type: &str,
     message: &str,
@@ -763,8 +1088,10 @@ fn generate_response_html(
 ) -> String {
     let (title, heading, content) = match status_type {
         "Success" => {
-            let name_display = name.unwrap_or("Your name");
-            let email_display = email.unwrap_or("your email");
+            // HTML escape user inputs
+            let name_display = html_escape(name.unwrap_or("Your name"));
+            let email_display = html_escape(email.unwrap_or("your email"));
+            // let message_escaped = html_escape(message);
 
             let thank_you_message = format!(
                 "Thank you <strong>{}</strong>! You will receive a message shortly to your designated email: <strong>{}</strong>",
@@ -780,9 +1107,9 @@ fn generate_response_html(
         "Error" => (
             "Form Submission Error",
             "🚫 Error",
-            format!("Sorry, there was an issue: {}", message),
+            format!("Sorry, there was an issue: {}", html_escape(message)),
         ),
-        _ => ("Form Response", "Response", message.to_string()),
+        _ => ("Form Response", "Response", html_escape(message)),
     };
 
     format!(
@@ -799,11 +1126,10 @@ fn generate_response_html(
     />
     <title>{}</title>
     <style>
-
         * {{
-        padding: 0;
-        margin: 0;
-        box-sizing: border-box;
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
         }}
 
         body {{
@@ -812,7 +1138,6 @@ fn generate_response_html(
             background-color: #222;
             color: white;
             min-height: 100vh;
-
             overflow: hidden;
             display: grid;
             place-content: center;
@@ -840,20 +1165,16 @@ fn generate_response_html(
             padding:2%;
             height: 50%;
             border-radius: 5px;
-
             font-size: 1.2rem;
             line-height: 1.5;
-
         }}
 
         .back-link {{
             display: inline-block;
             width: 40%;
             height: 15%;
-
             display: grid;
             place-content: center;
-
             background-color: #222;
             color: white;
             text-decoration: none;
@@ -874,12 +1195,12 @@ fn generate_response_html(
         }}
 
         @media screen and (max-width: 508px) {{
-        .container {{
-             width: 100vw !important;
-         }}
-         .back-link {{
-         width: 60%;
-         }}
+            .container {{
+                 width: 100vw !important;
+             }}
+             .back-link {{
+                 width: 60%;
+             }}
         }}
     </style>
 </head>
@@ -893,7 +1214,7 @@ fn generate_response_html(
     </div>
 </body>
 </html>"#,
-        title,
+        html_escape(title),
         heading,
         if status_type == "Success" {
             "success"

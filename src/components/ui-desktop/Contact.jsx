@@ -1,14 +1,21 @@
 // import { useEffect, useState } from "react";
 
-//Which server should i use Rust or Nodejs ? i enjoy both :D
+import { useRef } from "react";
+
+// use express for dev and rust for prod
 
 // initialize a dummy get request to your server to wake it up
 // currently on a free instance
 
+// form can be edited using dev-tools make sure to handle that on the server
+
 export default function Contact({
   // formActionURL = "https://nox-hltl.onrender.com",
+  // formActionURL = "http://127.0.0.1:3000/nox-form",
   formActionURL = "http://127.0.0.1:8080",
 }) {
+  const formEl = useRef(null);
+  const formSubmitterEl = useRef(null);
   // const [status, setStatus] = useState(false); // your cloud server
 
   // const getCloudServerStatus = useEffect(() => {
@@ -17,19 +24,42 @@ export default function Contact({
   //     .catch((error) => console.warn(error));
   // }, []);
 
-  function handleInputName({ target }) {
-    const maxNameLength = target?.maxLength ?? 40;
-    let remaining = maxNameLength - target?.value.length;
+  /* My Sever handles most of the validations and security checks */
 
-    console.log(remaining);
+  function checkLenght(e) {
+    const max = 1900;
+    let r = max - e.target.value.length;
+    console.log(r);
   }
-  function handleInputEmail() {
-    // const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    //  emailRegex.test(email);
-  }
-  function handleInputMessage() {}
 
-  function handleFormSubmit() {}
+  function handleFormSubmit(e) {
+    // e.preventDefault();
+    const formData = new FormData(formEl.current, formSubmitterEl.current);
+    // formData.set("email", 300); // causes an error in rust server
+
+    // convert formData to urlencoded for express
+    const params = new URLSearchParams();
+    for (const [key, value] of formData) {
+      params.append(key, value);
+    }
+    console.log(params.toString());
+
+    const req = new Request(formActionURL, {
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      method: "POST",
+      body: params,
+    });
+
+    fetch(req)
+      .then((res) => {
+        if (!res.ok) console.error("Could not POST  FormData");
+        return res.text();
+      })
+      .then((data) => console.log(data))
+      .catch((error) => console.warn(`an error occured: ${error}`));
+  }
 
   return (
     <div className="contact flex column between ">
@@ -43,6 +73,8 @@ export default function Contact({
           action={formActionURL}
           id="nox-form"
           className="flex column evenly "
+          ref={formEl}
+          onSubmit={handleFormSubmit}
         >
           <div className=" input-text ">
             <label htmlFor="noxName"></label>
@@ -53,9 +85,8 @@ export default function Contact({
               placeholder="your name"
               required
               autoComplete="on"
-              maxLength={40}
+              maxLength={100}
               minLength={2}
-              onInput={handleInputName}
             />
           </div>
           <div className=" input-text ">
@@ -67,7 +98,7 @@ export default function Contact({
               placeholder="your@email.todo"
               required
               autoComplete="on"
-              maxLength={80}
+              maxLength={250}
             />
           </div>
           <div className=" input-area ">
@@ -82,7 +113,8 @@ export default function Contact({
               wrap="hard"
               required
               minLength={2}
-              maxLength={2000}
+              maxLength={1900}
+              // onInput={checkLenght}
             ></textarea>
           </div>
           <div className=" input-checkbox ">
@@ -108,7 +140,7 @@ export default function Contact({
             </fieldset>
           </div>
           <div className="input-button flex center ">
-            <button title="submit" type="submit">
+            <button title="submit" type="submit" ref={formSubmitterEl}>
               Let's Go!
             </button>
           </div>

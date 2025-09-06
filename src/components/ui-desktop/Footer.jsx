@@ -89,17 +89,30 @@ export default function Footer() {
               <Xlogo />
             </a>
             <a
-              href="#"
+              href="https://www.linkedin.com/in/nonso-martin-80b221238"
               aria-label="Connect with me on LinkedIn"
+              target="_blank"
               className="icon dark"
               style={{ "--i": 2 }}
             >
               <LinkedInLogo />
             </a>
-            <a href="#" aria-label="Hire me on Upwork" className="icon dark" style={{ "--i": 3 }}>
+            <a
+              href="#"
+              aria-label="Hire me on Upwork"
+              target="_blank"
+              className="icon dark"
+              style={{ "--i": 3 }}
+            >
               <UpworkLogo />
             </a>
-            <a href="#" aria-label="Browse my Youtube contents" className="icon dark" style={{ "--i": 4 }}>
+            <a
+              href="https://youtube.com/@nox_lab"
+              aria-label="Browse my Youtube contents"
+              target="_blank"
+              className="icon dark"
+              style={{ "--i": 4 }}
+            >
               <YTlgo />
             </a>
           </div>
