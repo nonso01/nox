@@ -48,7 +48,7 @@ const footerChatContent = [
 
 export default function Footer() {
   return (
-    <div className="d-footer flex column evenly ">
+    <div className="d-footer flex column evenly limit-screen-large">
       <div className="footer-content" id="contact">
         <div className="footer-content-words flex column between  ">
           <div className="footer-word flex column between ">

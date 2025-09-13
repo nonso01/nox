@@ -6,7 +6,7 @@ const MobileApp = lazy(() => import("./components/MobileApp"));
 const DesktopApp = lazy(() => import("./components/DesktopApp"));
 
 function App() {
-  const mobileQuery = window.matchMedia("(max-width: 768px)");
+  const mobileQuery = window.matchMedia("(width <= 850px)");
   const [isMobile, setIsMobile] = useState(mobileQuery.matches);
 
   mobileQuery.addEventListener("change", (event) => {

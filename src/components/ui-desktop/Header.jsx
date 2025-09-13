@@ -12,7 +12,7 @@ import Logo from "../../assets/images/favicon.png";
 
 export default function Header() {
   return (
-    <header className="d-header flex column between " id="home">
+    <header className="d-header flex column between limit-screen-large" id="home">
       <nav className="d-nav flex between ">
         <div className=" links flex evenly ">
           <span title="home">

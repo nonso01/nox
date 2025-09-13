@@ -7,7 +7,7 @@ const TData = [
     image: "https://avatars.githubusercontent.com/u/156743576?v=4",
     rating: 4,
     testimonial:
-      "Martin's web development skills and Blender animations made our software interface both functional and visually stunning, saving us hours of design work.",
+      "The project was delivered ahead of schedule and the code quality exceeded our expectations. Collaboration was smooth and communication was always clear.",
   },
   {
     name: "Maxim Kirby",
@@ -15,7 +15,7 @@ const TData = [
     image: "https://avatars.githubusercontent.com/u/132941561?v=4",
     rating: 4,
     testimonial:
-      "Martin's video edits and 3D models brought our ML data visualizations to life, enhancing our presentations with a 25% better audience response.",
+      "Our data visualizations became much more engaging after integrating the 3D models and Blender animations. The technical support throughout was excellent.",
   },
   {
     name: "S. Shahriar",
@@ -23,7 +23,7 @@ const TData = [
     image: "https://avatars.githubusercontent.com/u/79012744?v=4",
     rating: 3,
     testimonial:
-      "Martin's web and video work was decent, but the Blender designs needed more polish to meet our scientific standards.",
+      "The web platform was functional and reliable, though a bit more attention to scientific detail would have made it perfect for our research needs.",
   },
   {
     name: "Catherine Mitagvaria",
@@ -31,23 +31,23 @@ const TData = [
     image: "https://avatars.githubusercontent.com/u/63928803?v=4",
     rating: 5,
     testimonial:
-      "Martin's seamless web integration, Blender creativity, and video editing elevated our frontend to perfection—our users love it!",
+      "UI/UX improvements were spot on, and the responsiveness across devices was impressive. Our users noticed the difference immediately.",
   },
   {
     name: "Eduardo Robles",
-    role: "system Admin",
+    role: "System Admin",
     image: "https://avatars.githubusercontent.com/u/8143735?v=4",
     rating: 4,
     testimonial:
-      "Martin's video tutorials and web tools streamlined our system training, making my job as an admin much easier.",
+      "Setup and deployment were straightforward, and the documentation made ongoing maintenance a breeze.",
   },
   {
     name: "Joshua Mo",
-    role: "DevRel Engineer ",
+    role: "DevRel Engineer",
     image: "https://avatars.githubusercontent.com/u/102877324?v=4",
     rating: 4,
     testimonial:
-      "Martin's engaging videos and Blender demos boosted our dev community's interest, doubling our event turnout.",
+      "The video tutorials provided were clear and concise, making it easy for our developer community to get started quickly.",
   },
   {
     name: "Charles Chrismann",
@@ -55,7 +55,7 @@ const TData = [
     image: "https://avatars.githubusercontent.com/u/78157563?v=4",
     rating: 3,
     testimonial:
-      "Martin a créé un site web et des vidéos corrects, mais ses animations Blender pourraient être améliorées avec plus de détails.",
+      "Le site web était bien conçu et facile à utiliser. Quelques animations supplémentaires auraient été appréciées.",
   },
   {
     name: "Cyro Cunha",
@@ -63,7 +63,7 @@ const TData = [
     image: "https://avatars.githubusercontent.com/u/61237292?v=4",
     rating: 5,
     testimonial:
-      "Martin's web expertise, Blender mastery, and video skills turned our app into a standout success—truly exceptional work!",
+      "Problem-solving skills and attention to detail stood out throughout the project. Would definitely collaborate again.",
   },
 ];
 

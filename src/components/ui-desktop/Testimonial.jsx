@@ -2,7 +2,7 @@ import { TestimonialCard , TData} from "../ui-shared/TestimonialCard";
 
 export default function Testimonial() {
   return (
-    <section className="d-testimonial flex column evenly">
+    <section className="d-testimonial flex column evenly limit-screen-large">
       <div className="words flex column evenly ">
         <p className="large">Testimonials that</p>
         <p className="large">

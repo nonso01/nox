@@ -39,7 +39,7 @@ function Projects() {
 
 export default function Service() {
   return (
-    <section className="d-service flex column evenly" id="service">
+    <section className="d-service flex column evenly limit-screen-large" id="service">
       <div className="service-info flex between">
         <div>
           <p>
