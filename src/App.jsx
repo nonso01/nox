@@ -1,24 +1,25 @@
-// import MobileApp from "./components/MobileApp";
-// import DesktopApp from "./components/DesktopApp";
-import { useState, lazy } from "react";
+import { useEffect, useState, lazy } from "react";
 
 const MobileApp = lazy(() => import("./components/MobileApp"));
 const DesktopApp = lazy(() => import("./components/DesktopApp"));
 
+const mobileQuery = window.matchMedia("(width <= 850px)");
+
 function App() {
-  const mobileQuery = window.matchMedia("(width <= 850px)");
   const [isMobile, setIsMobile] = useState(mobileQuery.matches);
+  const [connected, setConnected] = useState(true); // start true to stop animation
 
-  mobileQuery.addEventListener("change", (event) => {
-    setIsMobile((m) => event.matches);
-    // console.log(event.matches);
-  });
+  useEffect(() => {
+    const handler = (event) => setIsMobile(c => event.matches);
 
-  const [connected, setConnected] = useState(!false);
-  // set back to true to stop animation
+    mobileQuery.addEventListener("change", handler);
 
-  // Simulate a delay for connection, this state
-  // is updated in the Connecting Component
+    // cleanup to avoid memory leaks
+    return () => {
+      mobileQuery.removeEventListener("change", handler);
+    };
+  }, []);
+
   function handleSetConnected(c) {
     setConnected(c);
   }
@@ -27,13 +28,10 @@ function App() {
     return (
       <MobileApp connected={connected} onSetConnected={handleSetConnected} />
     );
-  } else if (!isMobile) {
-    return (
-      <DesktopApp connected={connected} onSetConnected={handleSetConnected} />
-    );
-  } else {
-    return <h1>An error occured!, Please refresh</h1>;
   }
+  return (
+    <DesktopApp connected={connected} onSetConnected={handleSetConnected} />
+  );
 }
 
 export default App;

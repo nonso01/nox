@@ -1,5 +1,4 @@
-import { useState } from "react";
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
 
 const strokeColor = "#34db69";
 const strokeColorDark = "#222222";
@@ -672,27 +671,35 @@ export function MobileMenu({ fill = "#fff", setState }) {
   const positionsNumber = 4;
   const menuRef = useRef(null);
 
-  useState(() => {
-    return (menuRef.current = null);
-  }, []);
+  useEffect(() => {
+    const el = menuRef.current;
+    if (!el) return;
+
+    const handleClick = () => {
+      position = (position + 1) % positionsNumber;
+      el.dataset.position = position;
+      // console.log("position", position);
+
+      if (typeof setState === "function") {
+        setState((p) => !p);
+        // console.log("clicked");
+      }
+    };
+
+    el.addEventListener("click", handleClick);
+    return () => el.removeEventListener("click", handleClick);
+  }, [menuRef, setState]);
 
   return (
     <div
       className="menu"
       title="menu"
       ref={menuRef}
-      onClick={() => {
-        position = (position + 1) % positionsNumber;
-        menuRef.current.dataset.position = position;
-        console.log(position);
-        try {
-          if (setState) {
-            setState((c) => !c);
-          }
-        } catch (error) {
-          console.warn(error);
-        }
-      }}
+      // onClick={() => {
+      //   position = (position + 1) % positionsNumber;
+      //   menuRef.current.dataset.position = position;
+      //   console.log(position);
+      // }}
     >
       <div className="menu__face menu__face--square menu__face--d1 menu__face--hamburger">
         <svg

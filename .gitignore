@@ -26,6 +26,8 @@ dist-ssr
 example.md
 old-image
 
+*.yaml
+
 # work on the server
 server
 

@@ -10,9 +10,9 @@ import { useRef } from "react";
 // form can be edited using dev-tools make sure to handle that on the server
 
 export default function Contact({
-  formActionURL = "https://nox-hltl.onrender.com",
+  // formActionURL = "https://nox-hltl.onrender.com",
   // formActionURL = "http://127.0.0.1:3000/nox-form",
-  // formActionURL = "http://127.0.0.1:8080",
+  formActionURL = "http://127.0.0.1:8080",
 }) {
   const formEl = useRef(null);
   const formSubmitterEl = useRef(null);
@@ -35,26 +35,26 @@ export default function Contact({
   function handleFormSubmit(e) {
     // e.preventDefault();
     const formData = new FormData(formEl.current, formSubmitterEl.current);
-    // formData.set("email", 300); // causes an error in rust server
 
     // convert formData to urlencoded for express
-    const params = new URLSearchParams();
-    for (const [key, value] of formData) {
-      params.append(key, value);
-    }
-    console.log(params.toString());
+    // const params = new URLSearchParams();
+    // for (const [key, value] of formData) {
+    //   params.append(key, value);
+    // }
+    // console.log(params.toString());
 
     const req = new Request(formActionURL, {
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-      },
+      // headers: {
+      //   "Content-Type": "application/x-www-form-urlencoded",
+      // },
       method: "POST",
-      body: params,
+      body: formData,
     });
 
     fetch(req)
       .then((res) => {
         if (!res.ok) console.error("Could not POST  FormData");
+        console.log(res.status)
         return res.text();
       })
       .then((data) => console.log(data))
@@ -71,10 +71,11 @@ export default function Contact({
         <form
           method="POST"
           action={formActionURL}
+          encType="multipart/form-data"
           id="nox-form"
           className="flex column evenly "
           ref={formEl}
-          // onSubmit={handleFormSubmit}
+          onSubmit={handleFormSubmit}
         >
           <div className=" input-text ">
             <label htmlFor="noxName"></label>
