@@ -349,7 +349,7 @@ export function ConnectSVG() {
             fill={strokeColor}
             fontSize={32}
             fontWeight={500}
-            className="text-effect orbitron"
+            className="font-orbitron"
           >
             000
           </text>

@@ -246,10 +246,10 @@ fieldset {
 }
 
 .text-effect {
-  &.orbitron,
+  /* &.orbitron,
   &.orbitron * {
     font-family: "Orbitron", sans-serif;
-  }
+  } */
 
   &.gradient-white {
     color: transparent !important;
@@ -304,7 +304,7 @@ fieldset {
   }
 }
 
-.debbug,
+.debug,
 .bd {
   border: 2px solid red;
 }
@@ -437,9 +437,9 @@ fieldset {
           font-size: 2rem;
           font-weight: bold;
           margin-block: 2rem;
-          span {
+          /* span {
             font-family: "Orbitron";
-          }
+          } */
         }
 
         .p-ex {
@@ -478,7 +478,7 @@ fieldset {
 
     @media (width >= 1280px) and (width <= 1444px) {
       /* border-color: pink; */
-      padding: 15px 70px;
+      padding: 15px 30px;
     }
 
     @media (width >= 1020px) and (width <= 1280px) {
@@ -500,15 +500,15 @@ fieldset {
 
     .service-info {
       height: 6.25rem;
-      padding-bottom: 1rem;
+      padding-bottom: var(--size-1);
       border-bottom: 2px solid var(--sc);
 
       div {
-        width: 30%;
+        width: 33%;
       }
 
       div:nth-child(1) p {
-        font-size: 3.5rem;
+        font-size: clamp(3rem, 5vw, 3.5rem);
         font-weight: 500;
 
         span {
@@ -518,7 +518,7 @@ fieldset {
 
       div:nth-child(2) p {
         font-size: 1.3rem;
-        line-height: 1.5;
+        line-height: 1.4;
       }
     }
 
@@ -527,18 +527,15 @@ fieldset {
 
       .card {
         width: 31.25rem;
-        /* height: 600px; */
         aspect-ratio: 1;
         align-self: center;
         background-color: var(--sc);
         border-radius: 3.75rem;
-        /* overflow: hidden; */
         box-shadow: 10px 10px 0px var(--scl);
 
         .card-main {
           width: max(92%, 28.75rem);
           height: max(92%, 28.75rem);
-          /* background-color: blue; */
           background-size: cover;
           background-repeat: no-repeat;
           border-radius: 50px;
@@ -556,7 +553,6 @@ fieldset {
           z-index: 5;
 
           p {
-            /* color: rgb(233, 233, 233); */
             font-size: 1.7rem;
             font-weight: 500;
             text-align: right;
@@ -612,11 +608,41 @@ fieldset {
             }
           }
           span:not(button span) {
-            font-family: "Orbitron", sans-serif;
+            /* font-family: "Orbitron", sans-serif; */
             font-size: 2rem;
             font-weight: 500;
           }
         }
+      }
+    }
+
+    @media (width >= 1280px) and (width <= 1444px) {
+      border-color: pink;
+      padding: 15px 30px;
+    }
+
+    @media (width >= 1020px) and (width <= 1280px) {
+      border-color: orange;
+      padding: var(--size-1);
+      height: 1800px;
+
+      .service-cards {
+        height: 90%;
+        flex-direction: column;
+        justify-content: space-evenly;
+      }
+    }
+
+    @media (width >= 850px) and (width <= 1020px) {
+      border-color: green;
+      padding: var(--size-half);
+
+      height: 1800px;
+
+      .service-cards {
+        height: 90%;
+        flex-direction: column;
+        justify-content: space-evenly;
       }
     }
   }
