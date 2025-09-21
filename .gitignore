@@ -37,3 +37,6 @@ server
 
 # rust files
 target
+
+# img files
+akaza_vs*

@@ -84,7 +84,7 @@ export default function Header() {
             <span className="font-orbitron">HELLO</span>
           </p>
           <h1 className="p-name">
-            I'm <span>Martin,</span>
+            I'm <span className="color-primary">Martin,</span>
             <p>Web Developer</p>
           </h1>
         </div>
@@ -109,7 +109,7 @@ export default function Header() {
               ))}
             </p>
             <p className="p-years">
-              <span>4</span> Years
+              <span className="font-orbitron">4</span> Years
             </p>
             <p className="p-ex">Expert</p>
           </div>

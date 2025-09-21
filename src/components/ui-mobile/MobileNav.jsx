@@ -9,7 +9,7 @@ export default function MobileNav({ batteryInfo }) {
   const [showMenu, setShowMenu] = useState((p) => false);
 
   return (
-    <nav className="m-nav flex between debbug">
+    <nav className="m-nav flex between debug">
       <MobileMenu setState={setShowMenu} />
       <div className="logo " title="Martin">
         <img
@@ -25,8 +25,7 @@ export default function MobileNav({ batteryInfo }) {
       </div>
       {/* list should be absolute*/}
       {showMenu ? (
-        <div className="menu-list debbug">
-          {/* <MobileMenu setState={setShowMenu} /> */}
+        <div className="menu-list debug">
           <XCircle
             onClick={(e) => {
               setShowMenu((p) => !p);

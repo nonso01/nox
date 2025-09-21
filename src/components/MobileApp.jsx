@@ -11,7 +11,7 @@ export default function MobileApp({ connected, onSetConnected }) {
 
   useEffect(() => {
     const _ = navigator.getBattery().then((battery) => {
-      console.log(battery);
+      // console.log(battery);
     });
   }, []);
 

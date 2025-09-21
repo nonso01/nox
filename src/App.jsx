@@ -7,7 +7,8 @@ const mobileQuery = window.matchMedia("(width <= 850px)");
 
 function App() {
   const [isMobile, setIsMobile] = useState(mobileQuery.matches);
-  const [connected, setConnected] = useState(true); // start true to stop animation
+  const [connected, setConnected] = useState(true); 
+  // start true to stop animation
 
   useEffect(() => {
     const handler = (event) => setIsMobile(c => event.matches);

@@ -39,8 +39,11 @@ function Projects() {
 
 export default function Service() {
   return (
-    <section className="d-service flex column evenly limit-screen-large" id="service">
-      <div className="service-info flex between">
+    <section
+      className="d-service flex column evenly limit-screen-large"
+      id="service"
+    >
+      <div className="service-info flex between ">
         <div>
           <p>
             My <span>Services</span>
@@ -53,7 +56,7 @@ export default function Service() {
           </p>
         </div>
       </div>
-      <div className="service-cards flex between ">
+      <div className="service-cards flex between">
         {cards.map(
           ({ title, fileNumber, video, bgUrl, subTitle, note, id }, _) => {
             return (
@@ -67,12 +70,12 @@ export default function Service() {
                   </div>
                   <div className="card-clip">
                     <div className="card-note">
-                      <h3>{subTitle}</h3>
+                      <h2 style={{ fontSize: "1.15rem" }}>{subTitle}</h2>
                       <p>{note}</p>
                     </div>
                     <div className="card-view flex between">
                       <p>
-                        <span>{fileNumber}</span>{" "}
+                        <span className="font-orbitron">{fileNumber}</span>
                         {fileNumber > 1 ? "Files" : "File"}
                       </p>
                       <button className="flex between pointer" data-id={id}>

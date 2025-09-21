@@ -578,6 +578,7 @@ export function FlyingMessagePath() {
           stroke="white"
           strokeWidth="5"
           strokeLinecap="round"
+          strokeOpacity={0.01}
         />
       </svg>
     </>

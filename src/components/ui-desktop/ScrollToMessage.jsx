@@ -10,23 +10,26 @@ import {
 } from "../ui-shared/UserFlow";
 
 export default function ScrollToMessage() {
+  
   return (
-    <section className="d-fly limit-screen-large debbug">
-      <div className="message-fly-cover flex center  debbug">
+    <section className="d-fly limit-screen-large ">
+      <div className="message-fly-cover flex center  ">
         <FlyingMessage />
       </div>
-      <div className="message-path-cover debbug">
+      <div className="message-path-cover ">
         {/* if message-fly-cover is inside here, it can move with the path */}
         <FlyingMessagePath />
       </div>
       {/* user-flow */}
-      <UserFlowOne />
-      <UserFlowTwo />
-      <UserFlowThree />
-      <UserFlowFour />
-      <UserFlowFive />
-      <UserFlowSix />
-      <UserFlowSeven />
+      <div>
+        <UserFlowOne />
+        <UserFlowTwo />
+        <UserFlowThree />
+        <UserFlowFour />
+        <UserFlowFive />
+        <UserFlowSix />
+        <UserFlowSeven />
+      </div>
     </section>
   );
 }

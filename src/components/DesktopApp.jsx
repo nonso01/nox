@@ -1,13 +1,3 @@
-// import Connecting from "./ui-shared/Connecting";
-// import Header from "./ui-desktop/Header";
-// import Service from "./ui-desktop/Service";
-// import Experience from "./ui-desktop/Experience";
-// import About from "./ui-desktop/About";
-// import MyRoom from "./ui-desktop/MyRoom";
-// import Testimonial from "./ui-desktop/Testimonial";
-// import ScrollToMessage from "./ui-desktop/ScrollToMessage";
-// import Footer from "./ui-desktop/Footer";
-
 import {
   createScope,
   createDraggable,
@@ -58,7 +48,7 @@ export default function DesktopApp({ connected, onSetConnected }) {
         const duration = 5000;
         const motionPath = svg.createMotionPath(".flying-message-path path");
 
-        // Animate the transforms properties of .car the motion path values
+        // Animate the transforms properties of .message the motion path values
         const a = animate(".d-fly .message-fly-cover", {
           ease: "linear",
           duration,
@@ -73,13 +63,13 @@ export default function DesktopApp({ connected, onSetConnected }) {
             leave: "bottom bottom",
             sync: 0.8,
             onEnter() {
-              console.log("entering");
+              // console.log("entering");
             },
             onLeave() {
-              console.log("leaving");
+              // console.log("leaving");
             },
             onUpdate() {
-              console.log("moving");
+              // console.log("moving");
             },
           }),
         });

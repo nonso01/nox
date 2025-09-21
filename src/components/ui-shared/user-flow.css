@@ -5,7 +5,10 @@
       border-color: green;
       border-width: 4px;
       margin-block: 5%;
-      height: 850px;
+      height: max(100dvh, 860px);
+      max-height: 860px;
+
+      scroll-snap-align: start;
 
       .description {
         border-color: orange;
