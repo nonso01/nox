@@ -5,10 +5,10 @@ import noxPspImage from "../../assets/images/nox-psp.webp";
 
 const cards = [
   {
-    title: "Video Editing For YouTube & Social Media",
+    title: "Video Editing & Image Manipulation",
     subTitle: "Editing",
-    note: "Video & Audio",
-    fileNumber: 1,
+    note: "Video & Photo",
+    fileNumber: 3,
     video: true,
     bgUrl: "",
     id: "video-editing",
@@ -25,7 +25,7 @@ const cards = [
   {
     title: "FullStack Websites & Landing Pages",
     subTitle: "Web Development",
-    note: "JS,Node.js,etc",
+    note: "JS,Node.js,amd Rust",
     fileNumber: 11,
     video: false,
     bgUrl: noxPspImage,

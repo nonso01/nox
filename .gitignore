@@ -25,10 +25,11 @@ dist-ssr
 
 example.md
 old-image
+*old.glb
 
 *.yaml
 
-# work on the server
+# no express server only rust
 server
 
 #n .env files

@@ -14,7 +14,7 @@ import house3D from "../../assets/3d-models/fornitures-house.glb";
 import brownPhotoStudioHdr from "../../assets/hdr/brown_photostudio_02_1k.hdr";
 
 const log = console.log;
-const BG_COLOR = 0x222222;
+const BG_COLOR = 0x101010;
 
 function Loader() {
   // const { progress } = useProgress();

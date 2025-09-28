@@ -89,7 +89,7 @@ export default function Footer() {
               <Xlogo />
             </a>
             <a
-              href="https://www.linkedin.com/in/nonso-martin-80b221238"
+              href="https://www.linkedin.com/in/nonso0x"
               aria-label="Connect with me on LinkedIn"
               target="_blank"
               className="icon dark"

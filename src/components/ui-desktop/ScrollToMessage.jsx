@@ -12,11 +12,11 @@ import {
 export default function ScrollToMessage() {
   
   return (
-    <section className="d-fly limit-screen-large ">
-      <div className="message-fly-cover flex center  ">
+    <section className="d-fly limit-screen-large debug">
+      <div className="message-fly-cover flex center  debug">
         <FlyingMessage />
       </div>
-      <div className="message-path-cover ">
+      <div className="message-path-cover debug">
         {/* if message-fly-cover is inside here, it can move with the path */}
         <FlyingMessagePath />
       </div>
