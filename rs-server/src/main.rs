@@ -39,7 +39,7 @@ impl SecurityConfig {
             max_content_length: MAX_CONTENT_LENGTH, // 50KB instead of 10KB
             max_connections: 100,
             connection_timeout: Duration::from_secs(30),
-            max_requests_per_hour: 100, // 10 requests per hour per IP
+            max_requests_per_hour: 100, // 100 requests per hour per IP
             enable_rate_limiting: true,
         }
     }
