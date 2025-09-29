@@ -48,7 +48,7 @@ const footerChatContent = [
 
 export default function Footer() {
   return (
-    <div className="d-footer flex column evenly limit-screen-large">
+    <footer className="d-footer flex column evenly limit-screen-large">
       <div className="footer-content" id="contact">
         <div className="footer-content-words flex column between  ">
           <div className="footer-word flex column between ">
@@ -98,7 +98,7 @@ export default function Footer() {
               <LinkedInLogo />
             </a>
             <a
-              href="#"
+              href="https://www.upwork.com/freelancers/~010b982b82d6d28d24?mp_source=share"
               aria-label="Hire me on Upwork"
               target="_blank"
               className="icon dark"
@@ -126,6 +126,6 @@ export default function Footer() {
           All CopyRight &copy; Reserved - {new Date().getUTCFullYear()}
         </span>
       </div>
-    </div>
+    </footer>
   );
 }
