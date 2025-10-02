@@ -1,9 +1,9 @@
 import { MessageCircle, Crown, PhoneCall } from "lucide-react";
 import {
   Xlogo,
-  YTlgo,
+  // YTlgo,
   UpworkLogo,
-  // TGlogo,
+  GithubLogo,
   LinkedInLogo,
 } from "../ui-shared/Svgs";
 import Contact from "./Contact";
@@ -107,13 +107,19 @@ export default function Footer() {
               <UpworkLogo />
             </a>
             <a
-              href="https://youtube.com/@nox_lab"
-              aria-label="Browse my Youtube contents"
+              // href="https://youtube.com/@nox_lab"
+              // aria-label="Browse my Youtube contents"
+              // target="_blank"
+              // className="icon dark"
+              // style={{ "--i": 4 }}
+              href="https://github.com/nonso01"
+              aria-label="Check out my github"
               target="_blank"
               className="icon dark"
               style={{ "--i": 4 }}
             >
-              <YTlgo />
+              {/* <YTlgo /> */}
+              <GithubLogo />
             </a>
           </div>
         </div>
