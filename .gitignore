@@ -34,7 +34,7 @@ server
 
 #n .env files
 .env
-.env.local
+.env*
 
 # rust files
 target

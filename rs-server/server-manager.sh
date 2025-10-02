@@ -7,6 +7,13 @@ LOG_FILE="$PREFIX/tmp/$SERVER_NAME.log"
 BINARY_PATH="$SERVER_DIR/target/release/$SERVER_NAME"
 
 start_server() {
+  # Load environment variables safely
+    if [ -f "$SERVER_DIR/.env" ]; then
+         set -o allexport
+         source "$SERVER_DIR/.env"
+         set +o allexport
+    fi
+
     if [ -f "$PID_FILE" ]; then
         if kill -0 $(cat "$PID_FILE") 2>/dev/null; then
             echo "Server is already running (PID: $(cat "$PID_FILE"))"
