@@ -325,13 +325,15 @@ fn handle_api_status(
     cors_config: &CorsConfig,
     origin: Option<&str>,
 ) -> ServerResult<()> {
-    let json_response = r#"{"status":"healthy","version":"1.0.0","timestamp":""#.to_string()
-        + &std::time::SystemTime::now()
-            .duration_since(std::time::UNIX_EPOCH)
-            .unwrap()
-            .as_secs()
-            .to_string()
-        + r#"}"#;
+    let timestamp = std::time::SystemTime::now()
+        .duration_since(std::time::UNIX_EPOCH)
+        .unwrap()
+        .as_secs();
+
+    let json_response = format!(
+        r#"{{"status":"healthy","version":"1.0.0","timestamp":{:?}}}"#,
+        timestamp
+    );
 
     let origin_header = get_cors_origin_header(cors_config, origin);
 
