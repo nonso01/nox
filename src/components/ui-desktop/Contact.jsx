@@ -1,30 +1,11 @@
-// import { useEffect, useState } from "react";
-
 import { useRef } from "react";
 
-// use express for dev and rust for prod
-
-// initialize a dummy get request to your server to wake it up
-// currently on a free instance
-
-// form can be edited using dev-tools make sure to handle that on the server
-
 export default function Contact({
-  formActionURL = "https://devastatingly-unthrowable-keaton.ngrok-free.dev/",
-  // formActionURL = "http://127.0.0.1:3000/nox-form",
-  // formActionURL = "http://127.0.0.1:8080",
+  formActionURL = "https://devastatingly-unthrowable-keaton.ngrok-free.dev/contact",
+  // formActionURL = "http://127.0.0.1:8080/contact",
 }) {
   const formEl = useRef(null);
   const formSubmitterEl = useRef(null);
-  // const [status, setStatus] = useState(false); // your cloud server
-
-  // const getCloudServerStatus = useEffect(() => {
-  //   let f = fetch("https://nox-hltl.onrender.com")
-  //     .then((res) => console.log(res.status))
-  //     .catch((error) => console.warn(error));
-  // }, []);
-
-  /* My Sever handles most of the validations and security checks */
 
   function checkLenght(e) {
     const max = 1900;
@@ -36,29 +17,19 @@ export default function Contact({
     // e.preventDefault();
     const formData = new FormData(formEl.current, formSubmitterEl.current);
 
-    // convert formData to urlencoded for express
-    // const params = new URLSearchParams();
-    // for (const [key, value] of formData) {
-    //   params.append(key, value);
-    // }
-    // console.log(params.toString());
-
     const req = new Request(formActionURL, {
-      // headers: {
-      //   "Content-Type": "application/x-www-form-urlencoded",
-      // },
       method: "POST",
       body: formData,
     });
 
     fetch(req)
       .then((res) => {
-        if (!res.ok) console.error("Could not POST  FormData");
-        console.log(res.status)
+        if (!res.ok) console.warn("Could not POST  FormData");
+        console.log(res.status);
         return res.text();
       })
       .then((data) => console.log(data))
-      .catch((error) => console.warn(`an error occured: ${error}`));
+      .catch((error) => console.warn(`An error occured: ${error}`));
   }
 
   return (
@@ -73,11 +44,11 @@ export default function Contact({
           action={formActionURL}
           encType="multipart/form-data"
           id="nox-form"
-          className="flex column evenly "
+          className="flex column evenly"
           ref={formEl}
           onSubmit={handleFormSubmit}
         >
-          <div className=" input-text ">
+          <div className=" input-text">
             <label htmlFor="noxName"></label>
             <input
               type="text"
@@ -90,7 +61,7 @@ export default function Contact({
               minLength={2}
             />
           </div>
-          <div className=" input-text ">
+          <div className=" input-text">
             <label htmlFor="noxEmail"></label>
             <input
               type="email"
@@ -118,7 +89,7 @@ export default function Contact({
               // onInput={checkLenght}
             ></textarea>
           </div>
-          <div className=" input-checkbox ">
+          <div className=" input-checkbox">
             <fieldset form="nox-form" className="flex column evenly">
               <legend>How can i help</legend>
               {/* no values should be set on the checkbox "check=on" is ok, if you decide otherwise then uodate your post handler */}
