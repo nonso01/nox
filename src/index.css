@@ -13,12 +13,13 @@
 :root {
   --font-sm: 0.9rem;
 
-  --pc: #34db69;
-  --pcl: #34db69b0;
-  --sc: #222;
-  --black: #101010;
-  --white: whitesmoke;
-  --scl: #0008;
+  --nox-primary-color: #34db69;
+  --nox-primary-color-light: #34db69b0;
+  --nox-secondary-color: #222;
+  --nox-danger-color: #e03a3a;
+  --nox-black: #101010;
+  --nox-white: whitesmoke;
+  --nox-secondary-color-light: #0008;
 
   --size-half: 0.5rem;
   --size-1: 1rem;
@@ -26,8 +27,8 @@
   --size-10p: 10%;
   /* --size-100p: 100%; */
 
-  --cursor: url("./assets/cursors/jujutsu-cursor-32.png") 5 5, auto;
-  --pointer: url("./assets/cursors/jujutsu-pointer-32.png") 5 5, pointer;
+  --cursor-image: url("./assets/cursors/jujutsu-cursor-32.png") 5 5, auto;
+  --pointer-image: url("./assets/cursors/jujutsu-pointer-32.png") 5 5, pointer;
 
   --ease: linear(
     0 0%,
@@ -74,11 +75,11 @@
 html,
 body {
   min-height: max(100dvh, 37.5rem);
-  background-color: var(--sc);
+  background-color: var(--nox-secondary-color);
   scrollbar-gutter: stable;
   scroll-behavior: smooth;
 
-  cursor: var(--cursor);
+  cursor: var(--cursor-image);
   overflow-x: hidden;
 
   #root,
@@ -120,7 +121,7 @@ a {
   color: inherit;
   transition-duration: 200ms;
   transition-timing-function: var(--ease);
-  cursor: var(--pointer);
+  cursor: var(--pointer-image);
 }
 
 button,
@@ -142,11 +143,11 @@ fieldset {
 }
 
 .color-primary {
-  color: var(--pc);
+  color: var(--nox-primary-color);
 }
 
 .color-secondary {
-  color: var(--sc);
+  color: var(--nox-secondary-color);
 }
 
 .pos-relative {
@@ -154,12 +155,12 @@ fieldset {
 }
 
 .pointer {
-  cursor: var(--pointer);
+  cursor: var(--pointer-image);
 }
 
 .icon {
-  --sc: #2e2e2eec;
-  /* --pc: #34db69ea; */
+  --nox-secondary-color: #2e2e2eec;
+  /* --nox-primary-color: #34db69ea; */
   width: 50px;
   height: 50px;
   display: grid;
@@ -171,43 +172,51 @@ fieldset {
   animation: rotateGradient calc(6s * var(--i, 1)) var(--ease) infinite;
 
   &.dark {
-    border: 2px solid var(--sc);
-    background: linear-gradient(var(--angle), transparent 70%, var(--sc) 100%);
+    border: 2px solid var(--nox-secondary-color);
+    background: linear-gradient(
+      var(--angle),
+      transparent 70%,
+      var(--nox-secondary-color) 100%
+    );
 
     &:hover {
-      border-color: var(--pc);
+      border-color: var(--nox-primary-color);
       background: linear-gradient(
         var(--angle),
         transparent 70%,
-        var(--pc) 100%
+        var(--nox-primary-color) 100%
       );
       svg {
-        stroke: var(--pc);
+        stroke: var(--nox-primary-color);
       }
     }
   }
 
   &.light {
-    border: 2px solid var(--pc);
-    background: linear-gradient(var(--angle), transparent 70%, var(--pc) 100%);
+    border: 2px solid var(--nox-primary-color);
+    background: linear-gradient(
+      var(--angle),
+      transparent 70%,
+      var(--nox-primary-color) 100%
+    );
 
     &:hover {
-      border-color: var(--sc);
+      border-color: var(--nox-secondary-color);
       background: linear-gradient(
         var(--angle),
         transparent 70%,
-        var(--sc) 100%
+        var(--nox-secondary-color) 100%
       );
       svg {
-        stroke: var(--sc);
+        stroke: var(--nox-secondary-color);
       }
     }
   }
 }
 
 .lucide-star {
-  stroke: var(--pc);
-  fill: var(--pc);
+  stroke: var(--nox-primary-color);
+  fill: var(--nox-primary-color);
 }
 
 /* scroll bar styles */
@@ -231,7 +240,7 @@ fieldset {
 
 ::-webkit-scrollbar-thumb:hover {
   transition-duration: 200ms;
-  background-color: var(--pc);
+  background-color: var(--nox-primary-color);
 }
 
 .flex {
@@ -264,14 +273,21 @@ fieldset {
     -webkit-background-clip: text;
     -moz-background-clip: text;
     background-clip: text;
-    background-image: linear-gradient(var(--angle), white 40%, var(--scl) 60%);
+    background-image: linear-gradient(
+      var(--angle),
+      white 40%,
+      var(--nox-secondary-color-light) 60%
+    );
   }
 
   &.gradient-green {
     color: transparent !important;
     -webkit-background-clip: text;
     background-clip: text;
-    background-image: linear-gradient(var(--pc) 60%, transparent);
+    background-image: linear-gradient(
+      var(--nox-primary-color) 60%,
+      transparent
+    );
   }
 
   &.animate {
@@ -317,8 +333,8 @@ fieldset {
 
 /* Spin */
 .spinner {
-  border: 4px solid var(--sc);
-  border-left-color: var(--pc);
+  border: 4px solid var(--nox-secondary-color);
+  border-left-color: var(--nox-primary-color);
   border-radius: calc(5 * var(--size-10p));
   width: calc(var(--size-1) * 2.5);
   height: calc(var(--size-1) * 2.5);
@@ -335,7 +351,7 @@ fieldset {
   height: 100dvh;
   position: relative;
   z-index: 1;
-  background-color: var(--sc);
+  background-color: var(--nox-secondary-color);
 
   svg {
     * {
@@ -363,7 +379,7 @@ fieldset {
       /* font-size: 1.1rem; */
       font-weight: bolder;
       &:hover {
-        color: var(--pc);
+        color: var(--nox-primary-color);
       }
     }
 
@@ -373,7 +389,7 @@ fieldset {
       z-index: 5;
 
       a.home-link {
-        color: var(--pc);
+        color: var(--nox-primary-color);
       }
 
       .logo {
@@ -387,7 +403,7 @@ fieldset {
       .links {
         width: calc(3.5 * var(--size-10p));
         align-items: center;
-        background-color: var(--black);
+        background-color: var(--nox-black);
         border-radius: 1.25rem;
         position: relative;
         z-index: inherit;
@@ -417,7 +433,7 @@ fieldset {
           font-weight: bold;
 
           /* span {
-            color: var(--pc);
+            color: var(--nox-primary-color);
           } */
         }
       }
@@ -478,7 +494,7 @@ fieldset {
         align-self: center;
 
         p {
-          color: var(--pc);
+          color: var(--nox-primary-color);
           width: 45%;
           align-self: center;
           height: calc(var(--size-1) * 5);
@@ -486,10 +502,10 @@ fieldset {
           font-size: 1.5rem;
           font-weight: bold;
           gap: 0.625rem;
-          cursor: var(--pointer);
+          cursor: var(--pointer-image);
           .lucide {
-            color: var(--pc);
-            stroke: var(--pcl);
+            color: var(--nox-primary-color);
+            stroke: var(--nox-primary-color-light);
             border: 2px solid currentColor;
             border-radius: 50%;
           }
@@ -516,13 +532,13 @@ fieldset {
   .d-service {
     height: 51.875rem;
     padding: 1.875rem 8.125rem;
-    background-color: var(--black);
+    background-color: var(--nox-black);
     /* border-radius: 50px; */
 
     .service-info {
       height: 6.25rem;
       padding-bottom: var(--size-1);
-      border-bottom: 2px solid var(--sc);
+      border-bottom: 2px solid var(--nox-secondary-color);
 
       div {
         width: 33%;
@@ -533,7 +549,7 @@ fieldset {
         font-weight: 500;
 
         span {
-          color: var(--pc);
+          color: var(--nox-primary-color);
         }
       }
 
@@ -550,9 +566,9 @@ fieldset {
         width: 31.25rem;
         aspect-ratio: 1;
         align-self: center;
-        background-color: var(--sc);
+        background-color: var(--nox-secondary-color);
         border-radius: 3.75rem;
-        box-shadow: 10px 10px 0px var(--scl);
+        box-shadow: 10px 10px 0px var(--nox-secondary-color-light);
 
         .card-main {
           width: max(92%, 28.75rem);
@@ -584,7 +600,7 @@ fieldset {
         .card-clip {
           width: 28.75rem;
           height: 20rem;
-          background-color: var(--black);
+          background-color: var(--nox-black);
           position: absolute;
           z-index: 5;
           bottom: -1px;
@@ -625,7 +641,7 @@ fieldset {
               border-radius: 50%;
             }
             &:hover * {
-              color: var(--pc);
+              color: var(--nox-primary-color);
             }
           }
           span:not(button span) {
@@ -757,7 +773,7 @@ fieldset {
   .d-testimonial {
     height: 830px;
     padding: 30px 0px;
-    background-color: var(--black);
+    background-color: var(--nox-black);
     position: relative;
 
     .words {
@@ -775,7 +791,7 @@ fieldset {
         font-size: 3rem;
 
         span {
-          color: var(--pc);
+          color: var(--nox-primary-color);
         }
       }
     }
@@ -790,7 +806,7 @@ fieldset {
       &::after {
         background-image: linear-gradient(
           to right,
-          var(--black) 20%,
+          var(--nox-black) 20%,
           #fff0 100%
         );
         content: "";
@@ -824,14 +840,14 @@ fieldset {
         font-size: 12px;
         font-weight: 600;
         span {
-          color: var(--pc);
+          color: var(--nox-primary-color);
         }
       }
     }
 
     .t-card {
-      /* border: 2px solid var(--pc); */
-      background-color: var(--sc);
+      /* border: 2px solid var(--nox-primary-color); */
+      background-color: var(--nox-secondary-color);
       width: 500px;
       height: 250px;
       border-radius: 0.625rem;
@@ -872,7 +888,7 @@ fieldset {
   }
 
   .d-fly {
-    background-color: var(--black);
+    background-color: var(--nox-black);
     height: max(100dvh, 860px);
     max-height: 1085px;
     position: relative;
@@ -910,7 +926,7 @@ fieldset {
 
       border-radius: 40px;
       padding: 1.3%;
-      background-color: var(--scl);
+      background-color: var(--nox-secondary-color-light);
       display: grid;
       grid-template-columns: repeat(14, 1fr);
       grid-template-rows: repeat(10, 1fr);
@@ -935,8 +951,8 @@ fieldset {
         display: flex;
         justify-content: space-between;
         .icon {
-          --sc: rgb(109, 109, 109);
-          /* --pc: blue; */
+          --nox-secondary-color: rgb(109, 109, 109);
+          /* --nox-primary-color: blue; */
         }
 
         .w {
@@ -949,11 +965,11 @@ fieldset {
             color: #d1d0d0;
           }
           a {
-            --sc: rgb(109, 109, 109);
-            color: var(--sc);
+            --nox-secondary-color: rgb(109, 109, 109);
+            color: var(--nox-secondary-color);
             text-decoration: underline;
             &:hover {
-              color: var(--pc);
+              color: var(--nox-primary-color);
             }
           }
           * {
@@ -968,14 +984,14 @@ fieldset {
         width: 65%;
 
         a.icon {
-          --sc: rgb(109, 109, 109);
+          --nox-secondary-color: rgb(109, 109, 109);
           align-self: flex-end;
           svg {
-            fill: var(--sc);
+            fill: var(--nox-secondary-color);
           }
           &:hover {
             svg {
-              fill: var(--pc);
+              fill: var(--nox-primary-color);
               stroke: none;
             }
           }
@@ -984,7 +1000,7 @@ fieldset {
     }
 
     .contact {
-      background-color: var(--sc);
+      background-color: var(--nox-secondary-color);
       border-radius: 30px;
       padding: 5%;
       grid-row: 1/11;
@@ -1008,7 +1024,7 @@ fieldset {
       }
 
       form {
-        --white: rgb(186, 186, 186);
+        --nox-white: rgb(186, 186, 186);
         height: 100%;
         width: 100%;
         /* border-color: #34db69; */
@@ -1020,21 +1036,21 @@ fieldset {
 
           input {
             border: 2px solid transparent;
-            border-bottom-color: var(--black);
+            border-bottom-color: var(--nox-black);
             padding-inline: 1% 5%;
             width: 100%;
             height: 100%;
-            color: var(--white);
+            color: var(--nox-white);
 
             &:focus {
               border-radius: 10px;
-              background-color: var(--scl);
+              background-color: var(--nox-secondary-color-light);
               &:hover {
-                border-color: var(--scl);
+                border-color: var(--nox-secondary-color-light);
               }
             }
             &:hover {
-              border-bottom-color: var(--pc);
+              border-bottom-color: var(--nox-primary-color);
             }
           }
         }
@@ -1045,23 +1061,23 @@ fieldset {
 
           textarea {
             border: 2px solid transparent;
-            border-bottom-color: var(--black);
+            border-bottom-color: var(--nox-black);
             padding-inline-start: 1%;
             width: 100%;
             height: 100%;
             resize: none;
-            color: var(--white);
+            color: var(--nox-white);
             /* background-color: transparent; */
 
             &:focus {
               border-radius: 10px;
-              background-color: var(--scl);
+              background-color: var(--nox-secondary-color-light);
               &:hover {
-                border-color: var(--scl);
+                border-color: var(--nox-secondary-color-light);
               }
             }
             &:hover {
-              border-bottom-color: var(--pc);
+              border-bottom-color: var(--nox-primary-color);
             }
           }
         }
@@ -1075,16 +1091,16 @@ fieldset {
             border-radius: 5px;
             height: 100%;
             &:hover {
-              border-color: var(--pc);
+              border-color: var(--nox-primary-color);
             }
             input,
             span {
               margin-inline: 1%;
-              color: var(--white);
+              color: var(--nox-white);
             }
 
             input:checked + span {
-              color: var(--pcl);
+              color: var(--nox-primary-color-light);
               text-decoration: line-through;
             }
           }
@@ -1098,12 +1114,12 @@ fieldset {
             width: 50%;
             font-weight: 500;
             border-radius: 10px;
-            background-color: var(--black);
+            background-color: var(--nox-black);
             box-shadow: 0 5px 0 black;
             &:hover {
               transform: translate3d(0, 3px, 0);
-              background-color: var(--pc);
-              box-shadow: 0 3px 1rem var(--pcl);
+              background-color: var(--nox-primary-color);
+              box-shadow: 0 3px 1rem var(--nox-primary-color-light);
             }
           }
         }
@@ -1111,11 +1127,11 @@ fieldset {
     }
 
     .copyright {
-      --black: rgb(109, 109, 109);
+      --nox-black: rgb(109, 109, 109);
       align-self: center;
       width: 20%;
       span {
-        color: var(--black);
+        color: var(--nox-black);
         font-weight: 500;
         margin-inline: 1%;
       }
@@ -1171,8 +1187,8 @@ fieldset {
     }
     .menu__face--square {
       /* background-color: #2229; */
-      --scl: #101010a0;
-      background-color: var(--scl);
+      --nox-secondary-color-light: #101010a0;
+      background-color: var(--nox-secondary-color-light);
     }
     .menu--minimal .menu__face--square {
       background: none;
@@ -1227,7 +1243,7 @@ fieldset {
       padding: 1% 2%;
       align-items: center;
       /* border-color: transparent; */
-      background-color: var(--black);
+      background-color: var(--nox-black);
 
       /* position: relative; */
     }
@@ -1238,7 +1254,7 @@ fieldset {
       padding: 3%;
       height: max(100dvh, 600px);
       width: min(85dvw, 300px);
-      background-color: var(--scl);
+      background-color: var(--nox-secondary-color-light);
       backdrop-filter: blur(5px);
       border-color: orange;
       /* width: 200px; */
