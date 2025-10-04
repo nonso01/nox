@@ -27,18 +27,19 @@
         place-content: center;
         overflow-x: hidden;
         background-color: var(--bg);
+        text-wrap: balance;
       }
 
       :root {
-        --sc: #222;
+        --nox-secondary-color: #222;
         --link-color: #ffc107;
         --bg: white;
       }
 
       @media (prefers-color-scheme: dark) {
         :root {
-          --sc: #34db69;
-          --link-color: white;
+          --nox-secondary-color: #fff;
+          --link-color: #34db69;
           --bg: #222;
         }
       }
@@ -46,7 +47,8 @@
       body {
         min-height: inherit;
         width: min(100dvw, 56.25rem);
-        color: var(--sc);
+        color: var(--nox-secondary-color);
+        padding-inline: 2%;
       }
 
       h1,
@@ -56,6 +58,9 @@
       }
       a {
         color: var(--link-color);
+        &:hover {
+          opacity: 0.6;
+        }
         &:visited {
           color: purple;
         }
@@ -67,12 +72,18 @@
 
       form {
         height: 22.5rem;
-        width: min(90%, 43.75rem);
+        width: min(100%, 43.75rem);
         border: 1px solid rgba(0, 0, 0, 0.422);
         padding: 2%;
         display: flex;
         flex-direction: column;
         justify-content: space-evenly;
+      }
+
+      @media screen and (width <= 768px) {
+        html {
+          font-size: 14px;
+        }
       }
     </style>
   </head>
@@ -177,7 +188,7 @@
         <h2>Contact</h2>
         <form
           method="POST"
-          action="/"
+          action="/contact"
           enctype="multipart/form-data"
           id="nox-form"
         >
@@ -251,15 +262,15 @@
           Open to freelance work, collaborations, and creative projects. Feel
           free to reach out.
         </p>
-        <p style="text-align: center; font-size: 0.9rem">
-          This site was served with pure Rust
+        <p style="text-align: center; font-size: 0.85rem">
+          This site is served with pure Rust
           <img
             src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/rust/rust-original.svg"
             alt="rust"
-            width="20"
-            height="20"
+            width="19"
+            height="19"
           />
-          no framework
+          and my Android (Termux)
         </p>
       </section>
     </main>

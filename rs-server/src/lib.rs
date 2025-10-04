@@ -1,5 +1,5 @@
-// all useful fn, Structs, Enum, etc
-// keep main.rs brief
+/// All essential functions, Constants, Structs, Enums
+/// and libs
 
 pub mod nox_server {
     use std::{
@@ -53,6 +53,103 @@ pub mod nox_server {
         }
     }
 
+  
+// Http Responses so you can have routes efficiently
+    pub struct HttpResponse {
+        status: String,
+        content_type: String,
+        body: Vec<u8>,
+        custom_headers: Vec<String>,
+    }
+
+    impl HttpResponse {
+        pub fn new(status: &str) -> Self {
+            Self {
+                status: status.to_string(),
+                content_type: "text/plain".to_string(),
+                body: Vec::new(),
+                custom_headers: Vec::new(),
+            }
+        }
+
+        pub fn ok() -> Self {
+            Self::new("200 OK")
+        }
+
+        pub fn not_found() -> Self {
+            Self::new("404 Not Found").html("<h1>404 Not Found</h1>")
+        }
+
+        pub fn bad_request() -> Self {
+            Self::new("400 Bad Request")
+        }
+
+        pub fn too_many_requests() -> Self {
+            Self::new("429 Too Many Requests")
+        }
+
+        pub fn method_not_allowed() -> Self {
+            Self::new("405 Method Not Allowed")
+        }
+
+        pub fn json(mut self, body: &str) -> Self {
+            self.content_type = "application/json".to_string();
+            self.body = body.as_bytes().to_vec();
+            self
+        }
+
+        pub fn html(mut self, body: &str) -> Self {
+            self.content_type = "text/html; charset=utf-8".to_string();
+            self.body = body.as_bytes().to_vec();
+            self
+        }
+
+        pub fn text(mut self, body: &str) -> Self {
+            self.content_type = "text/plain".to_string();
+            self.body = body.as_bytes().to_vec();
+            self
+        }
+
+        pub fn with_header(mut self, header: String) -> Self {
+            self.custom_headers.push(header);
+            self
+        }
+
+        pub fn send(
+            self,
+            stream: &mut std::net::TcpStream,
+            cors_origin_header: &str,
+        ) -> Result<(), std::io::Error> {
+            use std::io::Write;
+
+            let cors_headers = if cors_origin_header.is_empty() {
+                String::new()
+            } else {
+                format!("{}\r\n", cors_origin_header)
+            };
+
+            let custom_headers = if self.custom_headers.is_empty() {
+                String::new()
+            } else {
+                format!("{}\r\n", self.custom_headers.join("\r\n"))
+            };
+
+            let response = format!(
+                "HTTP/1.1 {}\r\nContent-Type: {}\r\nContent-Length: {}\r\n{}{}\r\n",
+                self.status,
+                self.content_type,
+                self.body.len(),
+                cors_headers,
+                custom_headers
+            );
+
+            stream.write_all(response.as_bytes())?;
+            stream.write_all(&self.body)?;
+            stream.flush()?;
+            Ok(())
+        }
+    }
+
     pub struct FieldConstraint {
         pub name: &'static str,
         pub max_length: usize,
@@ -60,7 +157,7 @@ pub mod nox_server {
         pub email: bool, // true for email field, enables regex validation
     }
 
-    // constants
+    // Constants
     pub const FIELD_CONSTRAINTS: &[FieldConstraint] = &[
         FieldConstraint {
             name: "name",
@@ -107,8 +204,6 @@ pub mod nox_server {
     pub const MAX_FORM_DATA_LENGTH: usize = 10 * 1024;
 
     // Sends an email using lettre.
-    // returns
-    // * `Result<(), Box<dyn std::error::Error>>` - Ok on success, Err on failure
     pub fn send_email(
         to: &str,
         subject: &str,

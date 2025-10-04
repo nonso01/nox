@@ -1,4 +1,5 @@
-/// I LOVE SECURITY 🦀
+/// MY CUSTOM RUST SERVER: NOX_SERVER
+/// Process will be documented as needed.
 use std::{
     collections::{HashMap, HashSet},
     env, fmt, fs,
@@ -15,8 +16,8 @@ use regex::Regex;
 use nox::nox_server::{
     contains_potential_xss, generate_email_html, get_mime_type, html_escape, is_safe_path,
     parse_form_data, parse_multipart_data, sanitize_email_content, sanitize_path, send_email,
-    send_html_email, RateLimiter, FIELD_CONSTRAINTS, MAX_CONTENT_LENGTH, MAX_FORM_DATA_LENGTH,
-    OPTIONAL_CHECKBOX,
+    send_html_email, HttpResponse, RateLimiter, FIELD_CONSTRAINTS, MAX_CONTENT_LENGTH,
+    MAX_FORM_DATA_LENGTH, OPTIONAL_CHECKBOX,
 };
 
 // 1 hour = 60 min
@@ -42,6 +43,26 @@ impl SecurityConfig {
             max_requests_per_hour: 100, // 100 requests per hour per IP
             enable_rate_limiting: true,
         }
+    }
+}
+
+// Add after SecurityConfig implementation, before ServerError
+enum Route {
+    Static,
+    ContactForm,
+    ApiStatus,
+    ApiHealth,
+    NotFound,
+}
+
+fn match_route(method: &str, path: &str) -> Route {
+    match (method, path) {
+        ("POST", "/contact") | ("POST", "/api/contact") => Route::ContactForm,
+        ("GET", "/api/status") => Route::ApiStatus,
+        ("GET", "/api/health") => Route::ApiHealth,
+        ("GET", path) if path.starts_with("/api/") => Route::NotFound,
+        ("GET", _) => Route::Static,
+        _ => Route::NotFound,
     }
 }
 
@@ -165,7 +186,7 @@ impl CorsConfig {
     }
 }
 #[allow(dead_code)]
-// Update ThreadPool to include rate limiter and security config
+// ThreadPool to include rate limiter and security config
 struct ThreadPool {
     workers: Vec<Worker>,
     sender: Option<mpsc::Sender<TcpStream>>,
@@ -195,7 +216,7 @@ impl ThreadPool {
         let receiver = Arc::new(Mutex::new(receiver));
         let mut workers = Vec::with_capacity(size);
 
-        // Create rate limiter
+        //  Rate limiter
         let rate_limiter = Arc::new(RateLimiter::new(
             security_config.max_requests_per_hour,
             WINDOW_LIMIT_MINS, // 1 hour window
@@ -298,6 +319,41 @@ impl Worker {
     }
 }
 
+// Add these route handler functions before main()
+fn handle_api_status(
+    stream: &mut TcpStream,
+    cors_config: &CorsConfig,
+    origin: Option<&str>,
+) -> ServerResult<()> {
+    let json_response = r#"{"status":"healthy","version":"1.0.0","timestamp":""#.to_string()
+        + &std::time::SystemTime::now()
+            .duration_since(std::time::UNIX_EPOCH)
+            .unwrap()
+            .as_secs()
+            .to_string()
+        + r#"}"#;
+
+    let origin_header = get_cors_origin_header(cors_config, origin);
+
+    HttpResponse::ok()
+        .json(&json_response)
+        .send(stream, &origin_header)
+        .map_err(|e| ServerError::IoError(e))
+}
+
+fn handle_api_health(
+    stream: &mut TcpStream,
+    cors_config: &CorsConfig,
+    origin: Option<&str>,
+) -> ServerResult<()> {
+    let origin_header = get_cors_origin_header(cors_config, origin);
+
+    HttpResponse::ok()
+        .text("OK")
+        .send(stream, &origin_header)
+        .map_err(|e| ServerError::IoError(e))
+}
+
 fn main() -> ServerResult<()> {
     let port = env::var("PORT").unwrap_or_else(|_| "8080".to_string());
     let host = env::var("HOST").unwrap_or_else(|_| "127.0.0.1".to_string());
@@ -315,26 +371,26 @@ fn main() -> ServerResult<()> {
         ServerError::IoError(e)
     })?;
 
-    println!("🚀 Server running on http://{}", &addr);
+    println!("🦀 Server running on http://{}", &addr);
     println!(
-        "🛡️  Security enabled - Max content: {}KB, Timeout: {}s",
+        "🦍  Security enabled - Max content: {}KB, Timeout: {}s",
         security_config.max_content_length / 1024,
         security_config.connection_timeout.as_secs()
     );
-    println!("🔒 CORS Mode: {}", cors_mode);
+    println!("🐊 CORS Mode: {}", cors_mode);
     println!(
-        "📧 Rate limiting: {} requests/hour per IP",
+        "🦥 Rate limiting: {} requests/hour per IP",
         security_config.max_requests_per_hour
     );
 
     if dist_exists {
-        println!("📁 Serving static files from ../dist/");
+        println!("✨ Serving static files from ../dist/");
     } else {
         println!("⚠️  Warning: ../dist/ folder not found!");
-        println!("📄 Serving hello.html from current directory as fallback");
+        println!("🌚 Serving hello.html from current directory as fallback");
     }
 
-    // Create thread pool with security config
+    //thread pool with security config
     let pool = ThreadPool::new(4, cors_config, security_config)?;
 
     for stream in listener.incoming() {
@@ -399,6 +455,7 @@ fn handle_connection_safe(
     }
 
     // Limit request line length to prevent DoS
+    // Make it a constant
     if request_line.len() > 8192 {
         // 8KB max request line
         send_error_response_with_cors(
@@ -450,9 +507,18 @@ fn handle_connection_safe(
         return Ok(());
     }
 
-    match method {
-        "OPTIONS" => handle_preflight_request(&mut stream, cors_config, origin.as_deref()),
-        "POST" => handle_post_request_secure(
+    // Handle OPTIONS first (preflight)
+    if method == "OPTIONS" {
+        return handle_preflight_request(&mut stream, cors_config, origin.as_deref());
+    }
+
+    // Route matching
+    let route = match_route(method, path);
+
+    // Add your routes and make sure it's
+    //  available in enum Route
+    match route {
+        Route::ContactForm => handle_post_request_secure(
             buf_reader,
             content_length,
             cors_config,
@@ -460,14 +526,17 @@ fn handle_connection_safe(
             security_config,
             &client_ip,
         ),
-        "GET" => serve_static_file_with_cors(&mut stream, path, cors_config, origin.as_deref()),
-        _ => send_error_response_with_cors(
-            &mut stream,
-            "405 Method Not Allowed",
-            "Method not allowed",
-            cors_config,
-            origin.as_deref(),
-        ),
+        Route::ApiStatus => handle_api_status(&mut stream, cors_config, origin.as_deref()),
+        Route::ApiHealth => handle_api_health(&mut stream, cors_config, origin.as_deref()),
+        Route::Static => {
+            serve_static_file_with_cors(&mut stream, path, cors_config, origin.as_deref())
+        }
+        Route::NotFound => {
+            let origin_header = get_cors_origin_header(cors_config, origin.as_deref());
+            HttpResponse::not_found()
+                .send(&mut stream, &origin_header)
+                .map_err(|e| ServerError::IoError(e))
+        }
     }
 }
 
@@ -860,7 +929,7 @@ fn validate_form_data(form_data: &HashMap<String, String>) -> ServerResult<()> {
     Ok(())
 }
 
-// FIXED: Secure POST request handler with proper email logic
+// Secure POST request handler with proper email logic
 fn handle_post_request_secure(
     mut buf_reader: BufReader<&mut TcpStream>,
     content_length: usize,
@@ -901,7 +970,7 @@ fn handle_post_request_secure(
         return Ok(());
     }
 
-    // CRITICAL: Validate content_length before allocating memory
+    // Validate content_length before allocating memory
     let mut body = vec![0; content_length];
     buf_reader.read_exact(&mut body).map_err(|e| {
         eprintln!("🚫 Failed to read POST body from {}: {}", client_ip, e);
@@ -917,12 +986,12 @@ fn handle_post_request_secure(
         parse_form_data(&body_str)
     };
 
-    // CRITICAL: Validate form data BEFORE proceeding
+    // Validate form data BEFORE proceeding
     match validate_form_data(&form_data) {
         Ok(()) => {
             println!("✅ Form validation passed for {}", client_ip);
 
-            // Log sanitized form data (don't log sensitive info)
+            // Log sanitized form data
             for (key, value) in &form_data {
                 if key == "email" {
                     println!("📧 Field '{}': '***@***'", key);
@@ -941,7 +1010,7 @@ fn handle_post_request_secure(
             let name = form_data.get("name").cloned();
             let email = form_data.get("email").cloned();
 
-            // FIXED: Send email ONLY after successful validation
+            // Send email ONLY after successful validation
             let email_sent = if let Some(email_addr) = &email {
                 send_confirmation_email(&form_data, email_addr, client_ip)
             } else {
@@ -1194,9 +1263,9 @@ fn generate_response_html(
             border-left-color: #51cf66;
         }}
 
-        @media screen and (max-width: 508px) {{
+        @media screen and (max-width: 510px) {{
             .container {{
-                 width: 100vw !important;
+                 width: 97dvwvw !important;
              }}
              .back-link {{
                  width: 60%;
