@@ -1265,7 +1265,7 @@ fn generate_response_html(
 
         @media screen and (max-width: 510px) {{
             .container {{
-                 width: 97dvwvw !important;
+                 width: 97dvw !important;
              }}
              .back-link {{
                  width: 60%;
