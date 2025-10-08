@@ -53,8 +53,7 @@ pub mod nox_server {
         }
     }
 
-  
-// Http Responses so you can have routes efficiently
+    // Http Responses so you can have routes efficiently
     pub struct HttpResponse {
         status: String,
         content_type: String,
@@ -402,8 +401,43 @@ pub mod nox_server {
         )
     }
 
-    // HTML escaping function to prevent XSS
+    // Colored text
+    pub fn green(text: &str, bold: bool) -> String {
+        if bold {
+            format!("\x1b[2;32m{}\x1b[0m", text)
+        } else {
+            format!("\x1b[32m{}\x1b[0m", text)
+        }
+    }
+
+    pub fn cyan(text: &str, bold: bool) -> String {
+        if bold {
+            format!("\x1b[2;36m{}\x1b[0m", text)
+        } else {
+            format!("\x1b[36m{}\x1b[0m", text)
+        }
+    }
+
+    pub fn yellow(text: &str, bold: bool) -> String {
+        if bold {
+            format!("\x1b[2;33m{}\x1b[0m", text)
+        } else {
+            format!("\x1b[33m{}\x1b[0m", text)
+        }
+    }
+
+    pub fn red(text: &str, bold: bool) -> String {
+        if bold {
+            format!("\x1b[2;31m{}\x1b[0m", text)
+        } else {
+            format!("\x1b[31m{}\x1b[0m", text)
+        }
+    }
+
+    // HELPER FUNCTIONS
     pub fn html_escape(input: &str) -> String {
+        // HTML escaping function to prevent XSS
+
         input
             .replace('&', "&amp;")
             .replace('<', "&lt;")
@@ -413,7 +447,6 @@ pub mod nox_server {
             .replace('/', "&#x2F;")
     }
 
-    // Helper functions.
     pub fn sanitize_path(path: &str) -> String {
         let path = if path.starts_with('/') {
             &path[1..]

@@ -14,14 +14,14 @@ use std::{
 use regex::Regex;
 
 use nox::nox_server::{
-    contains_potential_xss, generate_email_html, get_mime_type, html_escape, is_safe_path,
-    parse_form_data, parse_multipart_data, sanitize_email_content, sanitize_path, send_email,
-    send_html_email, HttpResponse, RateLimiter, FIELD_CONSTRAINTS, MAX_CONTENT_LENGTH,
-    MAX_FORM_DATA_LENGTH, OPTIONAL_CHECKBOX,
+    contains_potential_xss, cyan, generate_email_html, get_mime_type, green, html_escape,
+    is_safe_path, parse_form_data, parse_multipart_data, red, sanitize_email_content,
+    sanitize_path, send_email, send_html_email, yellow, HttpResponse, RateLimiter,
+    FIELD_CONSTRAINTS, MAX_CONTENT_LENGTH, MAX_FORM_DATA_LENGTH, OPTIONAL_CHECKBOX,
 };
 
 // 1 hour = 60 min
-const WINDOW_LIMIT_MINS: u64 = 60; //  change values here
+const WINDOW_LIMIT_MINS: u64 = 60;
 
 // Connection and Rate Limiting Configurations
 #[derive(Clone)]
@@ -61,7 +61,7 @@ fn match_route(method: &str, path: &str) -> Route {
         ("GET", "/api/status") => Route::ApiStatus,
         ("GET", "/api/health") => Route::ApiHealth,
         ("GET", path) if path.starts_with("/api/") => Route::NotFound,
-        ("GET", _) => Route::Static,
+        ("GET", "/") => Route::Static, // revert to _ in case of err
         _ => Route::NotFound,
     }
 }
@@ -373,23 +373,50 @@ fn main() -> ServerResult<()> {
         ServerError::IoError(e)
     })?;
 
-    println!("🦀 Server running on http://{}", &addr);
     println!(
-        "🦍  Security enabled - Max content: {}KB, Timeout: {}s",
-        security_config.max_content_length / 1024,
-        security_config.connection_timeout.as_secs()
+        "{}",
+        green(&format!("🦀 Server running on http://{}", &addr), false)
     );
-    println!("🐊 CORS Mode: {}", cors_mode);
+
     println!(
-        "🦥 Rate limiting: {} requests/hour per IP",
-        security_config.max_requests_per_hour
+        "{}",
+        green(
+            &format!(
+                "🦍 Security enabled - Max content: {}KB, Timeout: {}s",
+                security_config.max_content_length / 1024,
+                security_config.connection_timeout.as_secs()
+            ),
+            false
+        )
+    );
+
+    println!("{}", green(&format!("🐊 CORS Mode: {}", cors_mode), false));
+
+    println!(
+        "{}",
+        cyan(
+            &format!(
+                "🦥 Rate limiting: {} requests/hour per IP",
+                security_config.max_requests_per_hour
+            ),
+            true
+        )
     );
 
     if dist_exists {
-        println!("✨ Serving static files from ../dist/");
+        println!("{}", green("✨ Serving static files from ../dist/", false));
     } else {
-        println!("⚠️  Warning: ../dist/ folder not found!");
-        println!("🌚 Serving hello.html from current directory as fallback");
+        println!(
+            "{}",
+            yellow("⚠️  Warning: ../dist/ folder not found!", false)
+        );
+        println!(
+            "{}",
+            yellow(
+                "📜 Serving hello.html from current directory as fallback",
+                false
+            )
+        );
     }
 
     //thread pool with security config
@@ -427,7 +454,13 @@ fn handle_connection_safe(
 
     // Check rate limiting FIRST
     if security_config.enable_rate_limiting && !rate_limiter.is_allowed(&client_ip) {
-        println!("🚫 Rate limit exceeded for IP: {}", client_ip);
+        println!(
+            "{}",
+            red(
+                &format!("⛔️ Rate limit exceeded for IP: {}", client_ip),
+                false
+            )
+        );
         send_error_response_with_cors(
             &mut stream,
             "429 Too Many Requests",
@@ -611,6 +644,25 @@ fn handle_preflight_request(
 ) -> ServerResult<()> {
     let origin_header = get_cors_origin_header(cors_config, origin);
 
+    // CRITICAL: Block unauthorized origins at preflight
+    if origin_header.is_empty() && origin.is_some() {
+        let response = "HTTP/1.1 403 Forbidden\r\nContent-Length: 0\r\n\r\n";
+        stream.write_all(response.as_bytes())?;
+        stream.flush()?;
+        println!(
+            "{}",
+            red(
+                &format!(
+                    "⛔️ Blocked preflight from unauthorized origin: {:?}",
+                    origin
+                ),
+                false
+            )
+        );
+        return Ok(());
+    }
+
+    // Only send CORS details if origin is allowed
     let response = format!(
         "HTTP/1.1 200 OK\r\n{}\r\nAccess-Control-Allow-Methods: {}\r\nAccess-Control-Allow-Headers: {}\r\nAccess-Control-Max-Age: {}\r\nContent-Length: 0\r\n\r\n",
         origin_header,
@@ -621,7 +673,7 @@ fn handle_preflight_request(
 
     stream.write_all(response.as_bytes())?;
     stream.flush()?;
-    println!("Sent preflight response for origin: {:?}", origin);
+    println!(" Sent preflight response for origin: {:?}", origin);
     Ok(())
 }
 
@@ -718,18 +770,27 @@ fn serve_hello_file(
 
     match fs::read(&hello_path) {
         Ok(content) => {
-            println!("Serving hello.html from current directory");
+            println!(
+                "{}",
+                yellow("Serving hello.html from current directory", true)
+            );
             send_file_response_with_cors(stream, &content, "text/html", cors_config, origin)?;
         }
         Err(_) => {
-            println!("Warning: hello.html not found in current directory");
+            println!(
+                "{}",
+                red(
+                    "🔎 Warning: hello.html not found in current directory, resolve to fallback",
+                    true
+                )
+            );
             // Create a basic HTML response if hello.html is also missing
             let fallback_html = r#"<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Server Running</title>
+    <title>Nonso Martin | Server Running</title>
     <style>
         body { font-family: Arial, sans-serif; max-width: 600px; margin: 50px auto; padding: 20px; }
         .status { color: #28a745; }
@@ -980,7 +1041,14 @@ fn handle_post_request_secure(
     })?;
 
     let body_str = String::from_utf8_lossy(&body);
-    println!("📧 POST data received from {} ({}B)", client_ip, body.len());
+    // println!("📨 POST data received from {} ({}B)", client_ip, body.len());
+    println!(
+        "{}",
+        green(
+            &format!("📨 POST data received from {} ({}B)", client_ip, body.len()),
+            true
+        )
+    );
 
     let form_data = if body_str.contains("Content-Disposition: form-data") {
         parse_multipart_data(&body_str)
@@ -991,7 +1059,14 @@ fn handle_post_request_secure(
     // Validate form data BEFORE proceeding
     match validate_form_data(&form_data) {
         Ok(()) => {
-            println!("✅ Form validation passed for {}", client_ip);
+            // println!("✅ Form validation passed for {}", client_ip);
+            println!(
+                "{}",
+                green(
+                    &format!("🟢 Form validation passed for {}", client_ip),
+                    true
+                )
+            );
 
             // Log sanitized form data
             for (key, value) in &form_data {
