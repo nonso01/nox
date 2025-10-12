@@ -14,14 +14,18 @@ use std::{
 use regex::Regex;
 
 use nox::nox_server::{
-    contains_potential_xss, cyan, generate_email_html, get_mime_type, green, html_escape,
-    is_safe_path, parse_form_data, parse_multipart_data, red, sanitize_email_content,
-    sanitize_path, send_email, send_html_email, yellow, HttpResponse, RateLimiter,
-    FIELD_CONSTRAINTS, MAX_CONTENT_LENGTH, MAX_FORM_DATA_LENGTH, OPTIONAL_CHECKBOX,
+    contains_potential_xss, generate_email_html, get_mime_type, html_escape, is_safe_path,
+    parse_form_data, parse_multipart_data, red, sanitize_email_content, sanitize_path, send_email,
+    send_html_email, HttpResponse, RateLimiter, FIELD_CONSTRAINTS, MAX_CONTENT_LENGTH,
+    MAX_FORM_DATA_LENGTH, OPTIONAL_CHECKBOX,
 };
 
-// 1 hour = 60 min
-const WINDOW_LIMIT_MINS: u64 = 60;
+const WINDOW_LIMIT_MINS: u64 = 60; // 1 hour = 60 min
+const CORS_CONFIG_MAX_AGE: u32 = 86400;
+const CORS_CONFIG_MIN_AGE: u32 = CORS_CONFIG_MAX_AGE / 24;
+
+const MAX_REQUEST_LINE_SIZE: usize = 8192; // 8KB max request line
+const MAX_HEADER_LINE_SIZE: usize = 8192;
 
 // Connection and Rate Limiting Configurations
 #[derive(Clone)]
@@ -149,7 +153,7 @@ impl CorsConfig {
                 "Accept".to_string(),
                 "Origin".to_string(),
             ],
-            max_age: 86400, // 24 hours
+            max_age: CORS_CONFIG_MAX_AGE, // 24 hours
         }
     }
 
@@ -164,7 +168,7 @@ impl CorsConfig {
                 "OPTIONS".to_string(), // Keep OPTIONS for preflight requests
             ],
             allow_headers: vec!["Content-Type".to_string(), "Accept".to_string()],
-            max_age: 3600, // 1 hour
+            max_age: CORS_CONFIG_MIN_AGE, // 1 hour
         }
     }
 
@@ -373,50 +377,26 @@ fn main() -> ServerResult<()> {
         ServerError::IoError(e)
     })?;
 
+    println!("🦀 Server running on http://{}", &addr);
+
     println!(
-        "{}",
-        green(&format!("🦀 Server running on http://{}", &addr), false)
+        "🦍 Security enabled - Max content: {}KB, Timeout: {}s",
+        security_config.max_content_length / 1024,
+        security_config.connection_timeout.as_secs()
     );
 
-    println!(
-        "{}",
-        green(
-            &format!(
-                "🦍 Security enabled - Max content: {}KB, Timeout: {}s",
-                security_config.max_content_length / 1024,
-                security_config.connection_timeout.as_secs()
-            ),
-            false
-        )
-    );
-
-    println!("{}", green(&format!("🐊 CORS Mode: {}", cors_mode), false));
+    println!("🐊 CORS Mode: {}", cors_mode);
 
     println!(
-        "{}",
-        cyan(
-            &format!(
-                "🦥 Rate limiting: {} requests/hour per IP",
-                security_config.max_requests_per_hour
-            ),
-            true
-        )
+        "🦥 Rate limiting: {} requests/hour per IP",
+        security_config.max_requests_per_hour
     );
 
     if dist_exists {
-        println!("{}", green("✨ Serving static files from ../dist/", false));
+        println!("✨ Serving static files from ../dist/");
     } else {
-        println!(
-            "{}",
-            yellow("⚠️  Warning: ../dist/ folder not found!", false)
-        );
-        println!(
-            "{}",
-            yellow(
-                "📜 Serving hello.html from current directory as fallback",
-                false
-            )
-        );
+        println!("⚠️  Warning: ../dist/ folder not found!");
+        println!("📜 Serving hello.html from current directory as fallback");
     }
 
     //thread pool with security config
@@ -454,13 +434,7 @@ fn handle_connection_safe(
 
     // Check rate limiting FIRST
     if security_config.enable_rate_limiting && !rate_limiter.is_allowed(&client_ip) {
-        println!(
-            "{}",
-            red(
-                &format!("⛔️ Rate limit exceeded for IP: {}", client_ip),
-                false
-            )
-        );
+        println!("⛔️ Rate limit exceeded for IP: {}", client_ip);
         send_error_response_with_cors(
             &mut stream,
             "429 Too Many Requests",
@@ -491,8 +465,7 @@ fn handle_connection_safe(
 
     // Limit request line length to prevent DoS
     // Make it a constant
-    if request_line.len() > 8192 {
-        // 8KB max request line
+    if request_line.len() > MAX_REQUEST_LINE_SIZE {
         send_error_response_with_cors(
             &mut stream,
             "414 Request-URI Too Long",
@@ -600,7 +573,7 @@ fn parse_headers_secure(
         }
 
         // Limit header line length
-        if line.len() > 8192 {
+        if line.len() > MAX_HEADER_LINE_SIZE {
             return Err(ServerError::ParseError("Header line too long".to_string()));
         }
 
@@ -770,20 +743,11 @@ fn serve_hello_file(
 
     match fs::read(&hello_path) {
         Ok(content) => {
-            println!(
-                "{}",
-                yellow("Serving hello.html from current directory", true)
-            );
+            println!("Serving hello.html from current directory",);
             send_file_response_with_cors(stream, &content, "text/html", cors_config, origin)?;
         }
         Err(_) => {
-            println!(
-                "{}",
-                red(
-                    "🔎 Warning: hello.html not found in current directory, resolve to fallback",
-                    true
-                )
-            );
+            println!("🔎 Warning: hello.html not found in current directory, resolve to fallback",);
             // Create a basic HTML response if hello.html is also missing
             let fallback_html = r#"<!DOCTYPE html>
 <html lang="en">
@@ -1017,7 +981,7 @@ fn handle_post_request_secure(
     // Use security config limits
     if content_length > security_config.max_content_length {
         println!(
-            "🚫 Payload too large from {}: {}KB",
+            "⛔️ Payload too large from {}: {}KB",
             client_ip,
             content_length / 1024
         );
@@ -1036,19 +1000,13 @@ fn handle_post_request_secure(
     // Validate content_length before allocating memory
     let mut body = vec![0; content_length];
     buf_reader.read_exact(&mut body).map_err(|e| {
-        eprintln!("🚫 Failed to read POST body from {}: {}", client_ip, e);
+        eprintln!("⛔️ Failed to read POST body from {}: {}", client_ip, e);
         ServerError::IoError(e)
     })?;
 
     let body_str = String::from_utf8_lossy(&body);
-    // println!("📨 POST data received from {} ({}B)", client_ip, body.len());
-    println!(
-        "{}",
-        green(
-            &format!("📨 POST data received from {} ({}B)", client_ip, body.len()),
-            true
-        )
-    );
+
+    println!("📨 POST data received from {} ({}B)", client_ip, body.len(),);
 
     let form_data = if body_str.contains("Content-Disposition: form-data") {
         parse_multipart_data(&body_str)
@@ -1059,14 +1017,7 @@ fn handle_post_request_secure(
     // Validate form data BEFORE proceeding
     match validate_form_data(&form_data) {
         Ok(()) => {
-            // println!("✅ Form validation passed for {}", client_ip);
-            println!(
-                "{}",
-                green(
-                    &format!("🟢 Form validation passed for {}", client_ip),
-                    true
-                )
-            );
+            println!("✅ Form validation passed for {}", client_ip);
 
             // Log sanitized form data
             for (key, value) in &form_data {
@@ -1110,7 +1061,7 @@ fn handle_post_request_secure(
             )?;
         }
         Err(e) => {
-            println!("🚫 Form validation failed for {}: {}", client_ip, e);
+            println!("⛔️ Form validation failed for {}: {}", client_ip, e);
             send_html_response_with_cors_secure(
                 &mut buf_reader,
                 "Error",
@@ -1183,7 +1134,7 @@ fn send_confirmation_email(
                 }
                 Err(e2) => {
                     eprintln!(
-                        "🚫 Failed to send any email to {} from {}: {}",
+                        "⛔️ Failed to send any email to {} from {}: {}",
                         email_addr, client_ip, e2
                     );
                     false
@@ -1252,7 +1203,7 @@ fn generate_response_html(
         }
         "Error" => (
             "Form Submission Error",
-            "🚫 Error",
+            "⛔️ Error",
             format!("Sorry, there was an issue: {}", html_escape(message)),
         ),
         _ => ("Form Response", "Response", html_escape(message)),
