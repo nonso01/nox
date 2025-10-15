@@ -525,7 +525,7 @@ Content-Type: multipart/form-data
 ```
 
 **Optional Fields:**
-```json
+```js
 {
   "frontend": "on",        // Checkbox
   "webDevelopment": "on",  // Checkbox
@@ -753,7 +753,7 @@ fn parse_headers_secure(
 }
 ```
 
-#### CORS Security Model
+### CORS Security Model
 
 **Origin Validation:**
 ```rust
