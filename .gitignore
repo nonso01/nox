@@ -29,8 +29,6 @@ old-image
 
 *.yaml
 
-# no express server only rust
-server
 
 #n .env files
 .env

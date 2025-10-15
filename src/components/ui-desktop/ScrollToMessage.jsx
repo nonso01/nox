@@ -11,7 +11,7 @@ import {
 
 export default function ScrollToMessage() {
   return (
-    <section className="d-fly limit-screen-large">
+    <section className="d-fly limit-screen-large debug">
       <div className="message-fly-cover flex center ">
         <FlyingMessage />
       </div>

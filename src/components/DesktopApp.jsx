@@ -32,17 +32,53 @@ export default function DesktopApp({ connected, onSetConnected }) {
         releaseEase: createSpring({ stiffness: 200 }),
       });
 
-      animate(".lucide-star", {
-        duration: 500,
-        scale: [0, 1],
-        ease: createSpring({ stiffness: 200, mass: 2 }),
-        delay: stagger(100, { from: "center" }),
-        alternate: true,
-        loop: true,
-      });
+      (() /** Rating Star animations */ => {
+        animate(".lucide-star", {
+          duration: 500,
+          scale: [0, 1],
+          ease: createSpring({ stiffness: 200, mass: 2 }),
+          delay: stagger(100, { from: "center" }),
+          alternate: true,
+          loop: true,
+        });
+      })();
 
-      {
-        // initiate scroll on d-fly
+      (() /** Animate Header Elements and Childrens */ => {
+        const headerAnim = animate("header", {
+          duration: 900,
+          ease: "out(3)",
+          autoplay: onScroll({
+            container: root.current,
+            target: "header",
+            debug: true,
+            repeat: true, // KEY: Allows animation to retrigger on every enter/leave
+            enter: "bottom top+=200",
+            leave: "top top+=90%",
+            sync: 0.5,
+            onEnter(obs) {
+              console.log("Entering - every time!");
+              animate(obs.target, {
+                translateY: [100, 0],
+                opacity: [0, 0.5, 1],
+                duration: 900,
+              });
+            },
+            onLeave(obs) {
+              console.log("Leaving - every time!");
+              // console.log(obs)
+              animate(obs.target, {
+                translateY: [0, -100],
+                opacity: [1, 0.5, 0],
+              });
+            },
+            onUpdate(obs) {
+              console.log("Progress:", obs.progress);
+            },
+          }),
+        });
+      })();
+
+      (() /** d-fly, during the mean time, look for a proper name */ => {
         const [$container] = utils.$(".d-fly");
         const debug = true;
         const duration = 5000;
@@ -73,17 +109,8 @@ export default function DesktopApp({ connected, onSetConnected }) {
             },
           }),
         });
-
-        //   // Line drawing animation following the motion path values
-        //   // For demo aesthetic only
-        //   animate(svg.createDrawable(".flying-message-path path"), {
-        //     draw: "0 1",
-        //     opacity: [0, 1],
-        //     ease: "linear",
-        //     duration,
-        //     loop: true,
-        //   });
-      }
+      })();
+      // more animations here...
     });
 
     // console.log(connected);

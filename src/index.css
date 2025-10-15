@@ -6,7 +6,7 @@
   line-height: 1.4;
 
   font-family: "Outfit", system-ui, -apple-system, sans-serif;
-  color: #fff;
+  color: var(--nox-white);
   user-select: none;
 }
 
@@ -74,7 +74,7 @@
 
 html,
 body {
-  min-height: max(100dvh, 37.5rem);
+  /* min-height: max(100dvh, 37.5rem); */
   background-color: var(--nox-secondary-color);
   scrollbar-gutter: stable;
   scroll-behavior: smooth;
@@ -84,7 +84,10 @@ body {
 
   #root,
   .desktop-app {
-    min-height: inherit;
+    height: max(100dvh, 37.5rem);
+    max-height: 67.5rem;
+    border: 2px solid red;
+    overflow-y: scroll;
   }
 }
 
