@@ -1,20 +1,15 @@
 import { useRef } from "react";
 
 export default function Contact({
-  // formActionURL = "https://devastatingly-unthrowable-keaton.ngrok-free.dev/contact",
-  formActionURL = "http://127.0.0.1:8080/contact",
+  formActionURL = "https://devastatingly-unthrowable-keaton.ngrok-free.dev/contact",
+  // formActionURL = "http://127.0.0.1:8080/contact",
 }) {
   const formEl = useRef(null);
   const formSubmitterEl = useRef(null);
 
-  // function checkLenght(e) {
-  //   const max = 1900;
-  //   let r = max - e.target.value.length;
-  //   console.log(r);
-  // }
-
   function handleFormSubmit(e) {
     e.preventDefault();
+    e.stopPropagation();
     const formData = new FormData(formEl.current, formSubmitterEl.current);
 
     const req = new Request(formActionURL, {

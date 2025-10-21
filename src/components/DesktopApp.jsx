@@ -56,7 +56,7 @@ export default function DesktopApp({ connected, onSetConnected }) {
             leave: "top top+=90%",
             sync: 0.5,
             onEnter(obs) {
-              console.log("Entering - every time!");
+              // console.log("Entering - every time!");
               animate(obs.target, {
                 translateY: [100, 0],
                 opacity: [0, 0.5, 1],
@@ -64,7 +64,7 @@ export default function DesktopApp({ connected, onSetConnected }) {
               });
             },
             onLeave(obs) {
-              console.log("Leaving - every time!");
+              // console.log("Leaving - every time!");
               // console.log(obs)
               animate(obs.target, {
                 translateY: [0, -100],
@@ -72,7 +72,7 @@ export default function DesktopApp({ connected, onSetConnected }) {
               });
             },
             onUpdate(obs) {
-              console.log("Progress:", obs.progress);
+              // console.log("Progress:", obs.progress);
             },
           }),
         });

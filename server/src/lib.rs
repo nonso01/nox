@@ -149,59 +149,6 @@ pub mod nox_server {
         }
     }
 
-    pub struct FieldConstraint {
-        pub name: &'static str,
-        pub max_length: usize,
-        pub required: bool,
-        pub email: bool, // true for email field, enables regex validation
-    }
-
-    // Constants
-    pub const FIELD_CONSTRAINTS: &[FieldConstraint] = &[
-        FieldConstraint {
-            name: "name",
-            max_length: 40,
-            required: true,
-            email: false,
-        },
-        FieldConstraint {
-            name: "email",
-            max_length: 80,
-            required: true,
-            email: true,
-        },
-        FieldConstraint {
-            name: "message",
-            max_length: 2000,
-            required: true,
-            email: false,
-        },
-        FieldConstraint {
-            name: "frontend",
-            max_length: 10,
-            required: false,
-            email: false,
-        },
-        FieldConstraint {
-            name: "webDevelopment",
-            max_length: 10,
-            required: false,
-            email: false,
-        },
-        FieldConstraint {
-            name: "blender",
-            max_length: 10,
-            required: false,
-            email: false,
-        },
-    ];
-
-    pub const OPTIONAL_CHECKBOX: [&str; 3] = ["blender", "frontend", "webDevelopment"];
-
-    pub const MAX_CONTENT_LENGTH: usize = 50 * 1024;
-
-    pub const MAX_FORM_DATA_LENGTH: usize = 10 * 1024;
-
     // Sends an email using lettre.
     pub fn send_email(
         to: &str,

@@ -25,14 +25,14 @@ function Loader() {
   );
 }
 
-function Ground({ positionY = 0 }) {
-  return (
-    <mesh receiveShadow rotation-x={-Math.PI / 2} position-y={positionY}>
-      <planeGeometry args={[100, 100]} />
-      <meshStandardMaterial color={BG_COLOR} />
-    </mesh>
-  );
-}
+// function Ground({ positionY = 0 }) {
+//   return (
+//     <mesh receiveShadow rotation-x={-Math.PI / 2} position-y={positionY}>
+//       <planeGeometry args={[100, 100]} />
+//       <meshStandardMaterial color={BG_COLOR} />
+//     </mesh>
+//   );
+// }
 
 function HouseModel({ url }) {
   const { scene } = useGLTF(url);
@@ -82,7 +82,14 @@ function HouseModel({ url }) {
 
 export default function HouseSceneR3F() {
   return (
-    <div className="house-scene" style={{ width: "100%", height: "100%" }}>
+    <div
+      className="house-scene"
+      style={{
+        width: "100%",
+        height: "100%",
+        backgroundColor: "var(--nox-black)",
+      }}
+    >
       <Canvas
         shadows
         dpr={[1, 2]}
@@ -104,7 +111,6 @@ export default function HouseSceneR3F() {
             shadow-normalBias={0.05}
           />
           <HouseModel url={house3D} />
-          <Ground />
         </Suspense>
         <OrbitControls
           enableDamping

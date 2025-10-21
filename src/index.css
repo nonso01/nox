@@ -86,7 +86,7 @@ body {
   .desktop-app {
     height: max(100dvh, 37.5rem);
     max-height: 67.5rem;
-    border: 2px solid red;
+    /* border: 2px solid var(--nox-white); */
     overflow-y: scroll;
   }
 }
@@ -761,7 +761,8 @@ fieldset {
   }
 
   .d-my-room {
-    height: 1020px;
+    height: max(100dvh, 1020px);
+    max-height: 1080px;
     .house-scene {
       height: 100%;
 

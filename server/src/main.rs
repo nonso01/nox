@@ -16,16 +16,12 @@ use regex::Regex;
 use nox::nox_server::{
     contains_potential_xss, generate_email_html, get_mime_type, html_escape, is_safe_path,
     parse_form_data, parse_multipart_data, red, sanitize_email_content, sanitize_path, send_email,
-    send_html_email, HttpResponse, RateLimiter, FIELD_CONSTRAINTS, MAX_CONTENT_LENGTH,
-    MAX_FORM_DATA_LENGTH, OPTIONAL_CHECKBOX,
+    send_html_email, HttpResponse, RateLimiter,
 };
 
-const WINDOW_LIMIT_MINS: u64 = 60; // 1 hour = 60 min
-const CORS_CONFIG_MAX_AGE: u32 = 86400;
-const CORS_CONFIG_MIN_AGE: u32 = CORS_CONFIG_MAX_AGE / 24;
+mod constants;
 
-const MAX_REQUEST_LINE_SIZE: usize = 8192; // 8KB max request line
-const MAX_HEADER_LINE_SIZE: usize = 8192;
+use constants::*;
 
 // Connection and Rate Limiting Configurations
 #[derive(Clone)]
@@ -152,6 +148,7 @@ impl CorsConfig {
                 "X-Requested-With".to_string(),
                 "Accept".to_string(),
                 "Origin".to_string(),
+                "ngrok-skip-browser-warning".to_string(),
             ],
             max_age: CORS_CONFIG_MAX_AGE, // 24 hours
         }
@@ -381,7 +378,7 @@ fn main() -> ServerResult<()> {
 
     println!(
         "🦍 Security enabled - Max content: {}KB, Timeout: {}s",
-        security_config.max_content_length / 1024,
+        security_config.max_content_length / ONE_KILO_BYTE,
         security_config.connection_timeout.as_secs()
     );
 
@@ -499,7 +496,7 @@ fn handle_connection_safe(
         method,
         path,
         client_ip,
-        content_length / 1024
+        content_length / ONE_KILO_BYTE
     );
 
     // Check if method is allowed
@@ -864,8 +861,7 @@ fn validate_form_data(form_data: &HashMap<String, String>) -> ServerResult<()> {
                 // Email specific validation
                 if constraint.email {
                     // Additional length check for email before regex
-                    if value.len() > 254 {
-                        // RFC 5321 limit
+                    if value.len() > RFC_5321_MAX_EMAIL_LENGTH {
                         errors.push("Email address too long".to_string());
                     } else if !email_regex.is_match(value) {
                         errors.push("Invalid email format".to_string());
@@ -877,11 +873,11 @@ fn validate_form_data(form_data: &HashMap<String, String>) -> ServerResult<()> {
                         let local_part = local_domain[0];
                         let domain_part = local_domain[1];
 
-                        if local_part.len() > 64 {
-                            // RFC 5321 local part limit
+                        if local_part.len() > RFC_5321_MAX_LOCAL_PART_LENGTH {
+                            // local part limit
                             errors.push("Email local part too long".to_string());
                         }
-                        if domain_part.len() > 253 {
+                        if domain_part.len() > RFC_5321_MAX_DOMAIN_PART_LENGTH {
                             // Domain length limit
                             errors.push("Email domain too long".to_string());
                         }
