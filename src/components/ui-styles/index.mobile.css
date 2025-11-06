@@ -1,0 +1,106 @@
+.mobile-app {
+  /* Menu Styles*/
+  .m-nav {
+    .menu {
+      position: relative;
+      display: block;
+      width: 2rem;
+      height: 2rem;
+      margin: 1%;
+      cursor: pointer;
+      transition: transform 0.4s var(--ease);
+      transform-style: preserve-3d;
+      transform-origin: center center 1rem;
+      /* Credit Pedro Ondiviela
+      https://codepen.io/Pedro-Ondiviela */
+    }
+    .menu__face {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 2rem;
+      height: 2rem;
+      transition: transform 0.4s var(--ease);
+      transform-origin: center center 1rem;
+    }
+    .menu__face--d2 {
+      transform: rotate3d(0, 1, 0, 90deg);
+    }
+    .menu__face--d3 {
+      transform: translateZ(2rem);
+    }
+    .menu__face--d4 {
+      transform: rotate3d(0, -1, 0, 90deg);
+    }
+    .menu__face--d5 {
+      transform: rotate3d(-1, 0, 0, 90deg);
+    }
+    .menu__face--d6 {
+      transform: rotate3d(1, 0, 0, 90deg);
+    }
+    .menu__face--axis-vertical {
+      transform: translateZ(1rem);
+    }
+    .menu__face--axis-horizontal {
+      transform: rotate3d(-1, 0, 0, 90deg) translateZ(1rem);
+    }
+    .menu__face--square {
+      /* background-color: #2229; */
+      --app-secondary-color-light: #101010a0;
+      background-color: var(--app-secondary-color-light);
+    }
+    .menu--minimal .menu__face--square {
+      background: none;
+    }
+    .menu[data-position="1"] {
+      transform: rotate3d(0, 1, 0, 90deg);
+    }
+    .menu[data-position="2"] {
+      transform: rotate3d(0, 1, 0, 90deg) rotate3d(0, 0, 1, 90deg)
+        rotate3d(0, 1, 0, 90deg);
+    }
+    .menu[data-position="3"] {
+      transform: rotate3d(0, 1, 0, 90deg) rotate3d(0, 0, 1, 90deg)
+        rotate3d(0, 1, 0, 90deg) rotate3d(0, 1, 0, 90deg)
+        rotate3d(0, 0, 1, 90deg);
+    }
+  }
+}
+
+/* Queries for devices below 850px */
+@media (width <= 850px) {
+  .mobile-app {
+    .m-header {
+      height: 550px;
+      padding: 2%;
+      background-image: url("../../assets/images/2d-me.webp");
+      background-repeat: no-repeat;
+      background-size: cover;
+
+      position: relative;
+      border-color: orange;
+    }
+    .m-nav {
+      height: 55px;
+      border-radius: 10px;
+      padding: 1% 2%;
+      align-items: center;
+      /* border-color: transparent; */
+      background-color: var(--app-black);
+
+      /* position: relative; */
+    }
+    .menu-list {
+      position: absolute;
+      top: 0;
+      left: 0;
+      padding: 3%;
+      height: max(100dvh, 600px);
+      width: min(85dvw, 300px);
+      background-color: var(--app-secondary-color-light);
+      backdrop-filter: blur(5px);
+      border-color: orange;
+      /* width: 200px; */
+    }
+  }
+}

@@ -87,7 +87,7 @@ export default function HouseSceneR3F() {
       style={{
         width: "100%",
         height: "100%",
-        backgroundColor: "var(--nox-black)",
+        backgroundColor: "var(--app-black)",
       }}
     >
       <Canvas

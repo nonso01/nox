@@ -11,7 +11,7 @@ import Contact from "./Contact";
 import Logo from "../../assets/images/favicon.png";
 
 let iconSize = 30;
-let iconColor = "var(--nox-secondary-color)";
+let iconColor = "var(--app-secondary-color)";
 
 const footerChatContent = [
   {
