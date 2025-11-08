@@ -6,26 +6,25 @@
   line-height: 1.4;
 
   font-family: "Outfit", system-ui, -apple-system, sans-serif;
-  color: var(--nox-white);
+  color: var(--app-white);
   user-select: none;
 }
 
 :root {
   --font-sm: 0.9rem;
 
-  --nox-primary-color: #34db69;
-  --nox-primary-color-light: #34db69b0;
-  --nox-secondary-color: #222;
-  --nox-danger-color: #e03a3a;
-  --nox-black: #101010;
-  --nox-white: whitesmoke;
-  --nox-secondary-color-light: #0008;
+  --app-primary-color: #34db69;
+  --app-primary-color-light: #34db69b0;
+  --app-secondary-color: #222;
+  --app-danger-color: #e03a3a;
+  --app-black: #101010;
+  --app-white: whitesmoke;
+  --app-secondary-color-light: #0008;
 
   --size-half: 0.5rem;
   --size-1: 1rem;
 
   --size-10p: 10%;
-  /* --size-100p: 100%; */
 
   --cursor-image: url("./assets/cursors/jujutsu-cursor-32.png") 5 5, auto;
   --pointer-image: url("./assets/cursors/jujutsu-pointer-32.png") 5 5, pointer;
@@ -75,7 +74,7 @@
 html,
 body {
   /* min-height: max(100dvh, 37.5rem); */
-  background-color: var(--nox-secondary-color);
+  background-color: var(--app-secondary-color);
   scrollbar-gutter: stable;
   scroll-behavior: smooth;
 
@@ -86,7 +85,9 @@ body {
   .desktop-app {
     height: max(100dvh, 37.5rem);
     max-height: 67.5rem;
-    /* border: 2px solid var(--nox-white); */
+    scroll-behavior: smooth;
+
+    /* border: 2px solid var(--app-white); */
     overflow-y: scroll;
   }
 }
@@ -142,15 +143,15 @@ fieldset {
 }
 
 .font-orbitron {
-  font-family: "Orbitron", system-ui, -apple-system, sans-serif;
+  font-family: "Orbitron", system-ui, -apple-system, monospace;
 }
 
 .color-primary {
-  color: var(--nox-primary-color);
+  color: var(--app-primary-color);
 }
 
 .color-secondary {
-  color: var(--nox-secondary-color);
+  color: var(--app-secondary-color);
 }
 
 .pos-relative {
@@ -162,8 +163,8 @@ fieldset {
 }
 
 .icon {
-  --nox-secondary-color: #2e2e2eec;
-  /* --nox-primary-color: #34db69ea; */
+  --app-secondary-color: #2e2e2eec;
+  /* --app-primary-color: #34db69ea; */
   width: 50px;
   height: 50px;
   display: grid;
@@ -175,51 +176,51 @@ fieldset {
   animation: rotateGradient calc(6s * var(--i, 1)) var(--ease) infinite;
 
   &.dark {
-    border: 2px solid var(--nox-secondary-color);
+    border: 2px solid var(--app-secondary-color);
     background: linear-gradient(
       var(--angle),
       transparent 70%,
-      var(--nox-secondary-color) 100%
+      var(--app-secondary-color) 100%
     );
 
     &:hover {
-      border-color: var(--nox-primary-color);
+      border-color: var(--app-primary-color);
       background: linear-gradient(
         var(--angle),
         transparent 70%,
-        var(--nox-primary-color) 100%
+        var(--app-primary-color) 100%
       );
       svg {
-        stroke: var(--nox-primary-color);
+        stroke: var(--app-primary-color);
       }
     }
   }
 
   &.light {
-    border: 2px solid var(--nox-primary-color);
+    border: 2px solid var(--app-primary-color);
     background: linear-gradient(
       var(--angle),
       transparent 70%,
-      var(--nox-primary-color) 100%
+      var(--app-primary-color) 100%
     );
 
     &:hover {
-      border-color: var(--nox-secondary-color);
+      border-color: var(--app-secondary-color);
       background: linear-gradient(
         var(--angle),
         transparent 70%,
-        var(--nox-secondary-color) 100%
+        var(--app-secondary-color) 100%
       );
       svg {
-        stroke: var(--nox-secondary-color);
+        stroke: var(--app-secondary-color);
       }
     }
   }
 }
 
 .lucide-star {
-  stroke: var(--nox-primary-color);
-  fill: var(--nox-primary-color);
+  stroke: var(--app-primary-color);
+  fill: var(--app-primary-color);
 }
 
 /* scroll bar styles */
@@ -243,7 +244,7 @@ fieldset {
 
 ::-webkit-scrollbar-thumb:hover {
   transition-duration: 200ms;
-  background-color: var(--nox-primary-color);
+  background-color: var(--app-primary-color);
 }
 
 .flex {
@@ -279,7 +280,7 @@ fieldset {
     background-image: linear-gradient(
       var(--angle),
       white 40%,
-      var(--nox-secondary-color-light) 60%
+      var(--app-secondary-color-light) 60%
     );
   }
 
@@ -288,7 +289,7 @@ fieldset {
     -webkit-background-clip: text;
     background-clip: text;
     background-image: linear-gradient(
-      var(--nox-primary-color) 60%,
+      var(--app-primary-color) 60%,
       transparent
     );
   }
@@ -336,8 +337,8 @@ fieldset {
 
 /* Spin */
 .spinner {
-  border: 4px solid var(--nox-secondary-color);
-  border-left-color: var(--nox-primary-color);
+  border: 4px solid var(--app-secondary-color);
+  border-left-color: var(--app-primary-color);
   border-radius: calc(5 * var(--size-10p));
   width: calc(var(--size-1) * 2.5);
   height: calc(var(--size-1) * 2.5);
@@ -354,7 +355,7 @@ fieldset {
   height: 100dvh;
   position: relative;
   z-index: 1;
-  background-color: var(--nox-secondary-color);
+  background-color: var(--app-secondary-color);
 
   svg {
     * {
@@ -382,7 +383,7 @@ fieldset {
       /* font-size: 1.1rem; */
       font-weight: bolder;
       &:hover {
-        color: var(--nox-primary-color);
+        color: var(--app-primary-color);
       }
     }
 
@@ -392,7 +393,7 @@ fieldset {
       z-index: 5;
 
       a.home-link {
-        color: var(--nox-primary-color);
+        color: var(--app-primary-color);
       }
 
       .logo {
@@ -406,7 +407,7 @@ fieldset {
       .links {
         width: calc(3.5 * var(--size-10p));
         align-items: center;
-        background-color: var(--nox-black);
+        background-color: var(--app-black);
         border-radius: 1.25rem;
         position: relative;
         z-index: inherit;
@@ -436,7 +437,7 @@ fieldset {
           font-weight: bold;
 
           /* span {
-            color: var(--nox-primary-color);
+            color: var(--app-primary-color);
           } */
         }
       }
@@ -497,7 +498,7 @@ fieldset {
         align-self: center;
 
         p {
-          color: var(--nox-primary-color);
+          color: var(--app-primary-color);
           width: 45%;
           align-self: center;
           height: calc(var(--size-1) * 5);
@@ -507,8 +508,8 @@ fieldset {
           gap: 0.625rem;
           cursor: var(--pointer-image);
           .lucide {
-            color: var(--nox-primary-color);
-            stroke: var(--nox-primary-color-light);
+            color: var(--app-primary-color);
+            stroke: var(--app-primary-color-light);
             border: 2px solid currentColor;
             border-radius: 50%;
           }
@@ -535,13 +536,13 @@ fieldset {
   .d-service {
     height: 51.875rem;
     padding: 1.875rem 8.125rem;
-    background-color: var(--nox-black);
+    background-color: var(--app-black);
     /* border-radius: 50px; */
 
     .service-info {
       height: 6.25rem;
       padding-bottom: var(--size-1);
-      border-bottom: 2px solid var(--nox-secondary-color);
+      border-bottom: 2px solid var(--app-secondary-color);
 
       div {
         width: 33%;
@@ -552,7 +553,7 @@ fieldset {
         font-weight: 500;
 
         span {
-          color: var(--nox-primary-color);
+          color: var(--app-primary-color);
         }
       }
 
@@ -569,9 +570,9 @@ fieldset {
         width: 31.25rem;
         aspect-ratio: 1;
         align-self: center;
-        background-color: var(--nox-secondary-color);
+        background-color: var(--app-secondary-color);
         border-radius: 3.75rem;
-        box-shadow: 10px 10px 0px var(--nox-secondary-color-light);
+        box-shadow: 10px 10px 0px var(--app-secondary-color-light);
 
         .card-main {
           width: max(92%, 28.75rem);
@@ -603,7 +604,7 @@ fieldset {
         .card-clip {
           width: 28.75rem;
           height: 20rem;
-          background-color: var(--nox-black);
+          background-color: var(--app-black);
           position: absolute;
           z-index: 5;
           bottom: -1px;
@@ -644,7 +645,7 @@ fieldset {
               border-radius: 50%;
             }
             &:hover * {
-              color: var(--nox-primary-color);
+              color: var(--app-primary-color);
             }
           }
           span:not(button span) {
@@ -777,7 +778,7 @@ fieldset {
   .d-testimonial {
     height: 830px;
     padding: 30px 0px;
-    background-color: var(--nox-black);
+    background-color: var(--app-black);
     position: relative;
 
     .words {
@@ -795,7 +796,7 @@ fieldset {
         font-size: 3rem;
 
         span {
-          color: var(--nox-primary-color);
+          color: var(--app-primary-color);
         }
       }
     }
@@ -810,7 +811,7 @@ fieldset {
       &::after {
         background-image: linear-gradient(
           to right,
-          var(--nox-black) 20%,
+          var(--app-black) 20%,
           #fff0 100%
         );
         content: "";
@@ -844,14 +845,14 @@ fieldset {
         font-size: 12px;
         font-weight: 600;
         span {
-          color: var(--nox-primary-color);
+          color: var(--app-primary-color);
         }
       }
     }
 
     .t-card {
-      /* border: 2px solid var(--nox-primary-color); */
-      background-color: var(--nox-secondary-color);
+      /* border: 2px solid var(--app-primary-color); */
+      background-color: var(--app-secondary-color);
       width: 500px;
       height: 250px;
       border-radius: 0.625rem;
@@ -892,7 +893,7 @@ fieldset {
   }
 
   .d-fly {
-    background-color: var(--nox-black);
+    background-color: var(--app-black);
     height: max(100dvh, 860px);
     max-height: 1085px;
     position: relative;
@@ -930,7 +931,7 @@ fieldset {
 
       border-radius: 40px;
       padding: 1.3%;
-      background-color: var(--nox-secondary-color-light);
+      background-color: var(--app-secondary-color-light);
       display: grid;
       grid-template-columns: repeat(14, 1fr);
       grid-template-rows: repeat(10, 1fr);
@@ -955,8 +956,8 @@ fieldset {
         display: flex;
         justify-content: space-between;
         .icon {
-          --nox-secondary-color: rgb(109, 109, 109);
-          /* --nox-primary-color: blue; */
+          --app-secondary-color: rgb(109, 109, 109);
+          /* --app-primary-color: blue; */
         }
 
         .w {
@@ -969,11 +970,11 @@ fieldset {
             color: #d1d0d0;
           }
           a {
-            --nox-secondary-color: rgb(109, 109, 109);
-            color: var(--nox-secondary-color);
+            --app-secondary-color: rgb(109, 109, 109);
+            color: var(--app-secondary-color);
             text-decoration: underline;
             &:hover {
-              color: var(--nox-primary-color);
+              color: var(--app-primary-color);
             }
           }
           * {
@@ -988,14 +989,14 @@ fieldset {
         width: 65%;
 
         a.icon {
-          --nox-secondary-color: rgb(109, 109, 109);
+          --app-secondary-color: rgb(109, 109, 109);
           align-self: flex-end;
           svg {
-            fill: var(--nox-secondary-color);
+            fill: var(--app-secondary-color);
           }
           &:hover {
             svg {
-              fill: var(--nox-primary-color);
+              fill: var(--app-primary-color);
               stroke: none;
             }
           }
@@ -1004,7 +1005,7 @@ fieldset {
     }
 
     .contact {
-      background-color: var(--nox-secondary-color);
+      background-color: var(--app-secondary-color);
       border-radius: 30px;
       padding: 5%;
       grid-row: 1/11;
@@ -1028,7 +1029,7 @@ fieldset {
       }
 
       form {
-        --nox-white: rgb(186, 186, 186);
+        --app-white: rgb(186, 186, 186);
         height: 100%;
         width: 100%;
         /* border-color: #34db69; */
@@ -1040,48 +1041,46 @@ fieldset {
 
           input {
             border: 2px solid transparent;
-            border-bottom-color: var(--nox-black);
+            border-bottom-color: var(--app-black);
             padding-inline: 1% 5%;
             width: 100%;
             height: 100%;
-            color: var(--nox-white);
+            color: var(--app-white);
 
             &:focus {
               border-radius: 10px;
-              background-color: var(--nox-secondary-color-light);
+              background-color: var(--app-secondary-color-light);
               &:hover {
-                border-color: var(--nox-secondary-color-light);
+                border-color: var(--app-secondary-color-light);
               }
             }
             &:hover {
-              border-bottom-color: var(--nox-primary-color);
+              border-bottom-color: var(--app-primary-color);
             }
           }
         }
 
         .input-area {
-          /* border-color: orange; */
           height: 22%;
 
           textarea {
             border: 2px solid transparent;
-            border-bottom-color: var(--nox-black);
+            border-bottom-color: var(--app-black);
             padding-inline-start: 1%;
             width: 100%;
             height: 100%;
             resize: none;
-            color: var(--nox-white);
-            /* background-color: transparent; */
+            color: var(--app-white);
 
             &:focus {
               border-radius: 10px;
-              background-color: var(--nox-secondary-color-light);
+              background-color: var(--app-secondary-color-light);
               &:hover {
-                border-color: var(--nox-secondary-color-light);
+                border-color: var(--app-secondary-color-light);
               }
             }
             &:hover {
-              border-bottom-color: var(--nox-primary-color);
+              border-bottom-color: var(--app-primary-color);
             }
           }
         }
@@ -1095,16 +1094,16 @@ fieldset {
             border-radius: 5px;
             height: 100%;
             &:hover {
-              border-color: var(--nox-primary-color);
+              border-color: var(--app-primary-color);
             }
             input,
             span {
               margin-inline: 1%;
-              color: var(--nox-white);
+              color: var(--app-white);
             }
 
             input:checked + span {
-              color: var(--nox-primary-color-light);
+              color: var(--app-primary-color-light);
               text-decoration: line-through;
             }
           }
@@ -1118,12 +1117,13 @@ fieldset {
             width: 50%;
             font-weight: 500;
             border-radius: 10px;
-            background-color: var(--nox-black);
+            background-color: var(--app-black);
             box-shadow: 0 5px 0 black;
             &:hover {
               transform: translate3d(0, 3px, 0);
-              background-color: var(--nox-primary-color);
-              box-shadow: 0 3px 1rem var(--nox-primary-color-light);
+              background-color: var(--app-primary-color);
+              box-shadow: 0 3px 1rem var(--app-primary-color-light);
+              color: var(--app-secondary-color);
             }
           }
         }
@@ -1131,83 +1131,14 @@ fieldset {
     }
 
     .copyright {
-      --nox-black: rgb(109, 109, 109);
+      --app-black: rgb(109, 109, 109);
       align-self: center;
       width: 20%;
       span {
-        color: var(--nox-black);
+        color: var(--app-black);
         font-weight: 500;
         margin-inline: 1%;
       }
-    }
-  }
-}
-
-.mobile-app {
-  /* Menu Styles*/
-  .m-nav {
-    .menu {
-      position: relative;
-      display: block;
-      width: 2rem;
-      height: 2rem;
-      margin: 1%;
-      cursor: pointer;
-      transition: transform 0.4s var(--ease);
-      transform-style: preserve-3d;
-      transform-origin: center center 1rem;
-      /* Credit Pedro Ondiviela
-      https://codepen.io/Pedro-Ondiviela */
-    }
-    .menu__face {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 2rem;
-      height: 2rem;
-      transition: transform 0.4s var(--ease);
-      transform-origin: center center 1rem;
-    }
-    .menu__face--d2 {
-      transform: rotate3d(0, 1, 0, 90deg);
-    }
-    .menu__face--d3 {
-      transform: translateZ(2rem);
-    }
-    .menu__face--d4 {
-      transform: rotate3d(0, -1, 0, 90deg);
-    }
-    .menu__face--d5 {
-      transform: rotate3d(-1, 0, 0, 90deg);
-    }
-    .menu__face--d6 {
-      transform: rotate3d(1, 0, 0, 90deg);
-    }
-    .menu__face--axis-vertical {
-      transform: translateZ(1rem);
-    }
-    .menu__face--axis-horizontal {
-      transform: rotate3d(-1, 0, 0, 90deg) translateZ(1rem);
-    }
-    .menu__face--square {
-      /* background-color: #2229; */
-      --nox-secondary-color-light: #101010a0;
-      background-color: var(--nox-secondary-color-light);
-    }
-    .menu--minimal .menu__face--square {
-      background: none;
-    }
-    .menu[data-position="1"] {
-      transform: rotate3d(0, 1, 0, 90deg);
-    }
-    .menu[data-position="2"] {
-      transform: rotate3d(0, 1, 0, 90deg) rotate3d(0, 0, 1, 90deg)
-        rotate3d(0, 1, 0, 90deg);
-    }
-    .menu[data-position="3"] {
-      transform: rotate3d(0, 1, 0, 90deg) rotate3d(0, 0, 1, 90deg)
-        rotate3d(0, 1, 0, 90deg) rotate3d(0, 1, 0, 90deg)
-        rotate3d(0, 0, 1, 90deg);
     }
   }
 }
@@ -1219,49 +1150,5 @@ fieldset {
     border-color: green;
     width: min(100dvw, 1920px);
     margin: auto;
-  }
-}
-
-/* Queries for devices below 850px */
-@media (width <= 850px) {
-  /* html,
-  body,
-  #root,
-  .mobile-app {
-    min-height: min(100dvh, 700px);
-  } */
-  .mobile-app {
-    .m-header {
-      height: 550px;
-      padding: 2%;
-      background-image: url("./assets/images/2d-me.webp");
-      background-repeat: no-repeat;
-      background-size: cover;
-
-      position: relative;
-      border-color: orange;
-    }
-    .m-nav {
-      height: 55px;
-      border-radius: 10px;
-      padding: 1% 2%;
-      align-items: center;
-      /* border-color: transparent; */
-      background-color: var(--nox-black);
-
-      /* position: relative; */
-    }
-    .menu-list {
-      position: absolute;
-      top: 0;
-      left: 0;
-      padding: 3%;
-      height: max(100dvh, 600px);
-      width: min(85dvw, 300px);
-      background-color: var(--nox-secondary-color-light);
-      backdrop-filter: blur(5px);
-      border-color: orange;
-      /* width: 200px; */
-    }
   }
 }
