@@ -1,16 +1,17 @@
 import { ArrowUpRight } from "lucide-react";
 import diceVideo from "../../assets/images/dice-390.webm";
-import earthImage from "../../assets/images/earth-390.webp";
+// import earthImage from "../../assets/images/earth-390.webp";
+import cyber from "../../assets/images/cyber.webp"
 import noxPspImage from "../../assets/images/nox-psp.webp";
 
 const cards = [
   {
-    title: "Video Editing & Image Manipulation",
-    subTitle: "Editing",
-    note: "Video & Photo",
+    title: "Cybersecurity & Analysis",
+    subTitle: "Security",
+    note: "kali, tcpdump, splunk...",
     fileNumber: 3,
-    video: true,
-    bgUrl: "",
+    video: false,
+    bgUrl: cyber,
     id: "video-editing",
   },
   {
@@ -18,8 +19,8 @@ const cards = [
     subTitle: "Blender Art",
     note: "final & experimental",
     fileNumber: 8,
-    video: false,
-    bgUrl: earthImage,
+    video: true,
+    bgUrl: "",
     id: "3d-animation",
   },
   {

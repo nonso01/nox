@@ -1,7 +1,7 @@
 import {
   createScope,
   createDraggable,
-  createSpring,
+  spring,
   animate,
   stagger,
   svg,
@@ -29,14 +29,14 @@ export default function DesktopApp({ connected, onSetConnected }) {
     scope.current = createScope({ root }).add((self) => {
       createDraggable(".logo img", {
         container: [0, 0, 0, 0],
-        releaseEase: createSpring({ stiffness: 200 }),
+        releaseEase: spring({ stiffness: 200 }),
       });
 
       (() /** Rating Star animations */ => {
         animate(".lucide-star", {
           duration: 500,
           scale: [0, 1],
-          ease: createSpring({ stiffness: 200, mass: 2 }),
+          ease: spring({ stiffness: 200, mass: 2 }),
           delay: stagger(100, { from: "center" }),
           alternate: true,
           loop: true,

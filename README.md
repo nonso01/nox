@@ -1,8 +1,7 @@
-# I AM NONSO MARTIN
-> Welcome to my little world, i will walk you through my code, what it does and how you can try it out if you wish to.
+# Project Documentation
 >
 > working branch will be `v0.10`
-___
+
 ## Server Side `RUST`
 
 A production-ready, security-focused HTTP server built in Rust for handling web requests, form submissions, and email notifications.

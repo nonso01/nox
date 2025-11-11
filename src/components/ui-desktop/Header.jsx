@@ -12,8 +12,11 @@ import Logo from "../../assets/images/favicon.png";
 
 export default function Header() {
   return (
-    <header className="d-header flex column between limit-screen-large" id="home">
-      <nav className="d-nav flex between ">
+    <header
+      className="desktop-header flex column between limit-large-screen debug"
+      id="home"
+    >
+      <nav className="desktop-navigation flex between ">
         <div className=" links flex evenly ">
           <span title="home">
             <a
@@ -21,7 +24,7 @@ export default function Header() {
               aria-label="move on to the home section"
               className="home-link icon dark"
             >
-              <House />
+              <House aria-hidden="true" />
             </a>
           </span>
           <span title="about me">
@@ -30,7 +33,7 @@ export default function Header() {
               aria-label="view more about Nonso Martin and his core skills"
               className="icon dark"
             >
-              <CircleUser />
+              <CircleUser aria-hidden="true" />
             </a>
           </span>
           <span title="service">
@@ -39,7 +42,7 @@ export default function Header() {
               aria-label="Browse the different services offered by Nonso Martin"
               className="icon dark"
             >
-              <HandPlatter />
+              <HandPlatter aria-hidden="true" />
             </a>
           </span>
         </div>
@@ -55,7 +58,7 @@ export default function Header() {
               aria-label="Download and Read Nonso Martin's Resume"
               className="icon dark"
             >
-              <FileDigit />
+              <FileDigit aria-hidden="true" />
             </a>
           </span>
           <span title="projects">
@@ -64,7 +67,7 @@ export default function Header() {
               aria-label="check Nonso Martin's completed and ongoing projects"
               className="icon dark"
             >
-              <FolderOpenDot />
+              <FolderOpenDot aria-hidden="true" />
             </a>
           </span>
           <span title="let's chat">
@@ -73,7 +76,7 @@ export default function Header() {
               aria-label="chat with Nonso Martin in your next project idea"
               className="icon dark"
             >
-              <MessageCircle />
+              <MessageCircle aria-hidden="true" />
             </a>
           </span>
         </div>
@@ -85,7 +88,8 @@ export default function Header() {
           </p>
           <h1 className="p-name">
             I'm <span className="color-primary">Martin,</span>
-            <p>Web Developer</p>
+            <br />
+            <span>Web Developer</span>
           </h1>
         </div>
 
@@ -117,7 +121,7 @@ export default function Header() {
 
         <div className="hire-me-link flex evenly ">
           <p className="flex center">
-            Hire me <ArrowUpRight />
+            Hire me <ArrowUpRight aria-hidden="true" />
           </p>
         </div>
       </section>
