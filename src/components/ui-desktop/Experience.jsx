@@ -2,7 +2,7 @@ import { LineFollowCircle } from "../ui-shared/Svgs";
 
 export default function Experience() {
   return (
-    <section className="d-experience flex column evenly  limit-screen-large">
+    <section className="d-experience flex column evenly limit-large-screen debug">
       <div className="flex center p-work ">
         <p>My Work Experience</p>
       </div>

@@ -9,11 +9,12 @@ import {
   FolderOpenDot,
 } from "lucide-react";
 import Logo from "../../assets/images/favicon.png";
+import { FourYearsExpert } from "../ui-shared/Svgs";
 
-export default function Header() {
+export default function Header({ handleHireMe = () => console.log("hire") }) {
   return (
     <header
-      className="desktop-header flex column between limit-large-screen debug"
+      className="desktop-header flex column between limit-large-screen "
       id="home"
     >
       <nav className="desktop-navigation flex between ">
@@ -86,7 +87,7 @@ export default function Header() {
           <p className="p-hello flex center">
             <span className="font-orbitron">HELLO</span>
           </p>
-          <h1 className="p-name">
+          <h1 className="martin">
             I'm <span className="color-primary">Martin,</span>
             <br />
             <span>Web Developer</span>
@@ -94,33 +95,33 @@ export default function Header() {
         </div>
 
         <div className="intro-rating flex between ">
-          <div className=" flex column between">
-            <p className="p-quote">❝</p>
-            <p className="p-info">
+          <div className=" flex column between ">
+            <blockquote className="p-quote">❝</blockquote>
+            <p className="martin-info">
               Martin's proffesionalism and expertise ensured our website and
               brand success. Highly recommended!
             </p>
-            <div className="p-client">
+            <div className="martin-client-count">
               <p className="font-orbitron">30+</p>
               <p>Client Served</p>
             </div>
           </div>
 
-          <div className=" flex column end">
-            <p className="p-stars flex evenly">
+          <div className=" flex column  between end ">
+            <p className="header-stars flex evenly ">
               {Array.from({ length: 5 }, (_, i) => (
                 <Star key={i} />
               ))}
             </p>
-            <p className="p-years">
-              <span className="font-orbitron">4</span> Years
-            </p>
-            <p className="p-ex">Expert</p>
+
+            <div className="four-years ">
+              <FourYearsExpert fill="whitesmoke" />
+            </div>
           </div>
         </div>
 
         <div className="hire-me-link flex evenly ">
-          <p className="flex center">
+          <p className="flex center" onClick={handleHireMe}>
             Hire me <ArrowUpRight aria-hidden="true" />
           </p>
         </div>

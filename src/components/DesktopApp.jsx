@@ -43,7 +43,7 @@ export default function DesktopApp({ connected, onSetConnected }) {
         });
       })();
 
-      (() /** Animate Header Elements and Childrens */ => {
+      () /** Animate Header Elements and Childrens */ => {
         const headerAnim = animate("header", {
           duration: 900,
           ease: "out(3)",
@@ -57,26 +57,19 @@ export default function DesktopApp({ connected, onSetConnected }) {
             sync: 0.5,
             onEnter(obs) {
               // console.log("Entering - every time!");
-              animate(obs.target, {
-                translateY: [100, 0],
-                opacity: [0, 0.5, 1],
-                duration: 900,
-              });
+              animate(obs.target, {});
             },
             onLeave(obs) {
               // console.log("Leaving - every time!");
               // console.log(obs)
-              animate(obs.target, {
-                translateY: [0, -100],
-                opacity: [1, 0.5, 0],
-              });
+              animate(obs.target, {});
             },
             onUpdate(obs) {
               // console.log("Progress:", obs.progress);
             },
           }),
         });
-      })();
+      };
 
       (() /** d-fly, during the mean time, look for a proper name */ => {
         const [$container] = utils.$(".d-fly");
