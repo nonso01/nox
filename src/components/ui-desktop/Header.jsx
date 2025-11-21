@@ -17,13 +17,13 @@ export default function Header({ handleHireMe = () => console.log("hire") }) {
       className="desktop-header flex column between limit-large-screen "
       id="home"
     >
-      <nav className="desktop-navigation flex between ">
+      <nav className="desktop-navigation flex between pos-relative">
         <div className=" links flex evenly ">
           <span title="home">
             <a
               href="#home"
               aria-label="move on to the home section"
-              className="home-link icon dark"
+              className="home-link icon dark color-primary"
             >
               <House aria-hidden="true" />
             </a>

@@ -225,7 +225,7 @@ fieldset {
 
 /* scroll bar styles */
 ::-webkit-scrollbar {
-  width: 0px;
+  width: 2px;
   /* controls the width */
   height: var(--size-half);
 }

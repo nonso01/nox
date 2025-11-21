@@ -1,6 +1,5 @@
 import { ArrowUpRight } from "lucide-react";
 import diceVideo from "../../assets/images/dice-390.webm";
-// import earthImage from "../../assets/images/earth-390.webp";
 import cyber from "../../assets/images/cyber.webp";
 import noxPspImage from "../../assets/images/nox-psp.webp";
 
@@ -34,23 +33,20 @@ const cards = [
   },
 ];
 
-function Projects() {
-  return <div></div>;
-}
 
 export default function Service() {
   return (
     <section
-      className="d-service flex column evenly limit-large-screen"
+      className="d-service flex column evenly limit-large-screen debug"
       id="service"
     >
-      <div className="service-info flex between ">
+      <div className="service-info flex between debug">
         <div>
           <p>
             My <span>Services</span>
           </p>
         </div>
-        <div>
+        <div className="debug">
           <p>
             Specializing in web development, Blender art, and Cybersecurity to
             bring your vision to life, while maintaining trust.

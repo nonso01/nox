@@ -20,12 +20,7 @@
 
     .desktop-navigation {
       height: 4.375rem;
-      position: relative;
       z-index: 5;
-
-      a.home-link {
-        color: var(--app-primary-color);
-      }
 
       .logo {
         width: var(--size-10p);
@@ -158,11 +153,9 @@
     height: 60rem;
     padding: 1.875rem 8.125rem;
     background-color: var(--app-black);
-    /* border-radius: 50px; */
 
     .service-info {
       height: 6.25rem;
-      padding-bottom: var(--size-1);
       border-bottom: 2px solid var(--app-secondary-color);
 
       div {
@@ -270,7 +263,6 @@
             }
           }
           span:not(button span) {
-            /* font-family: "Orbitron", sans-serif; */
             font-size: 2rem;
             font-weight: 500;
           }
@@ -310,76 +302,13 @@
   }
 
   .d-experience {
-    height: 830px;
-    padding: 30px 130px;
-
-    .p-work {
-      height: 100px;
-      width: 48.8%; /* 800px */
-      align-self: center;
-
-      p {
-        font-size: 3rem;
-        font-weight: 500;
-      }
-    }
-
-    .d-work {
-      height: 600px;
-
-      h2 {
-        font-size: 2rem;
-      }
-
-      p {
-        margin-block: 0.625rem;
-        font-weight: 500;
-        span {
-          font-family: "Orbitron", sans-serif;
-        }
-      }
-
-      .d-work-time {
-        height: 100%;
-        width: 36.7%;
-
-        div {
-          height: 25%;
-        }
-      }
-
-      .d-work-info {
-        height: 100%;
-        width: 52%;
-
-        .lines {
-          width: 100px;
-        }
-
-        .info-detail {
-          width: 650px;
-          div {
-            height: 25%;
-          }
-        }
-      }
-    }
+    /*height: 830px;*/
+    height: 60rem;
   }
 
   .d-about {
     height: 500px;
     overflow-x: hidden;
-    background-image: url(./assets/images/akaza_look_tanjiro.webp);
-    background-repeat: no-repeat;
-    background-size: calc(var(--size-10p) * 5);
-    /* ;) little effects */
-    background-clip: text;
-    -webkit-background-clip: text;
-    animation: moveBg 10s var(--ease) infinite alternate;
-    p {
-      font-size: clamp(1vw, 14vw, 18rem);
-      font-weight: 600;
-    }
   }
 
   .d-my-room {
@@ -472,7 +401,6 @@
     }
 
     .t-card {
-      /* border: 2px solid var(--app-primary-color); */
       background-color: var(--app-secondary-color);
       width: 500px;
       height: 250px;
@@ -486,7 +414,6 @@
           height: 100%;
           aspect-ratio: 1;
           border-radius: 50%;
-          /*border: 2px solid blue;*/
         }
 
         .name {
@@ -506,6 +433,7 @@
         height: 15%;
         gap: 1rem;
         p {
+          /* use util class names */
           font-family: "Orbitron", sans-serif;
           font-weight: 500;
         }
@@ -531,14 +459,14 @@
       position: absolute;
       top: -120px;
       left: -100px;
-      /* border: 2px solid red; */
     }
 
     .message-path-cover {
       position: absolute;
-      /* height: fit-content; */
+    }
 
-      /* visibility: hidden; */
+    &::-webkit-scrollbar {
+      width: 0;
     }
   }
 
@@ -572,17 +500,14 @@
       }
 
       .fc {
-        /* border: 2px solid currentColor; */
         height: 25%;
         display: flex;
         justify-content: space-between;
         .icon {
           --app-secondary-color: rgb(109, 109, 109);
-          /* --app-primary-color: blue; */
         }
 
         .w {
-          /* border: 2px solid blue; */
           width: 80%;
           h3 {
             font-size: 1.3rem;
@@ -653,10 +578,8 @@
         --app-white: rgb(186, 186, 186);
         height: 100%;
         width: 100%;
-        /* border-color: #34db69; */
 
         .input-text {
-          /* border-color: blue; */
           height: 13%;
           position: relative;
 
@@ -707,7 +630,6 @@
         }
 
         .input-checkbox {
-          /* border-color: violet; */
           height: 30%;
 
           fieldset {
