@@ -1,6 +1,7 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
+import "./components/ui-styles/index.desktop.css";
 import "./components/ui-styles/user-flow.css";
 import "./components/ui-styles/index.mobile.css";
 import App from "./App.jsx";

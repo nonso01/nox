@@ -1,16 +1,16 @@
 import { ArrowUpRight } from "lucide-react";
 import diceVideo from "../../assets/images/dice-390.webm";
-import earthImage from "../../assets/images/earth-390.webp";
+import cyber from "../../assets/images/cyber.webp";
 import noxPspImage from "../../assets/images/nox-psp.webp";
 
 const cards = [
   {
-    title: "Video Editing & Image Manipulation",
-    subTitle: "Editing",
-    note: "Video & Photo",
+    title: "Cybersecurity & Analysis",
+    subTitle: "Security",
+    note: "kali, tcpdump, splunk...",
     fileNumber: 3,
-    video: true,
-    bgUrl: "",
+    video: false,
+    bgUrl: cyber,
     id: "video-editing",
   },
   {
@@ -18,8 +18,8 @@ const cards = [
     subTitle: "Blender Art",
     note: "final & experimental",
     fileNumber: 8,
-    video: false,
-    bgUrl: earthImage,
+    video: true,
+    bgUrl: "",
     id: "3d-animation",
   },
   {
@@ -33,17 +33,14 @@ const cards = [
   },
 ];
 
-function Projects() {
-  return <div></div>;
-}
 
 export default function Service() {
   return (
     <section
-      className="d-service flex column evenly limit-screen-large"
+      className="d-service flex column evenly limit-large-screen"
       id="service"
     >
-      <div className="service-info flex between ">
+      <div className="service-info flex between">
         <div>
           <p>
             My <span>Services</span>
@@ -51,8 +48,8 @@ export default function Service() {
         </div>
         <div>
           <p>
-            Specializing in web development, Blender art, and professional video
-            editing to bring your vision to life.
+            Specializing in web development, Blender art, and Cybersecurity to
+            bring your vision to life, while maintaining trust.
           </p>
         </div>
       </div>
