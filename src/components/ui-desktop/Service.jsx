@@ -37,16 +37,16 @@ const cards = [
 export default function Service() {
   return (
     <section
-      className="d-service flex column evenly limit-large-screen debug"
+      className="d-service flex column evenly limit-large-screen"
       id="service"
     >
-      <div className="service-info flex between debug">
+      <div className="service-info flex between">
         <div>
           <p>
             My <span>Services</span>
           </p>
         </div>
-        <div className="debug">
+        <div>
           <p>
             Specializing in web development, Blender art, and Cybersecurity to
             bring your vision to life, while maintaining trust.
