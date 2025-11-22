@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Battery, XCircle } from "lucide-react";
 import { MobileMenu } from "../ui-shared/Svgs";
 
-import Logo from "../../assets/images/favicon.png";
+import Logo from "/images/favicon.png";
 const imgSize = 40;
 
 export default function MobileNav({ batteryInfo }) {

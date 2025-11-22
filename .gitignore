@@ -24,18 +24,12 @@ dist-ssr
 *.sw?
 
 example.md
-old-image
-*old.glb
+*.old
 
 *.yaml
 
-
-#n .env files
 .env
 .env*
 
 # rust files
 target
-
-# img files
-akaza_vs*

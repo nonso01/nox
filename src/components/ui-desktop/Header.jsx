@@ -8,7 +8,7 @@ import {
   MessageCircle,
   FolderOpenDot,
 } from "lucide-react";
-import Logo from "../../assets/images/favicon.png";
+import Logo from "/images/favicon.png";
 import { FourYearsExpert } from "../ui-shared/Svgs";
 
 export default function Header({ handleHireMe = () => console.log("hire") }) {

@@ -60,8 +60,8 @@ fn match_route(method: &str, path: &str) -> Route {
         ("POST", "/contact") | ("POST", "/api/contact") => Route::ContactForm,
         ("GET", "/api/status") => Route::ApiStatus,
         ("GET", "/api/health") => Route::ApiHealth,
-        ("GET", path) if path.starts_with("/api/") => Route::NotFound,
-        ("GET", "/") => Route::Static, // revert to _ in case of err
+        ("GET", not_api_path) if not_api_path.starts_with("/api/") => Route::NotFound,
+        ("GET", _) => Route::Static,
         _ => Route::NotFound,
     }
 }
