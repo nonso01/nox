@@ -319,23 +319,23 @@ pub mod nox_server {
         <div class="header">
             <h1>🤩 Thank You for Your Submission!</h1>
         </div>
-        
+
         <div class="content">
             <p>Hello <span class="highlight">{}</span>,</p>
-            
+
             <p>Thank you for reaching out! I have received your message and will respond to your queries shortly 🫡.</p>
-            
+
             <p><strong>Your message:</strong></p>
             <blockquote style="padding: 10px; border-left: 2px solid currentColor; margin: 10px 0; font-style: italic; font-size: 12px;">
                 {}
             </blockquote>
-            
+
             <p>I appreciate you taking the time to contact me, and I'll get back to you as soon as possible ⚡️⚡️⚡️.</p>
-            
+
             <p>Best regards,<br>
             <strong>Nonso Martin</strong></p>
         </div>
-        
+
         <div class="footer">
             <p>This is an automated response to confirm we received your form submission.</p>
             <p>If you didn't initiate this message please ignore.</p>
@@ -354,22 +354,6 @@ pub mod nox_server {
             format!("\x1b[2;32m{}\x1b[0m", text)
         } else {
             format!("\x1b[32m{}\x1b[0m", text)
-        }
-    }
-
-    pub fn cyan(text: &str, bold: bool) -> String {
-        if bold {
-            format!("\x1b[2;36m{}\x1b[0m", text)
-        } else {
-            format!("\x1b[36m{}\x1b[0m", text)
-        }
-    }
-
-    pub fn yellow(text: &str, bold: bool) -> String {
-        if bold {
-            format!("\x1b[2;33m{}\x1b[0m", text)
-        } else {
-            format!("\x1b[33m{}\x1b[0m", text)
         }
     }
 
