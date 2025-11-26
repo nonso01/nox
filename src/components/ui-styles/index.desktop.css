@@ -301,9 +301,8 @@
     }
   }
 
-  .d-experience {
-    /*height: 830px;*/
-    height: 60rem;
+  .desktop-experience {
+    min-height: 60rem;
   }
 
   .d-about {

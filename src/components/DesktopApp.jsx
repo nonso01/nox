@@ -61,7 +61,6 @@ export default function DesktopApp({ connected, onSetConnected }) {
             },
             onLeave(obs) {
               // console.log("Leaving - every time!");
-              // console.log(obs)
               animate(obs.target, {});
             },
             onUpdate(obs) {
@@ -91,15 +90,6 @@ export default function DesktopApp({ connected, onSetConnected }) {
             enter: "top+=50 100",
             leave: "bottom bottom",
             sync: 0.8,
-            onEnter() {
-              // console.log("entering");
-            },
-            onLeave() {
-              // console.log("leaving");
-            },
-            onUpdate() {
-              // console.log("moving");
-            },
           }),
         });
       })();
