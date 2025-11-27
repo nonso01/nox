@@ -80,13 +80,12 @@ export default function DesktopApp({ connected, onSetConnected }) {
         const a = animate(".d-fly .message-fly-cover", {
           ease: "linear",
           duration,
-          // loop: true,
           ...motionPath,
           autoplay: onScroll({
             container: $container,
             target: ".flying-message-path",
-            debug,
-            // enter: top top, leave: bottom bottom works ;D
+
+            // enter: top top, leave: bottom bottom works
             enter: "top+=50 100",
             leave: "bottom bottom",
             sync: 0.8,

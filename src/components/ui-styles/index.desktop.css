@@ -302,12 +302,16 @@
   }
 
   .desktop-experience {
-    min-height: 60rem;
+    height: max-content;
   }
 
-  .d-about {
-    height: 500px;
+  .desktop-about {
+    height: max-content;
     overflow-x: hidden;
+    img {
+        width: 100%;
+        /*height: 100%;*/
+    }
   }
 
   .d-my-room {
