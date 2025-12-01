@@ -15,14 +15,15 @@ createRoot(document.getElementById("root")).render(
       <div
         style={{
           position: "fixed",
-          bottom: 0,
+          top: 0,
           right: 0,
           width: 20,
           height: 20,
           margin: "10px",
           borderRadius: "50%",
           color: "var(--app-danger-color)",
-          border: "2px solid currentColor",
+          outline: "2px solid currentColor",
+          outlineOffset: 3,
           // opacity: 0.8,
           backgroundColor: "currentColor",
           zIndex: 99999,
@@ -32,5 +33,5 @@ createRoot(document.getElementById("root")).render(
     ) : (
       void 0
     )}
-  </StrictMode>
+  </StrictMode>,
 );

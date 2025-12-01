@@ -1,40 +1,11 @@
 import { ArrowUpRight } from "lucide-react";
-import diceVideo from "../../assets/images/dice-390.webm";
-import cyber from "../../assets/images/cyber.webp";
-import noxPspImage from "../../assets/images/nox-psp.webp";
+import { cardData, diceVideo } from "../ui-shared/ServiceCards";
 
-const cards = [
-  {
-    title: "Cybersecurity & Analysis",
-    subTitle: "Security",
-    note: "kali, tcpdump, splunk...",
-    fileNumber: 3,
-    video: false,
-    bgUrl: cyber,
-    id: "video-editing",
+export default function Service({
+  handleShowService = (e) => {
+    console.log(e.target?.dataset);
   },
-  {
-    title: "3D Animations & Modeling",
-    subTitle: "Blender Art",
-    note: "final & experimental",
-    fileNumber: 8,
-    video: true,
-    bgUrl: "",
-    id: "3d-animation",
-  },
-  {
-    title: "FullStack Websites & Landing Pages",
-    subTitle: "Web Development",
-    note: "JS,Node.js,amd Rust",
-    fileNumber: 11,
-    video: false,
-    bgUrl: noxPspImage,
-    id: "web-development",
-  },
-];
-
-
-export default function Service() {
+}) {
   return (
     <section
       className="d-service flex column evenly limit-large-screen"
@@ -54,7 +25,7 @@ export default function Service() {
         </div>
       </div>
       <div className="service-cards flex between">
-        {cards.map(
+        {cardData.map(
           ({ title, fileNumber, video, bgUrl, subTitle, note, id }, _) => {
             return (
               <div className="card flex center" key={id}>
@@ -75,7 +46,11 @@ export default function Service() {
                         <span className="font-orbitron">{fileNumber}</span>
                         {fileNumber > 1 ? "Files" : "File"}
                       </p>
-                      <button className="flex between pointer" data-id={id}>
+                      <button
+                        className="flex between pointer"
+                        data-id={id}
+                        onClick={handleShowService}
+                      >
                         <span>View</span> <ArrowUpRight />
                       </button>
                     </div>
@@ -107,7 +82,7 @@ export default function Service() {
                 </div>
               </div>
             );
-          }
+          },
         )}
       </div>
     </section>

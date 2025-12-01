@@ -8,7 +8,7 @@ import {
 } from "../ui-shared/Svgs";
 import Contact from "./Contact";
 
-import Logo from "/images/favicon.png";
+// import Logo from "/images/favicon.png";
 
 let iconSize = 30;
 let iconColor = "var(--app-secondary-color)";
@@ -53,7 +53,14 @@ export default function Footer() {
         <div className="footer-content-words flex column between  ">
           <div className="footer-word flex column between ">
             <div className="footer-logo ">
-              <img src={Logo} width={30} height={30} title="Nonso Martin" />
+              <img
+                src="https://avatars.githubusercontent.com/u/84927159"
+                alt="Martin"
+                width={30}
+                height={30}
+                title="Nonso Martin"
+                loading="lazy"
+              />
             </div>
             {footerChatContent.map(
               ({ icon, size, stroke, h3, p, a, link, title }, i) => {
@@ -76,7 +83,7 @@ export default function Footer() {
                     </div>
                   </div>
                 );
-              }
+              },
             )}
           </div>
           <div className="footer-links flex between ">

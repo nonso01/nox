@@ -5,7 +5,11 @@
   box-sizing: border-box;
   line-height: 1.4;
 
-  font-family: "Outfit", system-ui, -apple-system, sans-serif;
+  font-family:
+    "Outfit",
+    system-ui,
+    -apple-system,
+    sans-serif;
   color: var(--app-white);
   user-select: none;
 }
@@ -87,7 +91,6 @@ body {
     max-height: 67.5rem;
     scroll-behavior: smooth;
 
-    /* border: 2px solid var(--app-white); */
     overflow-y: scroll;
   }
 }
@@ -138,12 +141,19 @@ fieldset {
 
   /* transitions */
   transition-duration: 150ms;
-  transition-property: border, background-color, transform color;
+  transition-property:
+    border,
+    background-color,
+    transform color;
   transition-timing-function: var(--ease);
 }
 
 .font-orbitron {
-  font-family: "Orbitron", system-ui, -apple-system, monospace;
+  font-family:
+    "Orbitron",
+    system-ui,
+    -apple-system,
+    monospace;
 }
 
 .color-primary {
@@ -365,7 +375,6 @@ fieldset {
     }
   }
 }
-
 
 /* Limit width for very large screens */
 .limit-large-screen {

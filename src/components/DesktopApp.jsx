@@ -61,7 +61,6 @@ export default function DesktopApp({ connected, onSetConnected }) {
             },
             onLeave(obs) {
               // console.log("Leaving - every time!");
-              // console.log(obs)
               animate(obs.target, {});
             },
             onUpdate(obs) {
@@ -71,35 +70,25 @@ export default function DesktopApp({ connected, onSetConnected }) {
         });
       };
 
-      (() /** d-fly, during the mean time, look for a proper name */ => {
-        const [$container] = utils.$(".d-fly");
+      (() /** desktop-user-flow, during the mean time, look for a proper name */ => {
+        const [$container] = utils.$(".desktop-user-flow");
         const debug = true;
         const duration = 5000;
         const motionPath = svg.createMotionPath(".flying-message-path path");
 
         // Animate the transforms properties of .message the motion path values
-        const a = animate(".d-fly .message-fly-cover", {
+        const a = animate(".desktop-user-flow .message-fly-cover", {
           ease: "linear",
           duration,
-          // loop: true,
           ...motionPath,
           autoplay: onScroll({
             container: $container,
             target: ".flying-message-path",
-            debug,
-            // enter: top top, leave: bottom bottom works ;D
+
+            // enter: top top, leave: bottom bottom works
             enter: "top+=50 100",
             leave: "bottom bottom",
             sync: 0.8,
-            onEnter() {
-              // console.log("entering");
-            },
-            onLeave() {
-              // console.log("leaving");
-            },
-            onUpdate() {
-              // console.log("moving");
-            },
           }),
         });
       })();

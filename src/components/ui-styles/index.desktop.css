@@ -301,14 +301,17 @@
     }
   }
 
-  .d-experience {
-    /*height: 830px;*/
-    height: 60rem;
+  .desktop-experience {
+    height: max-content;
   }
 
-  .d-about {
-    height: 500px;
+  .desktop-about {
+    height: max-content;
     overflow-x: hidden;
+    img {
+        width: 100%;
+        /*height: 100%;*/
+    }
   }
 
   .d-my-room {
@@ -441,7 +444,7 @@
     }
   }
 
-  .d-fly {
+  .desktop-user-flow {
     background-color: var(--app-black);
     height: max(100dvh, 860px);
     max-height: 1085px;
