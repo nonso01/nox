@@ -73,7 +73,7 @@
     .m-header {
       height: 550px;
       padding: 2%;
-      background-image: url("../../assets/images/2d-me.webp");
+      background-image: url("/images/2d-me.webp");
       background-repeat: no-repeat;
       background-size: cover;
 
