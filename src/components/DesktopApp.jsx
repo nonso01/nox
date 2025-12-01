@@ -70,14 +70,14 @@ export default function DesktopApp({ connected, onSetConnected }) {
         });
       };
 
-      (() /** d-fly, during the mean time, look for a proper name */ => {
-        const [$container] = utils.$(".d-fly");
+      (() /** desktop-user-flow, during the mean time, look for a proper name */ => {
+        const [$container] = utils.$(".desktop-user-flow");
         const debug = true;
         const duration = 5000;
         const motionPath = svg.createMotionPath(".flying-message-path path");
 
         // Animate the transforms properties of .message the motion path values
-        const a = animate(".d-fly .message-fly-cover", {
+        const a = animate(".desktop-user-flow .message-fly-cover", {
           ease: "linear",
           duration,
           ...motionPath,

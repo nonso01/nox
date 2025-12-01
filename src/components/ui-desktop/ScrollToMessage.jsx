@@ -11,7 +11,7 @@ import {
 
 export default function ScrollToMessage() {
   return (
-    <section className="d-fly limit-large-screen">
+    <section className="desktop-user-flow limit-large-screen debug">
       <div className="message-fly-cover flex center ">
         <FlyingMessage />
       </div>
@@ -19,7 +19,6 @@ export default function ScrollToMessage() {
         {/* if message-fly-cover is inside here, it can move with the path */}
         <FlyingMessagePath />
       </div>
-      {/* user-flow */}
       <div>
         <UserFlowOne />
         <UserFlowTwo />

@@ -444,7 +444,7 @@
     }
   }
 
-  .d-fly {
+  .desktop-user-flow {
     background-color: var(--app-black);
     height: max(100dvh, 860px);
     max-height: 1085px;
