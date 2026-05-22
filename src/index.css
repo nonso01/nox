@@ -77,7 +77,7 @@
 
 html,
 body {
-  /* min-height: max(100dvh, 37.5rem); */
+  height: max(100dvh, 37.5rem);
   background-color: var(--app-secondary-color);
   scrollbar-gutter: stable;
   scroll-behavior: smooth;
@@ -87,7 +87,6 @@ body {
 
   #root,
   .desktop-app {
-    height: max(100dvh, 37.5rem);
     max-height: 67.5rem;
     scroll-behavior: smooth;
 
@@ -235,7 +234,7 @@ fieldset {
 
 /* scroll bar styles */
 ::-webkit-scrollbar {
-  width: 2px;
+  width: 0px;
   /* controls the width */
   height: var(--size-half);
 }

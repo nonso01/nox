@@ -32,45 +32,42 @@ export default function DesktopApp({ connected, onSetConnected }) {
         releaseEase: spring({ stiffness: 200 }),
       });
 
-      (() /** Rating Star animations */ => {
-        animate(".lucide-star", {
-          duration: 500,
-          scale: [0, 1],
-          ease: spring({ stiffness: 200, mass: 2 }),
-          delay: stagger(100, { from: "center" }),
-          alternate: true,
-          loop: true,
-        });
-      })();
+      const ratingStarAnimations = animate(".lucide-star", {
+        duration: 500,
+        scale: [0, 1],
+        ease: spring({ stiffness: 200, mass: 2 }),
+        delay: stagger(100, { from: "center" }),
+        alternate: true,
+        loop: true,
+      });
 
-      () /** Animate Header Elements and Childrens */ => {
-        const headerAnim = animate("header", {
-          duration: 900,
-          ease: "out(3)",
-          autoplay: onScroll({
-            container: root.current,
-            target: "header",
-            debug: true,
-            repeat: true, // KEY: Allows animation to retrigger on every enter/leave
-            enter: "bottom top+=200",
-            leave: "top top+=90%",
-            sync: 0.5,
-            onEnter(obs) {
-              // console.log("Entering - every time!");
-              animate(obs.target, {});
-            },
-            onLeave(obs) {
-              // console.log("Leaving - every time!");
-              animate(obs.target, {});
-            },
-            onUpdate(obs) {
-              // console.log("Progress:", obs.progress);
-            },
-          }),
-        });
-      };
+      const headerAnimationsWithChildren = animate("header", {
+        duration: 900,
+        ease: "out(3)",
+        autoplay: onScroll({
+          container: root.current,
+          target: "header",
+          debug: true,
+          repeat: true, // KEY: Allows animation to retrigger on every enter/leave
+          enter: "bottom top+=200",
+          leave: "top top+=90%",
+          sync: 0.5,
+          onEnter(obs) {
+            // console.log("Entering - every time!");
+            animate(obs.target, {});
+          },
+          onLeave(obs) {
+            // console.log("Leaving - every time!");
+            animate(obs.target, {});
+          },
+          onUpdate(obs) {
+            // console.log("Progress:", obs.progress);
+          },
+        }),
+      });
 
-      (() /** desktop-user-flow, during the mean time, look for a proper name */ => {
+      /** desktop-user-flow, during the mean time, look for a proper name */
+      (() => {
         const [$container] = utils.$(".desktop-user-flow");
         const debug = true;
         const duration = 5000;
