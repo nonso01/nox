@@ -77,7 +77,7 @@
 
 html,
 body {
-  /* min-height: max(100dvh, 37.5rem); */
+  height: max(100dvh, 37.5rem);
   background-color: var(--app-secondary-color);
   scrollbar-gutter: stable;
   scroll-behavior: smooth;
@@ -87,7 +87,6 @@ body {
 
   #root,
   .desktop-app {
-    height: max(100dvh, 37.5rem);
     max-height: 67.5rem;
     scroll-behavior: smooth;
 
@@ -183,7 +182,7 @@ fieldset {
   border-radius: 10px;
   transition-timing-function: var(--ease);
   transition-duration: 150ms;
-  animation: rotateGradient calc(6s * var(--i, 1)) var(--ease) infinite;
+  /* animation: rotateGradient calc(6s * var(--i, 1)) var(--ease) infinite; */
 
   &.dark {
     border: 2px solid var(--app-secondary-color);
@@ -235,7 +234,7 @@ fieldset {
 
 /* scroll bar styles */
 ::-webkit-scrollbar {
-  width: 2px;
+  width: 0px;
   /* controls the width */
   height: var(--size-half);
 }
@@ -367,13 +366,12 @@ fieldset {
   z-index: 1;
   background-color: var(--app-secondary-color);
 
-  svg {
+  /* svg {
     * {
-      /* for animejs */
       transform-origin: calc(5 * var(--size-10p));
       transform-box: fill-box;
     }
-  }
+  } */
 }
 
 /* Limit width for very large screens */
@@ -385,3 +383,12 @@ fieldset {
     margin: auto;
   }
 }
+
+
+svg {
+    * {
+      /* for animejs */
+      transform-origin: calc(5 * var(--size-10p));
+      transform-box: fill-box;
+    }
+  }

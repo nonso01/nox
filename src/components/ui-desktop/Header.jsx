@@ -17,7 +17,7 @@ export default function Header({ handleHireMe = () => console.log("hire") }) {
       className="desktop-header flex column between limit-large-screen "
       id="home"
     >
-      <nav className="desktop-navigation flex between pos-relative">
+      <nav className="desktop-navigation flex between pos-relative debug">
         <div className=" links flex evenly ">
           <span title="home">
             <a

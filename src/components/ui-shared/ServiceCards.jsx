@@ -7,7 +7,7 @@ const cardData = [
     title: "Cybersecurity & Analysis",
     subTitle: "Security",
     note: "kali, tcpdump, splunk...",
-    fileNumber: 3,
+    fileNumber: 1,
     linksToFile: [],
     video: false,
     bgUrl: cyber,
