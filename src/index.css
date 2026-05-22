@@ -182,7 +182,7 @@ fieldset {
   border-radius: 10px;
   transition-timing-function: var(--ease);
   transition-duration: 150ms;
-  animation: rotateGradient calc(6s * var(--i, 1)) var(--ease) infinite;
+  /* animation: rotateGradient calc(6s * var(--i, 1)) var(--ease) infinite; */
 
   &.dark {
     border: 2px solid var(--app-secondary-color);
@@ -366,13 +366,12 @@ fieldset {
   z-index: 1;
   background-color: var(--app-secondary-color);
 
-  svg {
+  /* svg {
     * {
-      /* for animejs */
       transform-origin: calc(5 * var(--size-10p));
       transform-box: fill-box;
     }
-  }
+  } */
 }
 
 /* Limit width for very large screens */
@@ -384,3 +383,12 @@ fieldset {
     margin: auto;
   }
 }
+
+
+svg {
+    * {
+      /* for animejs */
+      transform-origin: calc(5 * var(--size-10p));
+      transform-box: fill-box;
+    }
+  }

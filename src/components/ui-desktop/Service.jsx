@@ -8,16 +8,16 @@ export default function Service({
 }) {
   return (
     <section
-      className="d-service flex column evenly limit-large-screen"
+      className="d-service flex column evenly limit-large-screen debug"
       id="service"
     >
-      <div className="service-info flex between">
-        <div>
+      <div className="service-info flex between debug">
+        <div className="debug">
           <p>
             My <span>Services</span>
           </p>
         </div>
-        <div>
+        <div className="debug">
           <p>
             Specializing in web development, Blender art, and Cybersecurity to
             bring your vision to life, while maintaining trust.
@@ -43,8 +43,13 @@ export default function Service({
                     </div>
                     <div className="card-view flex between">
                       <p>
-                        <span className="font-orbitron">{fileNumber}</span>
-                        {fileNumber > 1 ? "Files" : "File"}
+                        <span
+                          className="font-orbitron"
+                          style={{ marginInline: 5 }}
+                        >
+                          {fileNumber}
+                        </span>
+                        {fileNumber > 1 ? "Samples" : "Sample"}
                       </p>
                       <button
                         className="flex between pointer"

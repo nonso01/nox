@@ -10,6 +10,8 @@ import {
 } from "animejs";
 import { useRef, useEffect, lazy } from "react";
 
+// https://medium.com/geekculture/link-your-html-form-to-a-spreadsheet-via-google-forms-9024f0611d82
+
 const Connecting = lazy(() => import("./ui-shared/Connecting"));
 const Header = lazy(() => import("./ui-desktop/Header"));
 const Service = lazy(() => import("./ui-desktop/Service"));
@@ -47,7 +49,7 @@ export default function DesktopApp({ connected, onSetConnected }) {
         autoplay: onScroll({
           container: root.current,
           target: "header",
-          debug: true,
+          debug: false,
           repeat: true, // KEY: Allows animation to retrigger on every enter/leave
           enter: "bottom top+=200",
           leave: "top top+=90%",
