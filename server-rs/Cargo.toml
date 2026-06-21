@@ -1,0 +1,8 @@
+[package]
+name = "nox"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+lettre = "0.11.18"
+regex = "1.11.2"
