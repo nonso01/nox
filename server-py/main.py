@@ -498,7 +498,7 @@ def main() -> None:
         print("✨ Serving static files from ../dist/")
     else:
         print("⚠️  Warning: ../dist/ folder not found!")
-        print("📜 Serving hello.html from current directory as fallback")
+        print("📜 Serving index.html from current directory as fallback")
 
     # thread pool with security config
     pool = ThreadPool(4, cors_config, security_config)
@@ -823,7 +823,7 @@ def serve_static_file_with_cors(
     dist_exists = Path("../dist").exists()
 
     if not dist_exists:
-        # Serve hello.html from current directory as fallback
+        # Serve index.html from current directory as fallback
         serve_hello_file(stream, cors_config, origin)
         return
 
@@ -852,15 +852,15 @@ def serve_hello_file(
     cors_config: CorsConfig,
     origin: Optional[str],
 ) -> None:
-    hello_path = Path.cwd() / "hello.html"
+    index_path = Path.cwd() / "pages" / "index.html"
 
     try:
-        content = hello_path.read_bytes()
-        print("Serving hello.html from current directory")
+        content = index_path.read_bytes()
+        print("Serving index.html from current directory")
         send_file_response_with_cors(stream, content, "text/html", cors_config, origin)
     except OSError:
-        print("🔎 Warning: hello.html not found in current directory, resolve to fallback")
-        # Create a basic HTML response if hello.html is also missing
+        print("🔎 Warning: index.html not found in current directory, resolve to fallback")
+        # Create a basic HTML response if index.html is also missing
         fallback_html = """<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -876,7 +876,7 @@ def serve_hello_file(
 <body>
     <h1 class="status">Python Server is Running!</h1>
     <div class="warning">
-        <strong>Note:</strong> Neither <code>../dist/</code> folder nor <code>hello.html</code> were found.
+        <strong>Note:</strong> Neither <code>../dist/</code> folder nor <code>index.html</code> were found.
         <br>This is a fallback page to confirm the server is working.
     </div>
     <p>Server is ready to:</p>
