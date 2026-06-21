@@ -1,6 +1,6 @@
 """
 MY CUSTOM PYTHON SERVER: NOX_SERVER (port of nox_server, the Rust original)
-Process documented as needed.
+Direct, structural replica of main.rs. Process documented as needed.
 """
 
 from __future__ import annotations
@@ -26,6 +26,14 @@ import constants as const
 def load_dotenv(path: str = ".env") -> None:
     """
     Minimal stdlib-only .env loader.
+
+    main.rs does not load a .env file itself either — std::env::var only
+    reads variables already present in the process environment. Whatever
+    mechanism feeds .env values into the Rust binary on your machine
+    (an IDE launch config, direnv, a shell that sources .env, etc.) sits
+    outside main.rs/lib.rs and isn't something Python inherits for free.
+    This function plays that same external role explicitly, so running
+    `python3 main.py` from a plain terminal behaves the same way.
 
     Rules, matching standard .env convention:
       - Lines starting with '#' or blank lines are skipped.
@@ -67,6 +75,14 @@ def load_dotenv(path: str = ".env") -> None:
 # ---------------------------------------------------------------------------
 @dataclass
 class SecurityConfig:
+    """
+    Replica of Rust's SecurityConfig (#[derive(Clone)]).
+
+    Python dataclasses are copyable by construction (no special Clone trait
+    needed) — `dataclasses.replace()` is the structural equivalent of
+    Rust's `.clone()` if a copy is ever needed, though this codebase
+    only ever reads from instances after creation (matching Rust's usage).
+    """
 
     max_content_length: int
     max_connections: int
@@ -122,6 +138,15 @@ def match_route(method: str, path: str) -> Route:
 # Custom error types for better error handling
 # ---------------------------------------------------------------------------
 class ServerError(Exception):
+    """
+    Base replica of Rust's `enum ServerError`.
+
+    Rust's enum variants (IoError, ParseError, ValidationError, EmailError,
+    ThreadPoolError, NetworkError) are each represented as a Python
+    Exception subclass below. This mirrors Rust's tagged-union error type
+    with Python's native exception hierarchy — `isinstance` checks replace
+    `match`-on-variant, and `str(err)` replaces the `Display` impl.
+    """
 
     def __str__(self) -> str:
         return self._display()
@@ -184,7 +209,11 @@ class NetworkError(ServerError):
         return f"Network error: {self.msg}"
 
 
-
+# Rust: type ServerResult<T> = Result<T, ServerError>;
+# Python has no Result alias to mirror; ServerError subclasses are raised
+# and caught with try/except instead. Function signatures are annotated
+# with the success type only (-> None, -> int, etc.) and a docstring notes
+# what they raise, which is the idiomatic Python equivalent.
 
 
 # ---------------------------------------------------------------------------
@@ -295,6 +324,7 @@ class Worker:
         while True:
             stream = task_queue.get()
             if stream is None:
+                # Sentinel: equivalent to mpsc recv() returning Err on closed channel
                 print(f"Worker {self.id} shutting down")
                 break
             try:
@@ -334,7 +364,7 @@ class ThreadPool:
         self.cors_config = cors_config
         self.security_config = security_config
 
-        # Rate limiter — shared across all workers 
+        # Rate limiter — shared across all workers (Rust: Arc<RateLimiter>)
         self.rate_limiter = RateLimiter(
             security_config.max_requests_per_hour,
             const.WINDOW_LIMIT_MINS,  # 1 hour window
@@ -357,7 +387,7 @@ class ThreadPool:
         self._closed = False
 
     def execute(self, stream: socket.socket) -> None:
-        """Raises ThreadPoolError on failure """
+        """Raises ThreadPoolError on failure (Rust: ServerResult<()>)."""
         try:
             stream.settimeout(self.security_config.connection_timeout)
         except OSError as e:
@@ -370,6 +400,7 @@ class ThreadPool:
 
     def shutdown(self) -> None:
         """
+        Replica of Rust's `impl Drop for ThreadPool`.
 
         Rust's Drop runs automatically when ThreadPool goes out of scope;
         Python has no deterministic destructor equivalent for this kind of
@@ -428,6 +459,7 @@ def handle_api_health(
 # ---------------------------------------------------------------------------
 def main() -> None:
     # Load .env into the process environment first, mirroring wherever
+    # your Rust project calls dotenv/dotenvy at the top of fn main().
     load_dotenv()
 
     port = os.environ.get("PORT", "8080")
@@ -450,7 +482,7 @@ def main() -> None:
         print(f"Failed to bind to address {host}:{port}: {e}")
         raise IoError(e)
 
-    print(f"Server running on http://{host}:{port}")
+    print(f"🦀 Server running on http://{host}:{port}")
 
     print(
         f"🦍 Security enabled - Max content: "
@@ -498,23 +530,16 @@ def handle_connection_safe(
     rate_limiter: RateLimiter,
     security_config: SecurityConfig,
 ) -> None:
-    # Get client IP for rate limiting
+    # Fallback IP from the raw socket — this is accurate for direct
+    # connections, but when traffic comes through a reverse proxy/tunnel
+    # (ngrok, nginx, Cloudflare, etc.) it only ever sees the PROXY's own
+    # address, not the real visitor's. Every tunneled visitor would
+    # otherwise collapse onto this one IP and share a single rate-limit
+    # bucket — exhausting it for one visitor exhausts it for everyone.
     try:
-        client_ip = stream.getpeername()[0]
+        socket_ip = stream.getpeername()[0]
     except OSError:
-        client_ip = "unknown"
-
-    # Check rate limiting FIRST
-    if security_config.enable_rate_limiting and not rate_limiter.is_allowed(client_ip):
-        print(f"⛔️ Rate limit exceeded for IP: {client_ip}")
-        send_error_response_with_cors(
-            stream,
-            "429 Too Many Requests",
-            "Rate limit exceeded. Please try again later.",
-            cors_config,
-            None,
-        )
-        return
+        socket_ip = "unknown"
 
     buf_reader = BufReader(stream)
     request_line = buf_reader.read_line()
@@ -538,7 +563,36 @@ def handle_connection_safe(
         return
 
     # Read headers with security limits
-    content_length, origin = parse_headers_secure(buf_reader, security_config)
+    content_length, origin, forwarded_for = parse_headers_secure(buf_reader, security_config)
+
+    # Prefer the real client IP from X-Forwarded-For (set by a trusted
+    # proxy in front of us) over the raw socket peer address. This means
+    # rate limiting now applies per real-world visitor again, instead of
+    # lumping every tunneled visitor into one bucket keyed on the proxy.
+    #
+    # NOTE ON TRUST: X-Forwarded-For is a client-controllable header in
+    # general — anyone could fake it. We only trust it here because this
+    # server, when deployed behind ngrok, ONLY receives traffic that has
+    # already passed through ngrok's edge, which overwrites this header
+    # itself rather than passing through an attacker-supplied value
+    # unchanged. If you deploy this directly on the open internet WITHOUT
+    # a trusted proxy in front of it, do not trust this header blindly —
+    # an attacker could set arbitrary X-Forwarded-For values to spoof
+    # their way around per-IP rate limiting.
+    client_ip = forwarded_for if forwarded_for else socket_ip
+
+    # Check rate limiting (moved here, after header parsing, since we need
+    # X-Forwarded-For from the headers before we know the real client IP)
+    if security_config.enable_rate_limiting and not rate_limiter.is_allowed(client_ip):
+        print(f"⛔️ Rate limit exceeded for IP: {client_ip}")
+        send_error_response_with_cors(
+            stream,
+            "429 Too Many Requests",
+            "Rate limit exceeded. Please try again later.",
+            cors_config,
+            None,
+        )
+        return
 
     parts = request_line.split()
     if len(parts) < 2:
@@ -647,9 +701,10 @@ class BufReader:
 def parse_headers_secure(
     buf_reader: BufReader,
     security_config: SecurityConfig,
-) -> tuple[int, Optional[str]]:
+) -> tuple[int, Optional[str], Optional[str]]:
     content_length = 0
     origin: Optional[str] = None
+    forwarded_for: Optional[str] = None
     header_count = 0
     max_headers = 50  # Limit number of headers
 
@@ -691,8 +746,23 @@ def parse_headers_secure(
                 if len(origin_trimmed) > 200:
                     raise ParseError("Origin header too long")
                 origin = origin_trimmed
+        elif line_lower.startswith("x-forwarded-for:"):
+            # Set by reverse proxies (ngrok, nginx, Cloudflare, etc.) to
+            # carry the real client IP, since stream.getpeername() only
+            # ever sees the proxy's own address once traffic is tunneled.
+            # Format can be a comma-separated chain ("client, proxy1, proxy2")
+            # if multiple proxies are involved — the FIRST entry is the
+            # original client, which is the one we want for rate limiting.
+            split_parts = line.split(": ", 1)
+            if len(split_parts) > 1:
+                xff_value = split_parts[1].strip()
+                if len(xff_value) > 200:
+                    raise ParseError("X-Forwarded-For header too long")
+                first_ip = xff_value.split(",")[0].strip()
+                if first_ip:
+                    forwarded_for = first_ip
 
-    return content_length, origin
+    return content_length, origin, forwarded_for
 
 
 def handle_preflight_request(
@@ -842,9 +912,10 @@ def send_file_response_with_cors(
 
 
 # ReDoS-resistant email regex - avoids catastrophic backtracking.
-# Compiled once at module load.
+# Compiled once at module load, mirroring Rust's Regex::new being called
 # inside validate_form_data each invocation (Rust's `regex` crate
 # internally caches/compiles efficiently per-call in the original; here
+# it's hoisted to module scope, which is the idiomatic Python equivalent
 # of "compile once" and avoids needless recompilation per request).
 _EMAIL_REGEX = re.compile(r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$")
 

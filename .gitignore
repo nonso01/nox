@@ -39,3 +39,4 @@ server-rs*
 __pycache__/
 *.pyc
 *.pyo
+test.py

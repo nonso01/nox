@@ -99,6 +99,7 @@ stop_server() {
     echo "Stopping server (PID: $PID)..."
     kill "$PID"
     rm "$PID_FILE"
+    rm -f "$LOG_FILE"
     echo "Server stopped"
   else
     echo "Server process not found, removing stale PID file"
