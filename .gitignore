@@ -33,7 +33,7 @@ example.md
 
 # rust files
 target
-server-rs
+server-rs*
 
 # python
 __pycache__/
